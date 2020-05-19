@@ -1,0 +1,39 @@
+<div (resized)="onResized($event)">
+  <a href="javascript:;" (click)="sidebarService.toggleSidebar();" class="toggle-sidebar">
+    <fa-icon [icon]="['fal', 'ellipsis-v']" size="lg"></fa-icon>
+  </a>
+  <div class="map-floors">
+    <ul>
+      <li>
+        <span *ngIf="routingSource.finish && state.floor.level < routingSource.finish.properties.level">{{ getUpcomingFloorNumber('up') }}</span>
+        <a href="javascript:;"
+           [ngClass]="{'blinking': routingSource.finish && state.floor.level < routingSource.finish.properties.level}"
+           (click)="onFloorChange('up')">
+          <fa-icon [icon]="['fal', 'chevron-up']"></fa-icon>
+        </a>
+      </li>
+      <li class="current-floor">{{ state.floor.level }}</li>
+      <li>
+        <span *ngIf="routingSource.finish && state.floor.level > routingSource.finish.properties.level">{{ getUpcomingFloorNumber('down') }}</span>
+        <a href="javascript:;"
+           [ngClass]="{'blinking': routingSource.finish && state.floor.level > routingSource.finish.properties.level}"
+           (click)="onFloorChange('down')">
+          <fa-icon [icon]="['fal', 'chevron-down']"></fa-icon>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <mgl-map
+    *ngIf="!state.initializing"
+    [style]="state.style"
+    (load)="onLoad($event)"
+  >
+    <ng-container *ngFor="let key of objectKeys(images)">
+      <mgl-image
+        [id]="key"
+        [url]="images[key].uri"
+      >
+      </mgl-image>
+    </ng-container>
+  </mgl-map>
+</div>
