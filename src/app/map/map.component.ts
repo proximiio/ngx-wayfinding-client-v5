@@ -425,6 +425,8 @@ export class MapComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         [...this.state.style.getLayers('main'), ...this.state.style.getLayers('route')].forEach(layer => {
           if (map.getLayer(layer.id)) {
+            if (layer.id === 'proximiio-levelchangers') {
+            }
             map.setFilter(layer.id, layer.filter);
           }
         });

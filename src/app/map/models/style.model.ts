@@ -344,7 +344,7 @@ export default class Style extends Observable {
         return;
       }
       layer.filter.forEach((filter: any, filterIndex: number) => {
-        if (this.id === 'proximiio-levelchangers') {
+        if (layer.id === 'proximiio-levelchangers') {
           const lvl = `__level_${level}`;
           if (filterIndex === 3) {
             filter[1] = lvl;
@@ -452,7 +452,7 @@ export default class Style extends Observable {
 
   togglePaths(enabled: boolean) {
     // tslint:disable-next-line:no-shadowed-variable
-    const layer = this.layers.find(layer => layer.id === 'proximiio-paths');
+    const layer = this.layers.find(layer => layer.id === 'proximiio-paths' || layer.id === 'paths');
     if (layer) {
       const updated = new LineLayer(Object.assign({}, layer.json));
       updated.layout.visibility = enabled ? 'visible' : 'none';
