@@ -499,9 +499,8 @@ export class Wayfinding {
         levelChangerGroupMap.forEach( (lcList, groupId) => {
             lcList.forEach(lc => {
                 lc.properties.fixedPointMap.forEach((point, level) => {
-                    if (point.properties.neighbours) {
-                      point.properties.neighbours.push(...lcList.filter(it => it !== lc));
-                    }
+                    if (point.properties.neighbours == undefined) point.properties.neighbours = [];
+                    point.properties.neighbours.push(...lcList.filter(it => it !== lc));
                 });
             });
         });
