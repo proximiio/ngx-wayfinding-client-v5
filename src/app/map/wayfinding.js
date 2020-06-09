@@ -1,6 +1,4 @@
-import * as turf from '@turf/turf';
-
-export class Wayfinding {
+class Wayfinding {
 
     /**
      *
@@ -391,15 +389,12 @@ export class Wayfinding {
 
                 segmentIntersections.forEach((intersection, index) => {
 
-                    // Inject split segments of currently processed segment
-                    let newCorridor = turf.lineString([previousPoint.geometry.coordinates, intersection.point.geometry.coordinates]);
-                    newCorridor.properties.level = previousPoint.properties.level;
-
                     // Set neighbourhood with points connected to intersection (next point will be added in next loop or with segment endpoint)
                     previousPoint.properties.neighbours.push(intersection.point);
                     walls[intersection.wallIndex][0].properties.neighbours.push(intersection.point);
                     walls[intersection.wallIndex][1].properties.neighbours.push(intersection.point);
                     intersection.point.properties.neighbours.push(previousPoint, walls[intersection.wallIndex][0], walls[intersection.wallIndex][1]);
+                    // TODO check directionality?
                     intersection.point.properties.neighbours.push(...corridorLineFeatures[i].properties.intersectionPointList);
                     corridorLineFeatures[i].properties.intersectionPointList.forEach(point => point.properties.neighbours.push(intersection.point));
 
@@ -461,6 +456,8 @@ export class Wayfinding {
                 let group = levelChangerGroupMap.get(groupId);
                 // Add lc to group map
                 group.push(levelChanger);
+            } else {
+                levelChangerGroupMap.set(levelChanger.id, [levelChanger]);
             }
 
             levelChanger.properties.fixedPointMap = new Map();
@@ -468,40 +465,54 @@ export class Wayfinding {
                 let point = this._copyPoint(levelChanger);
                 point.properties.level = level;
                 let fixedPoint = this._getFixPointInArea(point);
+                fixedPoint.id = levelChanger.id;
+                fixedPoint.properties.amenity = levelChanger.properties.amenity;
+                fixedPoint.properties.direction = levelChanger.properties.direction;
+                fixedPoint.properties.id = levelChanger.properties.id;
+                fixedPoint.properties.level = level;
+                if (fixedPoint.properties.neighbours === undefined) fixedPoint.properties.neighbours = [];
+
                 // Do not fix level changers that are further than 5 meters from any path or area
                 if (this._distance(point, fixedPoint) > 5) {
                     return;
                 }
-                if (fixedPoint !== point) {
-                    levelChanger.properties.fixedPointMap.set(level, fixedPoint);
-                    if (fixedPoint.properties.onCorridor) {
-                        fixedPoint.properties.neighbours = [...this.corridorLinePointPairs[fixedPoint.properties.corridorIndex], ...segmentIntersectionPointMap.get(fixedPoint.properties.corridorIndex)];
-                        fixedPoint.properties.neighbours.forEach(it => {
-                            if (it.properties.levels !== undefined) { // if neighbour is level changer
-                                it = it.properties.fixedPointMap.get(level);
-                            }
-                            if (it.properties.neighbours === undefined) {
-                                it.properties.neighbours = [];
-                            }
-                            it.properties.neighbours.push(levelChanger);
+
+                // Store fixed point into the level changer
+                levelChanger.properties.fixedPointMap.set(level, fixedPoint);
+
+                // Add neighbourhood for corridor
+                if (fixedPoint.properties.onCorridor) {
+                    // fixedPoint.properties.neighbours = [...this.corridorLinePointPairs[fixedPoint.properties.corridorIndex], ...segmentIntersectionPointMap.get(fixedPoint.properties.corridorIndex)];
+                    if (fixedPoint.properties.neighboursLeadingTo !== undefined) {
+                        fixedPoint.properties.neighboursLeadingTo.forEach(neighbour => {
+                            if (neighbour.properties.neighbours === undefined) neighbour.properties.neighbours = [];
+                            neighbour.properties.neighbours.push(fixedPoint);
                         });
-                        this.corridorLineFeatures[fixedPoint.properties.corridorIndex].properties.intersectionPointList.push(levelChanger);
+                        this.corridorLineFeatures[fixedPoint.properties.corridorIndex].properties.intersectionPointList.push(fixedPoint);
                     }
-                } else {
-                    fixedPoint = this._copyPoint(levelChanger);
-                    fixedPoint.properties.level = level;
-                    levelChanger.properties.fixedPointMap.set(level, fixedPoint);
                 }
-                // fixedPoint.properties.amenity = levelChanger.properties.amenity;
             });
         });
 
         levelChangerGroupMap.forEach( (lcList, groupId) => {
+
+            let direction = lcList.map(it => it.properties.direction).find(it => it !== undefined);
+            let fixedPointList = [];
             lcList.forEach(lc => {
-                lc.properties.fixedPointMap.forEach((point, level) => {
-                    if (point.properties.neighbours == undefined) point.properties.neighbours = [];
-                    point.properties.neighbours.push(...lcList.filter(it => it !== lc));
-                });
+                fixedPointList.push(...lc.properties.fixedPointMap.values());
+            });
+
+            fixedPointList.forEach(fixedPoint => {
+                // init neighbour
+                if (fixedPoint.properties.neighbours == undefined) fixedPoint.properties.neighbours = [];
+                // Set neighbourhood
+                if (direction === 'up') {
+                    fixedPoint.properties.neighbours.push(...fixedPointList.filter(it => it.properties.level > fixedPoint.properties.level))
+                } else if (direction === 'down') {
+                    fixedPoint.properties.neighbours.push(...fixedPointList.filter(it => it.properties.level < fixedPoint.properties.level))
+                } else {
+                    fixedPoint.properties.neighbours.push(...fixedPointList.filter(it => it.properties.level !== fixedPoint.properties.level))
+                }
             });
         });
     }
@@ -551,7 +562,8 @@ export class Wayfinding {
         this.floorData.forEach((data, level) => {
             points = points.concat(data.points);
         });
-        points = points.concat(this.levelChangerList);
+        this.levelChangerList.forEach(lc => points.push(...lc.properties.fixedPointMap.values()));
+        points = points.concat();
         points = points.concat(this.corridorLinePoints);
         return points;
     }
@@ -577,7 +589,7 @@ export class Wayfinding {
         // NeighbourMap for polygon points
         this.floorData.forEach((levelFloorData, level) => {
             let levelNeighboursMap = {};
-            let levelPoints = levelFloorData.points.concat(this.levelChangerList.filter(point => this._isPointOnLevel(point, level)));
+            let levelPoints = levelFloorData.points.concat(this.levelChangerList.filter(point => this._isPointOnLevel(point, level)).map(it => it.properties.fixedPointMap.get(level)));
             levelPoints.forEach(point => {
                 let pointIndex = points.indexOf(point);
                 // Get unwrapped point if case the point is a level changer, so we can properly test neighbourhood
@@ -734,72 +746,16 @@ export class Wayfinding {
         let path = [];
         let previous = current;
         do {
-            if (this.levelChangerList.includes(current)) {
-
-                // Fix on previous level
-                let prevFloorFix = this._unwrapLevelChangerPoint(current, previous.properties.level);
-                if (prevFloorFix !== current) {
-                    prevFloorFix = this._copyPoint(prevFloorFix);
-                    prevFloorFix.properties.level = previous.properties.level;
-                    if (current.id != undefined) prevFloorFix.id = current.id;
-                    if (current.properties.id != undefined) prevFloorFix.properties.id = current.properties.id;
-                    if (current.properties.amenity != undefined) prevFloorFix.properties.amenity = current.properties.amenity;
-                    if (current.properties.type != undefined) prevFloorFix.properties.type = current.properties.type;
-                    path.push(prevFloorFix);
+            let pointsToInject = this._calculateWallOffsetPointList(current, path.length > 0 ? path[path.length - 1] : previous);
+            pointsToInject.forEach((point) => {
+                if (previous === current || previous.geometry.coordinates[0] !== point.geometry.coordinates[0] || previous.geometry.coordinates[1] !== point.geometry.coordinates[1]) {
+                    let newPoint = this._copyPoint(point);
+                    newPoint.properties.level = current.properties.level;
+                    path.push(newPoint);
+                    previous = point;
                 }
-
-//                // Point on previous level
-//                let prevFloorPoint = this._copyPoint(current);
-//                prevFloorPoint.properties.level = previous.properties.level;
-//                path.push(prevFloorPoint);
-//
-//                // Point on next level
-//                let nextFloorPoint = this._copyPoint(current);
-//                nextFloorPoint.properties.level = current.properties.cameFrom.properties.level;
-//                path.push(nextFloorPoint);
-
-                // Fix on next level
-                let nextFloorLevel;
-                if (current.properties.cameFrom.properties.levels != undefined) {
-                    let bestLevelDistance = Number.MAX_VALUE;
-                    current.properties.fixedPointMap.forEach((fixedPoint, level) => {
-                        if (fixedPoint.properties.neighbours.includes(current.properties.cameFrom)) {
-                            let levelDistance = Math.abs(previous.properties.level - level);
-                            if (levelDistance < bestLevelDistance) {
-                                bestLevelDistance = levelDistance;
-                                nextFloorLevel = level;
-                            }
-                        }
-                    });
-                } else {
-                    nextFloorLevel = current.properties.cameFrom.properties.level;
-                }
-                let nextFloorFix = this._unwrapLevelChangerPoint(current, nextFloorLevel);
-                if (nextFloorFix !== current) {
-                    nextFloorFix = this._copyPoint(nextFloorFix);
-                    nextFloorFix.properties.level = nextFloorLevel;
-                    if (current.id != undefined) nextFloorFix.id = current.id;
-                    if (current.properties.id != undefined) nextFloorFix.properties.id = current.properties.id;
-                    if (current.properties.amenity != undefined) nextFloorFix.properties.amenity = current.properties.amenity;
-                    if (current.properties.type != undefined) nextFloorFix.properties.type = current.properties.type;
-                    path.push(nextFloorFix);
-                }
-
-                current =  current.properties.cameFrom;
-                previous = nextFloorFix;
-            } else {
-                let pointsToInject = this._calculateWallOffsetPointList(current, path.length > 0 ? path[path.length - 1] : previous);
-                pointsToInject.forEach((point) => {
-                    if (previous === current || previous.geometry.coordinates[0] !== point.geometry.coordinates[0] || previous.geometry.coordinates[1] !== point.geometry.coordinates[1]) {
-                        let newPoint = this._copyPoint(point);
-                        newPoint.properties.level = current.properties.level;
-                        path.push(newPoint);
-                        previous = point;
-                    }
-                });
-                current =  current.properties.cameFrom;
-//                console.log(current);
-            }
+            });
+            current =  current.properties.cameFrom;
         } while (current != null);
 
         path.reverse();
@@ -883,20 +839,19 @@ export class Wayfinding {
                 delete point.properties.cameFrom;
                 delete point.properties.gscore;
                 delete point.properties.fscore;
-                delete point.properties.neighbours;
             }
         });
         this.levelChangerList.forEach(levelChanger => {
-            delete levelChanger.properties.cameFrom;
-            delete levelChanger.properties.gscore;
-            delete levelChanger.properties.fscore;
-            delete levelChanger.properties.neighbours;
+            levelChanger.properties.fixedPointMap.forEach((it, level) => {
+                delete it.properties.cameFrom;
+                delete it.properties.gscore;
+                delete it.properties.fscore;
+            });
         });
         this.corridorLinePoints.forEach(point => {
             delete point.properties.cameFrom;
             delete point.properties.gscore;
             delete point.properties.fscore;
-            delete point.properties.neighbours;
         });
     }
 
@@ -999,21 +954,23 @@ export class Wayfinding {
             // Gather neighbours over all levels
             let points = this._getPointList();
             let pointIndex = points.indexOf(point);
-            this.floorData.forEach((_, level) =>{
-                let levelNeighbourMap = this.neighbourMap[level];
-                if (levelNeighbourMap.hasOwnProperty(pointIndex)) {
-                    levelNeighbourMap[pointIndex].forEach(neighbourIndex => {
-                        let neighbourPoint = points[neighbourIndex];
+            if (pointIndex >= 0) {
+                this.floorData.forEach((_, level) => {
+                    let levelNeighbourMap = this.neighbourMap[level];
+                    if (levelNeighbourMap.hasOwnProperty(pointIndex)) {
+                        levelNeighbourMap[pointIndex].forEach(neighbourIndex => {
+                            let neighbourPoint = points[neighbourIndex];
 
-                        let revolvingDoorBlock = this.configuration.avoidRevolvingDoors && this._testAccessibilityPoiNeighbourhood(point, neighbourPoint, level, this.POI_TYPE.REVOLVING_DOOR);
-                        let ticketGateBlock = this.configuration.avoidTicketGates && this._testAccessibilityPoiNeighbourhood(point, neighbourPoint, level, this.POI_TYPE.TICKET_GATE);
+                            let revolvingDoorBlock = this.configuration.avoidRevolvingDoors && this._testAccessibilityPoiNeighbourhood(point, neighbourPoint, level, this.POI_TYPE.REVOLVING_DOOR);
+                            let ticketGateBlock = this.configuration.avoidTicketGates && this._testAccessibilityPoiNeighbourhood(point, neighbourPoint, level, this.POI_TYPE.TICKET_GATE);
 
-                        if (!neighbours.includes(neighbourPoint) && !revolvingDoorBlock && !ticketGateBlock) {
-                            neighbours.push(neighbourPoint);
-                        }
-                    });
-                }
-            });
+                            if (!neighbours.includes(neighbourPoint) && !revolvingDoorBlock && !ticketGateBlock) {
+                                neighbours.push(neighbourPoint);
+                            }
+                        });
+                    }
+                });
+            }
 
             // Test if endpoint is neighbour
             if (
@@ -1444,41 +1401,19 @@ export class Wayfinding {
             if (bestDistance < Infinity) {
                 return bestDistance;
             }
-
-            // TODO we need to fix heuristic calculations
-//            // Filter out levelChangers available on pointA level and not previously tested direct levelChangers
-//            let levelChangerList = this.levelChangerList
-//                .filter(levelChanger => directLevelChangerList.indexOf(levelChanger) < 0)
-//                .filter(levelChanger => levelChanger.properties.levels.includes(pointA.properties.level))
-//                .filter(levelChanger => levelChanger !== pointA);
-//            bestDistance = Infinity;
-//            levelChangerList.forEach(levelChanger => {
-//                let levelChangerPoint = this._copyPoint(levelChanger);
-//                let levelChangerDistance = this._distance(pointA, levelChangerPoint);
-//                levelChanger.properties.levels.forEach(i => {
-//                    levelChangerPoint.properties.level = i;
-//                    let distance = this._heuristic(levelChangerPoint, pointB);
-//                    if (levelChangerDistance + distance < bestDistance) {
-//                        bestDistance = levelChangerDistance + distance;
-//                    }
-//                });
-//            });
-//            if (bestDistance < Infinity) {
-//                return bestDistance;
-//            }
             return 2000;
         }
     }
 
     /**
      *
-     * @param pointA {Point}
-     * @param pointB {Point}
+     * @param pointA {Feature}
+     * @param pointB {Feature}
      * @returns {*|number|undefined}
      */
     _distance(pointA, pointB) {
         let levelChangePenalty = 0;
-        if (pointB.properties.levels !== undefined) levelChangePenalty = 10;
+        if (pointB.properties.level !== pointA.properties.level) levelChangePenalty = 10;
         return turf.distance(pointA, pointB, {units:'meters'}) + levelChangePenalty;
     }
 
@@ -1606,10 +1541,10 @@ export class Wayfinding {
      */
     _copyPoint(pointFeature) {
         let point = turf.point([pointFeature.geometry.coordinates[0], pointFeature.geometry.coordinates[1]]);
-        if (pointFeature.id != undefined) point.id = pointFeature.id;
-        if (pointFeature.properties.id != undefined) point.properties.id = pointFeature.properties.id;
-        if (pointFeature.properties.amenity != undefined) point.properties.amenity = pointFeature.properties.amenity;
-        if (pointFeature.properties.type != undefined) point.properties.type = pointFeature.properties.type;
+        if (pointFeature.id !== undefined) point.id = pointFeature.id;
+        if (pointFeature.properties.id !== undefined) point.properties.id = pointFeature.properties.id;
+        if (pointFeature.properties.amenity !== undefined) point.properties.amenity = pointFeature.properties.amenity;
+        if (pointFeature.properties.type !== undefined) point.properties.type = pointFeature.properties.type;
         return point;
     }
 
@@ -1638,5 +1573,3 @@ export class Wayfinding {
         return 0;
     }
 }
-
-export default Wayfinding;
