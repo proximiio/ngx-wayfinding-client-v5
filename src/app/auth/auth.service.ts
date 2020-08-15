@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { LocalStorageService } from '../core/local-storage.service';
 import { SessionStorageService } from '../core/session-storage.service';
 import { axios } from '../map/common';
+import { NgForage } from 'ngforage';
 
 const AUTH_URL = environment.authUrl;
 export const AUTH_KEY = 'AUTH';
@@ -24,7 +25,9 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private localStorageService: LocalStorageService,
-    private sessionStorageService: SessionStorageService) {}
+    private sessionStorageService: SessionStorageService,
+    private readonly ngf: NgForage
+  ) {}
 
   getToken() {
     return this.token;
@@ -76,8 +79,8 @@ export class AuthService {
       );
   }
 
-  autoAuthUser() {
-    const authInformation = this.getAuthData();
+  async autoAuthUser() {
+    const authInformation = await this.getAuthData();
     if (!authInformation) {
       return;
     }
@@ -103,24 +106,17 @@ export class AuthService {
   }
 
   private saveAuthData(token: string, user: any, config: any, data: any) {
-    this.sessionStorageService.setItem(
-      AUTH_KEY,
-      { isAuthenticated: true, token, user, config, data }
-    );
+    this.ngf.setItem(AUTH_KEY, { isAuthenticated: true, token, user, config, data });
   }
 
   private clearAuthData() {
     console.log('clear auth data');
-    this.sessionStorageService.setItem(
-      AUTH_KEY,
-      { isAuthenticated: false, token: null, user: null, config: null, data: null }
-    );
+    this.ngf.setItem(AUTH_KEY, { isAuthenticated: false, token: null, user: null, config: null, data: null });
   }
 
-  private getAuthData() {
-    const data = this.sessionStorageService.getItem(
-      AUTH_KEY
-    );
+  private async getAuthData() {
+    const data: any = await this.ngf.getItem(AUTH_KEY);
+    console.log(data);
     if (!data || !data.token || !data.user || !data.data) {
       return;
     }

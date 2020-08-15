@@ -7,15 +7,18 @@ import { CoreModule } from '../core/core.module';
 import { FontawesomeModule } from '../fontawesome.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    CoreModule,
-    FontawesomeModule,
-    MapRoutingModule,
-    NgxMapboxGLModule
-  ],
-  declarations: [
-    MapComponent
-  ]
+    imports: [
+        CommonModule,
+        CoreModule,
+        FontawesomeModule,
+        MapRoutingModule,
+        NgxMapboxGLModule
+    ],
+    exports: [
+        MapComponent
+    ],
+    declarations: [
+        MapComponent
+    ]
 })
 export class MapModule {}

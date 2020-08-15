@@ -10,6 +10,10 @@ import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core/core.module';
 import { AngularMaterialModule } from './angular-material.module';
 import { FontawesomeModule } from './fontawesome.module';
+import { DEFAULT_CONFIG, NgForageOptions, NgForageConfig, Driver } from 'ngforage';
+import { environment } from '../environments/environment';
+
+const APP_PREFIX = environment.appPrefix;
 
 @NgModule({
   declarations: [
@@ -27,7 +31,17 @@ import { FontawesomeModule } from './fontawesome.module';
   ],
   providers: [
     AuthGuard,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    {
+      provide: DEFAULT_CONFIG,
+      useValue: {
+        name: APP_PREFIX,
+        driver: [ // defaults to indexedDB -> webSQL -> localStorage
+          Driver.INDEXED_DB,
+          Driver.LOCAL_STORAGE
+        ]
+      } as NgForageOptions
+    }
   ],
   bootstrap: [AppComponent]
 })
