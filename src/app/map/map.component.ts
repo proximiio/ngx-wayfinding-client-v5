@@ -17,6 +17,9 @@ import DataSource from './sources/data_source';
 import { getImageFromBase64 } from './common';
 import { chevron } from './icons';
 import * as turf from '@turf/turf';
+import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { NotificationDialogComponent } from '../core/notification-dialog/notification-dialog.component';
 
 interface State {
   readonly initializing: boolean;
@@ -65,7 +68,9 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(
     private mapService: MapService,
     private authService: AuthService,
-    public sidebarService: SidebarService
+    public sidebarService: SidebarService,
+    public activatedRoute: ActivatedRoute,
+    private dialog: MatDialog
   ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentUserData = this.authService.getCurrentUserData();
@@ -131,7 +136,9 @@ export class MapComponent implements OnInit, OnDestroy {
        this.generateRoute();
       }),
       this.sidebarService.getSelectedPlaceListener().subscribe(place => {
-        this.setPlace(place);
+        if (place) {
+          this.setPlace(place);
+        }
       })
     );
   }
@@ -359,8 +366,59 @@ export class MapComponent implements OnInit, OnDestroy {
       // map.setStyle(this.state.style);
       this.imageSourceManager.setLevel(map, this.state.floor.level);
       await this.onPlaceSelect(this.state.place);
+      this.handleQueryParams();
     }
   }
+
+  handleQueryParams() {
+    // do logic with query params
+    if (this.activatedRoute.snapshot.queryParams['place']) {
+      const placeId = this.activatedRoute.snapshot.queryParams['place'];
+      const place = this.state.places.find(f => f.id === placeId);
+      if (place) {
+        this.sidebarService.selectedPlaceListener.next(place);
+      } else {
+        this.dialog.open(NotificationDialogComponent, {
+          data: {
+            header: `We couldn't find place that matches id "${placeId}".`,
+            message: `Try searching other id, or use navigation to find it!`,
+            closeText: `Okay, got it`
+          }
+        });
+      }
+    }
+    if (this.activatedRoute.snapshot.queryParams['startPoi']) {
+      const startPoiId = this.activatedRoute.snapshot.queryParams['startPoi'];
+      const startPoi = this.features.features.find(f => f.properties.id === startPoiId);
+      if (startPoi) {
+       this.sidebarService.startPointListener.next(startPoi);
+      } else {
+        this.dialog.open(NotificationDialogComponent, {
+          data: {
+            header: `We couldn't find starting point that matches id "${startPoiId}".`,
+            message: `Try searching other id, or use navigation to find it!`,
+            closeText: `Okay, got it`
+          }
+        });
+      }
+    }
+    if (this.activatedRoute.snapshot.queryParams['endPoi']) {
+      const endPoiId = this.activatedRoute.snapshot.queryParams['endPoi'];
+      const endPoi = this.features.features.find(f => f.properties.id === endPoiId);
+      if (endPoi) {
+       this.sidebarService.endPointListener.next(endPoi);
+      } else {
+        this.dialog.open(NotificationDialogComponent, {
+          data: {
+            header: `We couldn't find ending point that matches id "${endPoiId}".`,
+            message: `Try searching other id, or use navigation to find it!`,
+            closeText: `Okay, got it`
+          }
+        });
+      }
+    }
+  }
+
 
   updateCluster() {
     const map = this.map;
@@ -472,7 +530,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.onFloorSelect(floor);
     }
     if (this.map) {
-      this.map.flyTo({ center: poi.coordinates });
+      this.map.flyTo({ center: poi.geometry.coordinates });
     }
   }
 

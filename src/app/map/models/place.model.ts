@@ -10,8 +10,8 @@ export default class Place extends BaseModel {
     super(data);
     this.name = data.name;
     this.address = data.address;
-    this.lat = data.location ? data.location.lat : 60.1669635;
-    this.lng = data.location ? data.location.lng : 24.9217484;
+    this.lat = data.lat ? data.lat : data.location ? data.location.lat : 60.1669635;
+    this.lng = data.lng ? data.lng : data.location ? data.location.lng :  24.9217484;
   }
 
   get hasLocation() {

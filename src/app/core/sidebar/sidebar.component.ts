@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { isPointWithinRadius } from 'geolib';
 import { AuthService } from '../../auth/auth.service';
 import { SidebarService } from './sidebar.service';
 import Place from '../../map/models/place.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   currentUser;
   config;
   currentUserData;
@@ -20,6 +21,8 @@ export class SidebarComponent implements OnInit {
   amenities;
   pois;
   selectedPlace;
+  startPoi;
+  endPoi;
   showPlaceSelector = true;
   endPointLabel = 'What are you looking for?';
   startPointLabel = 'Where are you now?';
@@ -30,8 +33,11 @@ export class SidebarComponent implements OnInit {
   onlyAccessible = false;
   showPoweredBy = false;
 
+  private subs = [];
+
   constructor(
     private authService: AuthService,
+    private router: Router,
     public sidebarService: SidebarService
   ) {
     this.currentUser = this.authService.getCurrentUser();
@@ -49,6 +55,24 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.pois = this.sortedPOIs;
+
+    this.subs.push(
+      this.sidebarService.getStartPointListener().subscribe(poi => {
+        this.startPoi = poi;
+        this.addQueryParams();
+      }),
+      this.sidebarService.getEndPointListener().subscribe(poi => {
+        this.endPoi = poi;
+        this.addQueryParams();
+      }),
+      this.sidebarService.getSelectedPlaceListener().subscribe(place => {
+        if (place) {
+          this.selectedPlace = this.places.find(p => p.id === place.id);
+          this.pois = this.sortedPOIs;
+          this.addQueryParams();
+        }
+      })
+    );
   }
 
   get sortedPOIs() {
@@ -113,14 +137,27 @@ export class SidebarComponent implements OnInit {
   }
 
   onPlaceSelect(place) {
-    this.selectedPlace = place;
-    this.pois = this.sortedPOIs;
     this.sidebarService.selectedPlaceListener.next(place);
   }
 
   onAccessibleOnlyToggle() {
     this.onlyAccessible = !this.onlyAccessible;
     this.sidebarService.accessibleOnlyToggleListener.next(this.onlyAccessible);
+  }
+
+  addQueryParams() {
+    this.router.navigate([], {
+      queryParams: {
+        place: this.selectedPlace ? this.selectedPlace.id : '',
+        startPoi: this.startPoi ? this.startPoi.properties.id : null,
+        endPoi: this.endPoi ? this.endPoi.properties.id : null
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach(s => s.unsubscribe());
   }
 
 }

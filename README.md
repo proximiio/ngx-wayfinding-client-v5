@@ -36,6 +36,30 @@ node server.js
 
 After that with default settings, wayfinding app should be available at `http://localhost:6001/wayfinding`.
 
+## Routing via URL query params
+
+You can use url query params to load map with predefined route, all you need to do is define place (not required for single place account), startPoi and endPoi params.
+
+##### Place param:
+Use place id to define a place, this is not required for single place accounts.
+```
+http://localhost:6001/wayfinding/map?place=placeId
+```
+
+##### Start poi param:
+Use poi id to define a start point.
+```
+http://localhost:6001/wayfinding/map?place=placeId&startPoi=startPoiId
+```
+
+##### End poi param:
+Use poi id to define an end point.
+```
+http://localhost:6001/wayfinding/map?place=placeId&startPoi=startPoiId&endPoi=endPoiId
+```
+
+With those set up the map should be loaded with already generated route.
+
 ## Development server
 
 For development process it's necessary to keep production server running as it's also serving the authentication.

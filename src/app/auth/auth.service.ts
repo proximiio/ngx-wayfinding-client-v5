@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { environment } from '../../environments/environment';
@@ -24,6 +24,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private localStorageService: LocalStorageService,
     private sessionStorageService: SessionStorageService,
     private readonly ngf: NgForage
@@ -70,7 +71,7 @@ export class AuthService {
             this.setAxios(token);
             this.authStatusListener.next(true);
             this.saveAuthData(token, this.user, this.config, this.data);
-            this.router.navigate(['/']);
+            this.router.navigate(['/map'],  { queryParams: this.activatedRoute.snapshot.queryParams, queryParamsHandling: 'merge' });
           }
         },
         error => {

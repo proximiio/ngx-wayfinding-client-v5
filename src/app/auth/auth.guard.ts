@@ -2,7 +2,7 @@ import {
   CanActivate,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
-  Router
+  Router, ActivatedRoute
 } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
   ): boolean | Observable<boolean> | Promise<boolean> {
     const isAuth = this.authService.getIsAuth();
     if (!isAuth) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login'],  { queryParams: route.queryParams, queryParamsHandling: 'merge' });
     }
     return isAuth;
   }

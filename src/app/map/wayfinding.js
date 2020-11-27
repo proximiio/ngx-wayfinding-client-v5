@@ -47,6 +47,9 @@ export class Wayfinding {
             || feature.properties.type === 'escalator'
             || feature.properties.type === 'staircase'
         );
+        levelChangerList.forEach(levelChanger => {
+            if (levelChanger.id === undefined) levelChanger.id = levelChanger.properties.id;
+        });
         let accesibilityPoiTypeList = ['door', 'ticket_gate'];
         let accessibilityPoiList = featureList.filter(feature => accesibilityPoiTypeList.includes(feature.properties.type));
 
@@ -472,6 +475,7 @@ export class Wayfinding {
                 fixedPoint.properties.direction = levelChanger.properties.direction;
                 fixedPoint.properties.id = levelChanger.properties.id;
                 fixedPoint.properties.level = level;
+                fixedPoint.properties.type = levelChanger.properties.type;
                 if (fixedPoint.properties.neighbours === undefined) fixedPoint.properties.neighbours = [];
 
                 // Do not fix level changers that are further than 5 meters from any path or area
@@ -891,12 +895,15 @@ export class Wayfinding {
             if (current === fixedEndPoint) {
 //                console.log('found the route!');
                 let finalPath = this.reconstructPath(current);
-                if (fixedEndPoint !== endPoint && (!fixedEndPoint.properties.onCorridor || this._distance(fixedEndPoint, endPoint) > this._pathFixDistance)) {
+                if (fixedEndPoint !== endPoint && endPoint.properties.levels !== undefined && (!fixedEndPoint.properties.onCorridor || this._distance(fixedEndPoint, endPoint) > this._pathFixDistance)) {
+                    endPoint.properties.fixed = true
                     finalPath.push(endPoint);
                 }
                 if (fixedStartPoint !== startPoint && (!fixedStartPoint.properties.onCorridor || this._distance(fixedStartPoint, startPoint) > this._pathFixDistance)) {
+                    startPoint.properties.fixed = true
                     finalPath.unshift(startPoint);
                 }
+                finalPath[finalPath.length - 1].properties.gscore = current.properties.gscore;
                 return finalPath
             }
             closedSet.push(openSet.splice(openSet.indexOf(current),1));
@@ -915,7 +922,7 @@ export class Wayfinding {
                 let gScoreNeighbour = neighbour.properties.gscore != null ? neighbour.properties.gscore : Infinity;
                 if (tentativeGScore < gScoreNeighbour) {
                     neighbour.properties.cameFrom = current;
-                    neighbour.properties.gscore = tentativeGScore;
+                    neighbour.properties.gscore = tentativeGScore + 0.2;
                     neighbour.properties.fscore = tentativeGScore + this._heuristic(neighbour, fixedEndPoint);
                     if (openSet.indexOf(neighbour) < 0) {
                         openSet.push(neighbour);

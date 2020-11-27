@@ -12,12 +12,14 @@ import { AngularMaterialModule } from './angular-material.module';
 import { FontawesomeModule } from './fontawesome.module';
 import { DEFAULT_CONFIG, NgForageOptions, NgForageConfig, Driver } from 'ngforage';
 import { environment } from '../environments/environment';
+import { NotificationDialogComponent } from './core/notification-dialog/notification-dialog.component';
 
 const APP_PREFIX = environment.appPrefix;
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NotificationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +45,7 @@ const APP_PREFIX = environment.appPrefix;
       } as NgForageOptions
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [NotificationDialogComponent]
 })
 export class AppModule { }

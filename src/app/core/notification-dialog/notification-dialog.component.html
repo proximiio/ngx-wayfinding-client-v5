@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{ data.header ? data.header : 'An Error Occurred!' }}</h1>
+<div mat-dialog-content>
+  <p class="mat-body-1 well" *ngIf="data.message">{{ data?.message }}</p>
+  <pre *ngIf="data.code">{{ data.code | json }}</pre>
+  <p class="text-success" *ngIf="data?.token"><fa-icon [icon]="['fal', 'exclamation-square']" class="mr-2"></fa-icon>We have copied token to <strong>clipboard</strong> for you!</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>{{ data.closeText ? data.closeText : 'Okay' }}</button>
+</div>
