@@ -1,12 +1,12 @@
 <div class="container">
   <button (click)="onDetailsClose()" class="close"><fa-icon [icon]="['fal', 'times']"></fa-icon></button>
   <div class="img-holder">
-    <img src="https://picsum.photos/500/300" [alt]="sidebarService.selectedEndPoi.properties.title">
+    <img [src]="poi.properties.images[0] ? getImageUrl() : 'https://picsum.photos/500/300'" [alt]="poi.properties.title">
   </div>
   <div class="content" [ngClass]="{'accessibleOnly': stateService.state.accessibleRoute}">
-    <h2 class="title">{{ sidebarService.selectedEndPoi.properties.title }}</h2>
-    <h4 class="open-hours">Open 06:00-23:00</h4>
-    <h4 class="level">{{ sidebarService.selectedEndPoi.properties.level + 1 | ordinal }} floor</h4>
+    <h2 class="title">{{ poi.properties.title }}</h2>
+    <h4 class="open-hours">{{ getOpenHours() }}</h4>
+    <h4 class="level">{{ poi.properties.level + 1 | ordinal }} floor</h4>
 
     <p>
       {{ details | slice:0: limit }} {{ details.length > limit ? '...' : '' }}
