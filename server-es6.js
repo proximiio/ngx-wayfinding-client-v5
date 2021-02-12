@@ -35,12 +35,32 @@ app.get(Settings.basepath+'/auth', async (request, response, next) => {
     const features = await proximiApiInstance.get(`/${Settings.geo_version}/geo/features`);
     const amenities = await proximiApiInstance.get(`/${Settings.geo_version}/geo/amenities`);
 
-    features.data.features = features.data.features.map(feature => {
+    const featuresToAdd = [];
+    features.data.features = features.data.features.map((feature, key) => {
       if (!feature.properties.title) {
         feature.properties.title = '';
       }
+      if (feature.properties.type === 'poi' && feature.properties.metadata && feature.properties.metadata.polygon_id) {
+        feature.properties.type = 'poi-custom';
+        const polygon = features.data.features.find(f => f.properties.id === feature.properties.metadata.polygon_id);
+        polygon.properties.type = 'shop-custom';
+        polygon.properties.poi_id = feature.properties.id;
+        polygon.id = key;
+        if (polygon.properties['label-line'] && polygon.properties['label-line'][0] instanceof Array && polygon.properties['label-line'][1] instanceof Array) {
+          const labelLineFeature = JSON.parse(JSON.stringify(feature));
+          labelLineFeature.geometry = {
+            coordinates: polygon.properties['label-line'],
+            type: 'LineString'
+          }
+          labelLineFeature.id = key+9999;
+          labelLineFeature.properties.type = 'shop-label';
+          polygon.properties.label_id = labelLineFeature.id;
+          featuresToAdd.push(labelLineFeature);
+        }
+      }
       return feature;
     });
+    features.data.features = features.data.features.concat(featuresToAdd);
 
     const defaultLevel = config.data.default_floor_number ? config.data.default_floor_number : 0;
     const defaultFloor = floors.data.filter(floor => floor.level === defaultLevel)[0];

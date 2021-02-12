@@ -13,6 +13,7 @@ import { FontawesomeModule } from './fontawesome.module';
 import { DEFAULT_CONFIG, NgForageOptions, NgForageConfig, Driver } from 'ngforage';
 import { environment } from '../environments/environment';
 import { NotificationDialogComponent } from './core/notification-dialog/notification-dialog.component';
+import { SidebarModule } from './core/sidebar/sidebar.module';
 
 const APP_PREFIX = environment.appPrefix;
 
@@ -28,6 +29,7 @@ const APP_PREFIX = environment.appPrefix;
     AngularMaterialModule,
     CoreModule,
     AuthModule,
+    SidebarModule,
     MapModule,
     AppRoutingModule
   ],

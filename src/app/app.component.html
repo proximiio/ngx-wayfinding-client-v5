@@ -1,20 +1,10 @@
 <div [class]="'theme-wrapper ' + theme$">
-  <mat-sidenav-container *ngIf="userIsAuthenticated">
-    <mat-sidenav
-      [ngStyle]="{'background-color': currentUserConfig ? currentUserConfig.primary_color : ''}"
-      [mode]="sidebarService.sidenavMode"
-      [opened]="sidenavIsOpened"
-      #appDrawer>
+  <ng-container *ngIf="userIsAuthenticated">
+    <div class="content">
       <app-sidebar></app-sidebar>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <div class="container">
-        <div class="content">
-          <app-map></app-map>
-        </div>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+      <app-map></app-map>
+    </div>
+  </ng-container>
   <ng-container *ngIf="!userIsAuthenticated">
     <div class="content">
       <p *ngIf="isLoading" style="margin: 2rem 0; text-align: center;">

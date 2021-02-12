@@ -1,0 +1,37 @@
+<div class="container">
+  <button (click)="onDetailsClose()" class="close"><fa-icon [icon]="['fal', 'times']"></fa-icon></button>
+  <div class="img-holder">
+    <img src="https://picsum.photos/500/300" [alt]="sidebarService.selectedEndPoi.properties.title">
+  </div>
+  <div class="content" [ngClass]="{'accessibleOnly': stateService.state.accessibleRoute}">
+    <h2 class="title">{{ sidebarService.selectedEndPoi.properties.title }}</h2>
+    <h4 class="open-hours">Open 06:00-23:00</h4>
+    <h4 class="level">{{ sidebarService.selectedEndPoi.properties.level + 1 | ordinal }} floor</h4>
+
+    <p>
+      {{ details | slice:0: limit }} {{ details.length > limit ? '...' : '' }}
+      <a *ngIf="details.length > limit" href="javascript:;" (click)="limit = details.length; showingMore = true">Show more <fa-icon [icon]="['fal', 'angle-down']"></fa-icon></a>
+      <a *ngIf="showingMore" href="javascript:;" (click)="limit = 200; showingMore = false">Show less <fa-icon [icon]="['fal', 'angle-up']"></fa-icon></a>
+    </p>
+
+    <button (click)="toggleInstructions()" class="instructions-toggle">
+      <fa-icon [icon]="showInstructions ? ['fal', 'angle-down'] : stateService.state.accessibleRoute ? ['fal', 'wheelchair'] : ['fal', 'route']"></fa-icon>
+      {{ showInstructions ? 'Hide' : 'Show' }} instructions
+    </button>
+    <button (click)="toggleAccessibleRoute()" class="accessible-toggle">
+      <fa-icon [icon]="stateService.state.accessibleRoute ? ['fal', 'walking'] : ['fal', 'wheelchair']"></fa-icon>
+      {{ stateService.state.accessibleRoute ? 'Show fastest route' : 'Show accessible route' }}
+    </button>
+
+    <mat-expansion-panel [disabled]="true" [expanded]="showInstructions">
+      <mat-panel-description>
+        <mat-list>
+          <mat-list-item *ngFor="let step of steps">
+            <p matLine> <fa-icon [icon]="step.directionIcon"></fa-icon> <fa-icon [icon]="step.stepIcon"></fa-icon></p>
+            <p matLine> {{ step.description }} </p>
+          </mat-list-item>
+        </mat-list>
+      </mat-panel-description>
+    </mat-expansion-panel>
+  </div>
+</div>

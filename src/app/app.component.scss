@@ -1,15 +1,10 @@
-.mat-sidenav {
-  width: 390px;
-  border-right: 0;
-  background-color: #2A8FBD;
-}
-.mat-sidenav-container {
-  background-color: white !important;
-  height: 100vh;
-}
-
-.container {
-  height: 100vh;
+app-sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 460px;
+  z-index: 1;
+  padding-top: 120px;
 }
 
 .content {
