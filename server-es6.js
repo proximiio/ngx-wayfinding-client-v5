@@ -43,19 +43,21 @@ app.get(Settings.basepath+'/auth', async (request, response, next) => {
       if (feature.properties.type === 'poi' && feature.properties.metadata && feature.properties.metadata.polygon_id) {
         feature.properties.type = 'poi-custom';
         const polygon = features.data.features.find(f => f.properties.id === feature.properties.metadata.polygon_id);
-        polygon.properties.type = 'shop-custom';
-        polygon.properties.poi_id = feature.properties.id;
-        polygon.id = key;
-        if (polygon.properties['label-line'] && polygon.properties['label-line'][0] instanceof Array && polygon.properties['label-line'][1] instanceof Array) {
-          const labelLineFeature = JSON.parse(JSON.stringify(feature));
-          labelLineFeature.geometry = {
-            coordinates: polygon.properties['label-line'],
-            type: 'LineString'
+        if (polygon) {
+          polygon.properties.type = 'shop-custom';
+          polygon.properties.poi_id = feature.properties.id;
+          polygon.id = key;
+          if (polygon.properties['label-line'] && polygon.properties['label-line'][0] instanceof Array && polygon.properties['label-line'][1] instanceof Array) {
+            const labelLineFeature = JSON.parse(JSON.stringify(feature));
+            labelLineFeature.geometry = {
+              coordinates: polygon.properties['label-line'],
+              type: 'LineString'
+            }
+            labelLineFeature.id = key+9999;
+            labelLineFeature.properties.type = 'shop-label';
+            polygon.properties.label_id = labelLineFeature.id;
+            featuresToAdd.push(labelLineFeature);
           }
-          labelLineFeature.id = key+9999;
-          labelLineFeature.properties.type = 'shop-label';
-          polygon.properties.label_id = labelLineFeature.id;
-          featuresToAdd.push(labelLineFeature);
         }
       }
       return feature;
@@ -93,10 +95,10 @@ app.post(Settings.basepath+'/analytics/ahoy/visits', function(request, res) {
   proximiApiInstance.post(`/v4/geo/metrics`, data).then(function (response) {
     res.send(response.data);
   })
-  .catch(function (error) {
-    console.log(error);
-    res.send(response.data);
-  });
+    .catch(function (error) {
+      console.log(error);
+      res.send(response.data);
+    });
 });
 
 app.post(Settings.basepath+'/analytics/ahoy/events', function(request, res) {
@@ -105,10 +107,10 @@ app.post(Settings.basepath+'/analytics/ahoy/events', function(request, res) {
   proximiApiInstance.post(`/v4/geo/metrics`, data).then(function (response) {
     res.send(response.data);
   })
-  .catch(function (error) {
-    console.log(error);
-    res.send(error);
-  });
+    .catch(function (error) {
+      console.log(error);
+      res.send(error);
+    });
 });
 
 const server = http.createServer(app);
