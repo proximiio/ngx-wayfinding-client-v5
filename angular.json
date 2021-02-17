@@ -23,7 +23,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": false,
-            "baseHref": "/wayfinding-demo/",
+            "baseHref": "/wayfinding/",
             "assets": [
               "src/favicon.ico",
               "src/assets"
