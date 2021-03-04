@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>Kiosk Settings</h1>
+<form [formGroup]="settingsForm">
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Latitude" formControlName="latitude">
+      <mat-error *ngIf="settingsForm.get('latitude').invalid">Please enter a valid latitude.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Longitude" formControlName="longitude">
+      <mat-error *ngIf="settingsForm.get('longitude').invalid">Please enter a valid longitude.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Level" formControlName="level">
+      <mat-error *ngIf="settingsForm.get('level').invalid">Please enter a valid level.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Zoom" formControlName="zoom">
+      <mat-error *ngIf="settingsForm.get('zoom').invalid">Please enter a valid zoom.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Bearing" formControlName="bearing">
+      <mat-error *ngIf="settingsForm.get('bearing').invalid">Please enter a valid bearing.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Pitch" formControlName="pitch">
+      <mat-error *ngIf="settingsForm.get('pitch').invalid">Please enter a valid pitch.</mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onCancel()" color="warn" class="cancel">Cancel</button>
+    <button type="submit" [disabled]="!settingsForm.valid" mat-button [mat-dialog-close]="settingsForm.value" cdkFocusInitial color="primary" class="submit">Submit</button>
+  </div>
+</form>

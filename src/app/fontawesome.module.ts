@@ -38,7 +38,7 @@ import {
   faPennant,
   faRoute,
   faAngleDown,
-  faWalking, faAngleUp
+  faWalking, faAngleUp, faCog
 } from '../vendor/pro-light-svg-icons';
 
 @NgModule({
@@ -87,7 +87,8 @@ export class FontawesomeModule {
       faRoute,
       faAngleDown,
       faAngleUp,
-      faWalking
+      faWalking,
+      faCog
     );
   }
 }

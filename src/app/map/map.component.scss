@@ -44,7 +44,8 @@ mgl-map {
   }
 }
 
-.my-location {
+.my-location,
+.settings {
   background-color: $default-color;
   color: white;
   box-shadow: none;
@@ -63,6 +64,9 @@ mgl-map {
   &:hover {
     background-color: darken($default-color, 3%);
   }
+}
+
+.my-location {
   .icon {
     background-image: url('../../assets/location-regular.svg');
     background-repeat: no-repeat;
@@ -71,6 +75,11 @@ mgl-map {
     width: 48px;
     background-size: 24px;
   }
+}
+
+.settings {
+  top: auto;
+  bottom: 45px;
 }
 
 .map-floors {

@@ -16,8 +16,11 @@ export interface State {
   readonly loadingRoute: boolean;
   readonly options: any;
   readonly noPlaces: boolean;
-  readonly defaultLocation: [number, number];
-  readonly defaultLocationAsStart: boolean;
+  readonly defaultLocation: {
+    coordinates: [number, number],
+    level: number,
+    isStartPoint: boolean
+  };
   accessibleRoute: boolean;
 }
 
@@ -37,13 +40,16 @@ export class StateService {
     noPlaces: false,
     options: {
       coordinates: [0, 0],
-      zoom: 0,
-      pitch: 0,
-      bearing: 0,
+      zoom: 19,
+      pitch: 40,
+      bearing: 10,
       bounds: [[0, 0], [0, 0]]
     },
-    defaultLocation: [51.48091652702158, 25.336680584406395],
-    defaultLocationAsStart: true,
+    defaultLocation: {
+      coordinates: [51.48091652702158, 25.336680584406395],
+      level: 0,
+      isStartPoint: true
+    },
     accessibleRoute: false
   };
 }
