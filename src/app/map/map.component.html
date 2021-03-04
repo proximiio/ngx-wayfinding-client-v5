@@ -23,6 +23,9 @@
   <button class="my-location" (click)="onMyLocation()">
     <span class="icon"></span>
   </button>
+  <button class="settings" (click)="onSettings()">
+    <fa-icon [icon]="['fal', 'cog']" size="lg"></fa-icon>
+  </button>
   <mgl-map
     *ngIf="!stateService.state.initializing"
     [style]="stateService.state.style"
@@ -32,31 +35,6 @@
       mglNavigation
       [showZoom]="false"
     ></mgl-control>
-    <mgl-geojson-source
-      id="my-location"
-    >
-      <mgl-feature
-        [geometry]="{
-          'type': 'Point',
-          'coordinates': stateService.state.defaultLocation
-       }"
-        [properties]="{
-          'level': 0
-        }"
-      ></mgl-feature>
-    </mgl-geojson-source>
-    <mgl-layer
-      id="my-location-layer"
-      type="symbol"
-      source="my-location"
-      [layout]="{
-        'icon-image': 'pulsing-dot'
-      }"
-      [filter]="[
-        'all',
-        ['==', ['to-number', ['get','level']], this.stateService.state.floor.level]
-      ]"
-    ></mgl-layer>
     <mgl-layer
       id="shop-custom"
       type="fill-extrusion"
@@ -161,6 +139,32 @@
           '#6945ed'
         ]
       }"></mgl-layer>
+    <mgl-geojson-source
+      id="my-location"
+    >
+      <mgl-feature
+        *ngIf="showStartPoint"
+        [geometry]="{
+          'type': 'Point',
+          'coordinates': stateService.state.defaultLocation.coordinates
+       }"
+        [properties]="{
+          'level': stateService.state.defaultLocation.level
+        }"
+      ></mgl-feature>
+    </mgl-geojson-source>
+    <mgl-layer
+      id="my-location-layer"
+      type="symbol"
+      source="my-location"
+      [layout]="{
+        'icon-image': 'pulsing-dot'
+      }"
+      [filter]="[
+        'all',
+        ['==', ['to-number', ['get','level']], this.stateService.state.floor.level]
+      ]"
+    ></mgl-layer>
     <ng-container *ngFor="let key of objectKeys(images)">
       <mgl-image
         [id]="key"

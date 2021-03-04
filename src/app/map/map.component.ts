@@ -21,6 +21,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationDialogComponent } from '../core/notification-dialog/notification-dialog.component';
 import { StateService } from '../core/state.service';
+import { SettingsDialogComponent } from '../core/settings-dialog/settings-dialog.component';
 
 @Component({
   selector: 'app-map',
@@ -48,6 +49,7 @@ export class MapComponent implements OnInit, OnDestroy {
   routingSource: RoutingSource = new RoutingSource();
   clusterSource: ClusterSource = new ClusterSource();
   imageSourceManager: ImageSourceManager = new ImageSourceManager();
+  showStartPoint = false;
 
   private subs = [];
 
@@ -121,9 +123,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.syntheticSource.observe(this.onSyntheticChange);
     this.routingSource.observe(this.onRouteChange);
     await this.fetch();
-    if (this.stateService.state.defaultLocationAsStart) {
-      const point = turf.point(this.stateService.state.defaultLocation, { level: 0 });
-      this.sidebarService.startPointListener.next(point);
+    if (this.stateService.state.defaultLocation.isStartPoint) {
+      this.setStartPoint();
     }
   }
 
@@ -137,6 +138,9 @@ export class MapComponent implements OnInit, OnDestroy {
     const { places, style, styles } = await Repository.getPackage();
     const place = places.length > 0 ? places[0] : new Place({});
     style.center = [place.lng, place.lat];
+    style.zoom = this.stateService.state.options.zoom;
+    style.bearing = this.stateService.state.options.bearing;
+    style.pitch = this.stateService.state.options.pitch;
     this.geojsonSource.fetch(this.features);
     this.routingSource.routing.setData(new FeatureCollection(this.features));
     this.onSourceChange();
@@ -428,7 +432,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     const map = this.map;
     if (map) {
-      map.flyTo({ center: [ place.lng, place.lat ] });
+      map.flyTo({ center: [ place.lng, place.lat ], bearing: this.stateService.state.options.bearing, pitch: this.stateService.state.options.pitch });
     }
   }
 
@@ -462,7 +466,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
       if (route) {
         const bbox = turf.bbox(route.geometry);
-        map.fitBounds(bbox, { padding: 150 });
+        map.fitBounds(bbox, { padding: 150, bearing: this.stateService.state.options.bearing, pitch: this.stateService.state.options.pitch });
       }
     }
     this.stateService.state = {...this.stateService.state, floor, style: this.stateService.state.style};
@@ -496,8 +500,42 @@ export class MapComponent implements OnInit, OnDestroy {
 
   onMyLocation() {
     if (this.map) {
-      this.map.flyTo({ center: this.stateService.state.defaultLocation });
+      this.map.flyTo({ center: this.stateService.state.defaultLocation.coordinates, bearing: this.stateService.state.options.bearing, pitch: this.stateService.state.options.pitch });
     }
+  }
+
+  onSettings() {
+    const dialogRef = this.dialog.open(SettingsDialogComponent, {
+      width: '420px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const options = this.stateService.state.options;
+        options.zoom = result.zoom;
+        options.bearing = result.bearing;
+        options.pitch = result.pitch;
+        this.stateService.state = {...this.stateService.state, options};
+        this.map.setZoom(result.zoom);
+        this.map.setPitch(result.pitch);
+        this.map.setBearing(result.bearing);
+
+        this.stateService.state.defaultLocation.coordinates = [result.longitude, result.latitude];
+        this.stateService.state.defaultLocation.level = result.level;
+        if (this.stateService.state.defaultLocation.isStartPoint) {
+          this.setStartPoint();
+        }
+      }
+    });
+  }
+
+  setStartPoint() {
+    this.showStartPoint = false;
+    setTimeout(() => {
+      const point = turf.point(this.stateService.state.defaultLocation.coordinates, { level: this.stateService.state.defaultLocation.level });
+      this.sidebarService.startPointListener.next(point);
+      this.showStartPoint = true;
+    })
   }
 
   centerOnPoi(poi) {
@@ -506,7 +544,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.onFloorSelect(floor);
     }
     if (this.map) {
-      this.map.flyTo({ center: poi.geometry.coordinates });
+      this.map.flyTo({ center: poi.geometry.coordinates, bearing: this.stateService.state.options.bearing, pitch: this.stateService.state.options.pitch });
     }
   }
 
@@ -518,7 +556,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       if (this.map) {
         const bbox = turf.bbox(route.geometry);
-        this.map.fitBounds(bbox, { padding: 150 });
+        this.map.fitBounds(bbox, { padding: 150, bearing: this.stateService.state.options.bearing, pitch: this.stateService.state.options.pitch });
       }
     }
   }

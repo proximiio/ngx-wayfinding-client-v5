@@ -14,7 +14,7 @@ import { environment } from '../environments/environment';
 export class AppComponent implements OnInit, OnDestroy {
   userIsAuthenticated = false;
   isLoading = false;
-  theme$ = 'default-theme';
+  theme$ = 'custom-theme';
   currentUserConfig;
   fingerprint;
   sendAnalytics = true;
