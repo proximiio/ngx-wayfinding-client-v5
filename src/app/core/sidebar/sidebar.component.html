@@ -3,13 +3,13 @@
     <fa-icon [icon]="['fal', 'times']"></fa-icon>
   </a>
   <div class="brand">
-    <img [src]="config.logo ? config.logo : 'assets/proximiio-logo-vertical.png'">
+    <img [src]="'assets/EWQ-logo.png'">
   </div>
-  <mat-form-field appearance="outline" *ngIf="showPlaceSelector">
+  <!--<mat-form-field appearance="outline" *ngIf="showPlaceSelector">
     <mat-label>{{ placeSelectorLabel }}</mat-label>
     <ng-select ngSelectMat [items]="places" bindLabel="name" (change)="onPlaceSelect($event)" [(ngModel)]="selectedPlace"></ng-select>
     <span matPrefix><fa-icon [icon]="['fal', 'map-marker-alt']" transform="up-3"></fa-icon></span>
-  </mat-form-field>
+  </mat-form-field>-->
   <mat-form-field appearance="outline">
     <mat-label>{{ endPointLabel }}</mat-label>
     <ng-select ngSelectMat groupBy="category" [items]="pois" bindLabel="properties.title" (change)="onEndPointSelect($event)" [(ngModel)]="endPoi" [searchFn]="poiSearchFn">
@@ -24,7 +24,7 @@
     </ng-select>
     <span matPrefix><fa-icon [icon]="['fal', 'search']" transform="up-3"></fa-icon></span>
   </mat-form-field>
-  <mat-form-field appearance="outline">
+  <!--<mat-form-field appearance="outline">
     <mat-label>{{ startPointLabel }}</mat-label>
     <ng-select ngSelectMat groupBy="category" [items]="pois" bindLabel="properties.title" (change)="onStartPointSelect($event)" [(ngModel)]="startPoi" [searchFn]="poiSearchFn">
       <ng-template ng-optgroup-tmp let-item="item" let-index="index">
@@ -37,7 +37,7 @@
       </ng-template>
     </ng-select>
     <span matPrefix><fa-icon [icon]="['fal', 'dot-circle']" transform="up-3"></fa-icon></span>
-  </mat-form-field>
+  </mat-form-field>-->
   <div *ngIf="showOnlyAccessibleToggle">
     <button type="button" class="accessible-btn" (click)="onAccessibleOnlyToggle()">
       <fa-icon [icon]="['fal', 'wheelchair']" size="lg"></fa-icon>

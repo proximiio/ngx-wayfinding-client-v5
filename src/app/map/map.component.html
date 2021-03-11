@@ -5,18 +5,18 @@
   <div class="map-floors">
     <ul>
       <li>
-        <span *ngIf="routingSource.finish && state.floor.level < routingSource.finish.properties.level">{{ getUpcomingFloorNumber('up') }}</span>
+        <span *ngIf="routingSource.finish && stateService.state.floor.level < routingSource.finish.properties.level">{{ getUpcomingFloorNumber('up') }}</span>
         <a href="javascript:;"
-           [ngClass]="{'blinking': routingSource.finish && state.floor.level < routingSource.finish.properties.level}"
+           [ngClass]="{'blinking': routingSource.finish && stateService.state.floor.level < routingSource.finish.properties.level}"
            (click)="onFloorChange('up')">
           <fa-icon [icon]="['fal', 'chevron-up']"></fa-icon>
         </a>
       </li>
-      <li class="current-floor">{{ state.floor.level }}</li>
+      <li class="current-floor">{{ stateService.state.floor.level }}</li>
       <li>
-        <span *ngIf="routingSource.finish && state.floor.level > routingSource.finish.properties.level">{{ getUpcomingFloorNumber('down') }}</span>
+        <span *ngIf="routingSource.finish && stateService.state.floor.level > routingSource.finish.properties.level">{{ getUpcomingFloorNumber('down') }}</span>
         <a href="javascript:;"
-           [ngClass]="{'blinking': routingSource.finish && state.floor.level > routingSource.finish.properties.level}"
+           [ngClass]="{'blinking': routingSource.finish && stateService.state.floor.level > routingSource.finish.properties.level}"
            (click)="onFloorChange('down')">
           <fa-icon [icon]="['fal', 'chevron-down']"></fa-icon>
         </a>
@@ -24,10 +24,36 @@
     </ul>
   </div>
   <mgl-map
-    *ngIf="!state.initializing"
-    [style]="state.style"
+    *ngIf="!stateService.state.initializing"
+    [style]="stateService.state.style"
     (load)="onLoad($event)"
   >
+    <mgl-geojson-source
+      id="my-location"
+    >
+      <mgl-feature
+        *ngIf="showStartPoint"
+        [geometry]="{
+          'type': 'Point',
+          'coordinates': stateService.state.defaultLocation.coordinates
+       }"
+        [properties]="{
+          'level': stateService.state.defaultLocation.level
+        }"
+      ></mgl-feature>
+    </mgl-geojson-source>
+    <mgl-layer
+      id="my-location-layer"
+      type="symbol"
+      source="my-location"
+      [layout]="{
+        'icon-image': 'pulsing-dot'
+      }"
+      [filter]="[
+        'all',
+        ['==', ['to-number', ['get','level']], this.stateService.state.floor.level]
+      ]"
+    ></mgl-layer>
     <ng-container *ngFor="let key of objectKeys(images)">
       <mgl-image
         [id]="key"

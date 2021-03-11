@@ -15,26 +15,12 @@ import ImageSourceManager from './sources/image_source_manager';
 import Repository from './repository';
 import DataSource from './sources/data_source';
 import { getImageFromBase64 } from './common';
-import { chevron } from './icons';
+import { chevron, pulsingDot } from './icons';
 import * as turf from '@turf/turf';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationDialogComponent } from '../core/notification-dialog/notification-dialog.component';
-
-interface State {
-  readonly initializing: boolean;
-  readonly floor: Floor;
-  readonly floors: Floor[];
-  readonly place: Place;
-  readonly places: Place[];
-  readonly style: Style;
-  readonly styles: Style[];
-  readonly latitude: number;
-  readonly longitude: number;
-  readonly loadingRoute: boolean;
-  readonly options: any;
-  readonly noPlaces: boolean;
-}
+import { StateService } from '../core/state.service';
 
 @Component({
   selector: 'app-map',
@@ -56,12 +42,12 @@ export class MapComponent implements OnInit, OnDestroy {
   startPoi;
   endPoi;
   accessibleOnly = false;
-  state: State;
   geojsonSource: GeoJSONSource = new GeoJSONSource(new FeatureCollection({}));
   syntheticSource: SyntheticSource = new SyntheticSource(new FeatureCollection({}));
   routingSource: RoutingSource = new RoutingSource();
   clusterSource: ClusterSource = new ClusterSource();
   imageSourceManager: ImageSourceManager = new ImageSourceManager();
+  showStartPoint = false;
 
   private subs = [];
 
@@ -70,33 +56,13 @@ export class MapComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     public sidebarService: SidebarService,
     public activatedRoute: ActivatedRoute,
+    public stateService: StateService,
     private dialog: MatDialog
   ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentUserData = this.authService.getCurrentUserData();
     this.features = this.currentUserData.features;
     this.amenities = this.currentUserData.amenities;
-
-    this.state = {
-      initializing: true,
-      floor: new Floor({}),
-      floors: [],
-      place: new Place({}),
-      places: [],
-      style: new Style({}),
-      styles: [],
-      latitude: 60.1669635,
-      longitude: 24.9217484,
-      loadingRoute: false,
-      noPlaces: false,
-      options: {
-        coordinates: [0, 0],
-        zoom: 0,
-        pitch: 0,
-        bearing: 0,
-        bounds: [[0, 0], [0, 0]]
-      }
-    };
 
     this.onPlaceSelect = this.onPlaceSelect.bind(this);
     this.onFloorSelect = this.onFloorSelect.bind(this);
@@ -153,7 +119,7 @@ export class MapComponent implements OnInit, OnDestroy {
   async cancelObservers() {
     this.geojsonSource.cancel(this.onSourceChange);
     this.syntheticSource.cancel(this.onSyntheticChange);
-    this.state.style.cancel(this.onStyleChange);
+    this.stateService.state.style.cancel(this.onStyleChange);
   }
 
   async fetch() {
@@ -166,8 +132,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.prepareStyle(style);
     this.imageSourceManager.belowLayer = style.usesPrefixes() ? 'proximiio-floors' : 'floors';
     this.imageSourceManager.initialize();
-    this.state = {
-      ...this.state,
+    this.stateService.state = {
+      ...this.stateService.state,
       initializing: false,
       place,
       places,
@@ -185,39 +151,39 @@ export class MapComponent implements OnInit, OnDestroy {
     style.setSource('synthetic', this.syntheticSource);
     style.setSource('route', this.routingSource);
     style.setSource('clusters', this.clusterSource);
-    style.setLevel(0);
+    style.setLevel(this.stateService.state.defaultLocation.isStartPoint ? this.stateService.state.defaultLocation.level : 0);
   }
 
   onRouteChange(event?: string) {
     if (event === 'loading-start') {
-      this.state = {...this.state, loadingRoute: true};
+      this.stateService.state = {...this.stateService.state, loadingRoute: true};
       return;
     }
 
     if (event === 'loading-finished') {
       const routeStart = this.routingSource.route[this.routingSource.start.properties.level];
       this.centerOnRoute(routeStart);
-      this.state = {...this.state, loadingRoute: false};
+      this.stateService.state = {...this.stateService.state, loadingRoute: false};
       return;
     }
 
     if (event === 'route-undefined') {
       console.log('route not found');
-      this.state = {...this.state, loadingRoute: false};
+      this.stateService.state = {...this.stateService.state, loadingRoute: false};
       return;
     }
 
-    const style = this.state.style;
+    const style = this.stateService.state.style;
     style.setSource('route', this.routingSource);
-    this.state = {...this.state, style};
+    this.stateService.state = {...this.stateService.state, style};
 
     this.updateMapSource(this.routingSource);
   }
 
   onSourceChange() {
-    this.state = {
-      ...this.state,
-      style: this.state.style
+    this.stateService.state = {
+      ...this.stateService.state,
+      style: this.stateService.state.style
     };
     this.updateMapSource(this.geojsonSource);
     // this.routingSource.routing.setData(this.geojsonSource.collection)
@@ -225,7 +191,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   onSyntheticChange() {
-    this.state.style.setSource('synthetic', this.syntheticSource);
+    this.stateService.state.style.setSource('synthetic', this.syntheticSource);
     this.updateMapSource(this.syntheticSource);
   }
 
@@ -246,32 +212,32 @@ export class MapComponent implements OnInit, OnDestroy {
       map.setStyle(style.json);
     }
 
-    this.state = {...this.state, style};
+    this.stateService.state = {...this.stateService.state, style};
   }
 
   onStyleChange(event?: string, data?: any) {
     const map = this.map;
     if (map) {
       if (event === 'overlay-toggled') {
-        const overlay = this.state.style.overlay ? 'visible' : 'none';
+        const overlay = this.stateService.state.style.overlay ? 'visible' : 'none';
         map.setLayoutProperty('main-polygon-fill', 'visibility', overlay);
         map.setLayoutProperty('main-polygon-outline', 'visibility', overlay);
       }
 
       if (event === 'segments-toggled') {
-        const segments = this.state.style.segments ? 'visible' : 'none';
+        const segments = this.stateService.state.style.segments ? 'visible' : 'none';
         map.setLayoutProperty('main-segment-fill', 'visibility', segments);
         map.setLayoutProperty('main-segment-outline', 'visibility', segments);
       }
 
       if (event === 'routable-toggled') {
-        const routables = this.state.style.segments ? 'visible' : 'none';
+        const routables = this.stateService.state.style.segments ? 'visible' : 'none';
         map.setLayoutProperty('main-routable-fill', 'visibility', routables);
         map.setLayoutProperty('main-routable-outline', 'visibility', routables);
       }
 
       if (event === 'cluster-toggled') {
-        const clusters = this.state.style.cluster ? 'visible' : 'none';
+        const clusters = this.stateService.state.style.cluster ? 'visible' : 'none';
         map.setLayoutProperty('clusters-circle', 'visibility', clusters);
       }
     }
@@ -299,7 +265,7 @@ export class MapComponent implements OnInit, OnDestroy {
     if (event === 'filter-change') {
       // tslint:disable-next-line:no-shadowed-variable
       const map = this.map;
-      this.state.style.getLayers('main').forEach(layer => {
+      this.stateService.state.style.getLayers('main').forEach(layer => {
         if (map.getLayer(layer.id)) {
           map.removeLayer(layer.id);
         }
@@ -307,14 +273,14 @@ export class MapComponent implements OnInit, OnDestroy {
       });
     }
     // this.map.setStyle(this.state.style);
-    this.state = {...this.state, style: this.state.style};
+    this.stateService.state = {...this.stateService.state, style: this.stateService.state.style};
   }
 
   onRasterToggle(value: boolean) {
     this.imageSourceManager.enabled = value;
     const map = this.map;
     if (map) {
-      this.imageSourceManager.setLevel(map, this.state.floor.level);
+      this.imageSourceManager.setLevel(map, this.stateService.state.floor.level);
     }
   }
 
@@ -338,7 +304,7 @@ export class MapComponent implements OnInit, OnDestroy {
     // set paths visible if available
     const map = this.map;
     if (map) {
-      this.state.style.togglePaths(true);
+      this.stateService.state.style.togglePaths(true);
       // routing layers
       const routingLayer = map.getLayer('routing-line-completed');
       const usePrefixed = typeof routingLayer === 'undefined' && typeof map.getLayer('proximiio-routing-line-completed') !== 'undefined';
@@ -360,13 +326,17 @@ export class MapComponent implements OnInit, OnDestroy {
       map.setMaxZoom(30);
       const decodedChevron = await getImageFromBase64(chevron);
       map.addImage('chevron_right', decodedChevron as any);
+      map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
       this.updateMapSource(this.geojsonSource);
       this.updateMapSource(this.routingSource);
       this.updateCluster();
       // map.setStyle(this.state.style);
-      this.imageSourceManager.setLevel(map, this.state.floor.level);
-      await this.onPlaceSelect(this.state.place);
+      this.imageSourceManager.setLevel(map, this.stateService.state.floor.level);
+      await this.onPlaceSelect(this.stateService.state.place);
       this.handleQueryParams();
+      if (this.stateService.state.defaultLocation.isStartPoint) {
+        this.setStartPoint();
+      }
     }
   }
 
@@ -374,7 +344,7 @@ export class MapComponent implements OnInit, OnDestroy {
     // do logic with query params
     if (this.activatedRoute.snapshot.queryParams['place']) {
       const placeId = this.activatedRoute.snapshot.queryParams['place'];
-      const place = this.state.places.find(f => f.id === placeId);
+      const place = this.stateService.state.places.find(f => f.id === placeId);
       if (place) {
         this.sidebarService.selectedPlaceListener.next(place);
       } else {
@@ -426,7 +396,7 @@ export class MapComponent implements OnInit, OnDestroy {
       const data = {
         type: 'FeatureCollection',
         features: this.geojsonSource.data.features
-                    .filter(f => f.isPoint && f.hasLevel(this.state.floor.level))
+                    .filter(f => f.isPoint && f.hasLevel(this.stateService.state.floor.level))
                     .map(f => f.json)
       } as FeatureCollection;
       const source = map.getSource('clusters') as any;
@@ -441,7 +411,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   async onPlaceSelect(place: Place) {
-    this.state = {...this.state, place};
+    this.stateService.state = {...this.stateService.state, place};
     const floors = await Repository.getFloors(0, place.id);
     const state: any = { floors: floors.sort((a, b) => a.level - b.level) };
 
@@ -454,7 +424,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.state = {...this.state, ...state};
+    this.stateService.state = {...this.stateService.state, ...state};
 
     const map = this.map;
     if (map) {
@@ -464,11 +434,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
   onFloorChange(way) {
     let floor;
-    let nextLevel = way === 'up' ? this.state.floor.level + 1 : this.state.floor.level - 1;
+    let nextLevel = way === 'up' ? this.stateService.state.floor.level + 1 : this.stateService.state.floor.level - 1;
     if (this.routingSource.route) {
       nextLevel = this.getUpcomingFloorNumber(way);
     }
-    floor = this.state.floors.filter(f => f.level === nextLevel) ? this.state.floors.filter(f => f.level === nextLevel)[0] : this.state.floor;
+    floor = this.stateService.state.floors.filter(f => f.level === nextLevel) ? this.stateService.state.floors.filter(f => f.level === nextLevel)[0] : this.stateService.state.floor;
     if (floor) {
       this.onFloorSelect(new Floor(floor));
     }
@@ -478,10 +448,10 @@ export class MapComponent implements OnInit, OnDestroy {
     const map = this.map;
     const route = this.routingSource.route && this.routingSource.route[floor.level] ? this.routingSource.route[floor.level] : null;
     if (map) {
-      this.state.style.setLevel(floor.level);
-      map.setStyle(this.state.style);
+      this.stateService.state.style.setLevel(floor.level);
+      map.setStyle(this.stateService.state.style);
       setTimeout(() => {
-        [...this.state.style.getLayers('main'), ...this.state.style.getLayers('route')].forEach(layer => {
+        [...this.stateService.state.style.getLayers('main'), ...this.stateService.state.style.getLayers('route')].forEach(layer => {
           if (map.getLayer(layer.id)) {
             if (layer.id === 'proximiio-levelchangers') {
             }
@@ -495,7 +465,7 @@ export class MapComponent implements OnInit, OnDestroy {
         map.fitBounds(bbox, { padding: 50 });
       }
     }
-    this.state = {...this.state, floor, style: this.state.style};
+    this.stateService.state = {...this.stateService.state, floor, style: this.stateService.state.style};
     this.updateCluster();
   }
 
@@ -513,7 +483,7 @@ export class MapComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.log('catched', e);
     }
-    this.state = {...this.state, style: this.state.style};
+    this.stateService.state = {...this.stateService.state, style: this.stateService.state.style};
   }
 
   onRouteCancel() {
@@ -521,12 +491,21 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   onOptionsChange(options: any) {
-    this.state = {...this.state, options};
+    this.stateService.state = {...this.stateService.state, options};
+  }
+
+  setStartPoint() {
+    this.showStartPoint = false;
+    setTimeout(() => {
+      const point = turf.point(this.stateService.state.defaultLocation.coordinates, { level: this.stateService.state.defaultLocation.level });
+      this.sidebarService.startPointListener.next(point);
+      this.showStartPoint = true;
+    })
   }
 
   centerOnPoi(poi) {
-    if (this.state.floor.level !== parseInt(poi.properties.level, 0)) {
-      const floor = this.state.floors.find(f => f.level === poi.properties.level);
+    if (this.stateService.state.floor.level !== parseInt(poi.properties.level, 0)) {
+      const floor = this.stateService.state.floors.find(f => f.level === poi.properties.level);
       this.onFloorSelect(floor);
     }
     if (this.map) {
@@ -536,8 +515,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
   centerOnRoute(route: Feature) {
     if (route && route.properties) {
-      if (this.state.floor.level !== parseInt(route.properties.level, 0)) {
-        const floor = this.state.floors.find(f => f.level === parseInt(route.properties.level, 0));
+      if (this.stateService.state.floor.level !== parseInt(route.properties.level, 0)) {
+        const floor = this.stateService.state.floors.find(f => f.level === parseInt(route.properties.level, 0));
         this.onFloorSelect(floor);
       }
       if (this.map) {
@@ -549,12 +528,12 @@ export class MapComponent implements OnInit, OnDestroy {
 
   getUpcomingFloorNumber(way: string) {
     if (this.routingSource.route) {
-      const currentRouteIndex = this.routingSource.lines.findIndex(route => +route.properties.level === this.state.floor.level);
+      const currentRouteIndex = this.routingSource.lines.findIndex(route => +route.properties.level === this.stateService.state.floor.level);
       const currentRoute = this.routingSource.lines[currentRouteIndex];
       const nextRouteIndex = way === 'up' ? currentRouteIndex + 1 : currentRouteIndex - 1;
       const nextRoute = this.routingSource.lines[nextRouteIndex];
       // return currentRouteIndex !== -1 && nextRoute ? +nextRoute.properties.level : way === 'up' ? this.state.floor.level + 1 : this.state.floor.level - 1;
-      return nextRoute ? +nextRoute.properties.level : this.state.floor.level;
+      return nextRoute ? +nextRoute.properties.level : this.stateService.state.floor.level;
     }
   }
 

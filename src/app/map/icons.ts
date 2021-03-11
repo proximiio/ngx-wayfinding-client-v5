@@ -17,3 +17,73 @@ export const marker = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAY
 export const defaultIcon = poi
 
 export const chevron = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAABvElEQVRoge3YWUsCURiA4TPdVdBGli1E20XLr+gHB923WFdt0k6aQZlB+guCIHi7mCXBwY7fOJ5Pm/faYc7D6DnjZ0xWls6AEWAXeAE2XK9HVIDY57cGsOV6XR0VIA5orQFsul6fVQHiMAYRVlePCRBHbRBh78C66/XGBoxaIpoxa67X3RKw1wEi7A1YSXttQx1+/ktwjyVjTAFYFlybTsAw8TuVmidjHX/vWP8GU0XZ18x2G+4bTEGIeQYWXBui8M+WYyGmohFzkgAz79oQlRDzpA0zBpwJMWVgzrUhChgfNMy5EFMC8q4NUQHmYlAwEwkwt8C0a0MUMAVcCzFFwLO5T6ev8ZK+jTGfwmtnTW/W2D7838mp8Gk0gG3XhqSIOhrGSiQ7S3RMYPB3KukZomPykhBR04SQnhk1NIyNgEngUoh4GxTEqmuDAXL4rxKSqmiYqASIu35HzCRAvKJhghIg7oWICrDo2tANhI6JCfLX8TIpDxd6MY0vG2N2PM/7EFybTvhnRlHTkxCH/bZbQtNEJC4LjH5EWICJ28Ee0TQBsQl/O35oQtwAOdfrEgXkgSv8v7V6xjdZWd3pB9JxAjY9tg5oAAAAAElFTkSuQmCC'
+
+const size = 120;
+
+export const pulsingDot = {
+  width: size,
+  height: size,
+  data: new Uint8Array(size * size * 4),
+
+  // get rendering context for the map canvas when layer is added to the map
+  onAdd: function(map, gl) {
+    const canvas = document.createElement('canvas');
+    canvas.width = this.width;
+    canvas.height = this.height;
+    this.context = canvas.getContext('2d');
+    this.map = map;
+  },
+
+  // called once before every frame where the icon will be used
+  render: function(gl, matrix) {
+    const duration = 1000;
+    const t = (performance.now() % duration) / duration;
+
+    const radius = (size / 2) * 0.3;
+    const outerRadius = (size / 2) * 0.7 * t + radius;
+    const context = this.context;
+    const map = this.map;
+
+    // draw outer circle
+    context.clearRect(0, 0, this.width, this.height);
+    context.beginPath();
+    context.arc(
+      this.width / 2,
+      this.height / 2,
+      outerRadius,
+      0,
+      Math.PI * 2
+    );
+    context.fillStyle = 'rgba(189,82,255,' + (1 - t) + ')';
+    context.fill();
+
+    // draw inner circle
+    context.beginPath();
+    context.arc(
+      this.width / 2,
+      this.height / 2,
+      radius,
+      0,
+      Math.PI * 2
+    );
+    context.fillStyle = 'rgb(189,82,255)';
+    context.strokeStyle = 'white';
+    context.lineWidth = 2 + 4 * (1 - t);
+    context.fill();
+    context.stroke();
+
+    // update this image's data with data from the canvas
+    this.data = context.getImageData(
+      0,
+      0,
+      this.width,
+      this.height
+    ).data;
+
+    // continuously repaint the map, resulting in the smooth animation of the dot
+    map.triggerRepaint();
+
+    // return `true` to let the map know that the image was updated
+    return true;
+  }
+};
