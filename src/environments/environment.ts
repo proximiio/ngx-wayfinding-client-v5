@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  authUrl: 'http://localhost:6001/wayfinding',
-  ahoyUrl: 'http://localhost:6001/wayfinding/analytics',
+  authUrl: 'http://localhost:6008/ewq',
+  ahoyUrl: 'http://localhost:6008/ewq/analytics',
   appPrefix: 'ngx-wayfinding-'
 };
 
