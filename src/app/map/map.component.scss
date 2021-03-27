@@ -110,3 +110,10 @@ mgl-map {
     color: white;
   }
 }
+
+.route-cancel {
+  position: fixed;
+  z-index: 9;
+  bottom: 20px;
+  left: 50%;
+}

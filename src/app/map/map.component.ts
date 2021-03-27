@@ -389,7 +389,6 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-
   updateCluster() {
     const map = this.map;
     if (map) {
@@ -422,6 +421,7 @@ export class MapComponent implements OnInit, OnDestroy {
       } else {
         state.floor = floors[0];
       }
+      this.imageSourceManager.setLevel(this.map, state.floor.level);
     }
 
     this.stateService.state = {...this.stateService.state, ...state};
@@ -487,6 +487,10 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   onRouteCancel() {
+    if (this.endPoi) {
+      this.endPoi = null;
+      this.sidebarService.endPointListener.next(this.endPoi);
+    }
     this.routingSource.cancel();
   }
 

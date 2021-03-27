@@ -62,4 +62,7 @@
       </mgl-image>
     </ng-container>
   </mgl-map>
+  <button mat-flat-button color="accent" (click)="onRouteCancel()" *ngIf="endPoi" class="route-cancel">
+    Cancel Route <fa-icon [icon]="['fal', 'times']"></fa-icon>
+  </button>
 </div>
