@@ -35,7 +35,7 @@ export class MapComponent implements OnInit, OnDestroy {
   amenities = [];
   amenityBaseLinks: any = {};
   features: any = {};
-  showRaster = true;
+  showRaster = false;
   imagesIteration = 0;
   images = {};
   objectKeys = Object.keys;
@@ -77,6 +77,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.onOptionsChange = this.onOptionsChange.bind(this);
 
     this.updateImages();
+
+    this.imageSourceManager.enabled = this.showRaster;
   }
 
   ngOnInit() {
