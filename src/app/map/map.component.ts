@@ -464,7 +464,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
       if (route) {
         const bbox = turf.bbox(route.geometry);
-        map.fitBounds(bbox, { padding: 50 });
+        map.fitBounds(bbox, { padding: 300 });
       }
     }
     this.stateService.state = {...this.stateService.state, floor, style: this.stateService.state.style};
@@ -494,6 +494,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.sidebarService.endPointListener.next(this.endPoi);
     }
     this.routingSource.cancel();
+    this.map.flyTo({ center: this.stateService.state.defaultLocation.coordinates, zoom: this.stateService.state.options.zoom })
   }
 
   onOptionsChange(options: any) {
@@ -527,7 +528,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       if (this.map) {
         const bbox = turf.bbox(route.geometry);
-        this.map.fitBounds(bbox, { padding: 50 });
+        this.map.fitBounds(bbox, { padding: 300 });
       }
     }
   }
