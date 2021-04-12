@@ -99,9 +99,9 @@ export class MapComponent implements OnInit, OnDestroy {
         this.generateRoute();
       }),
       this.sidebarService.getAccessibleOnlyToggleListener().subscribe(accessibleOnly => {
-       this.accessibleOnly = accessibleOnly;
-       this.routingSource.toggleAccessible(accessibleOnly);
-       this.generateRoute();
+        this.accessibleOnly = accessibleOnly;
+        this.routingSource.toggleAccessible(accessibleOnly);
+        this.generateRoute();
       }),
       this.sidebarService.getSelectedPlaceListener().subscribe(place => {
         if (place) {
@@ -146,6 +146,7 @@ export class MapComponent implements OnInit, OnDestroy {
       noPlaces: places.length === 0
     };
     style.observe(this.onStyleChange);
+    style.setAmenityVisibility('default', false);
   }
 
   prepareStyle(style: Style) {
@@ -268,10 +269,12 @@ export class MapComponent implements OnInit, OnDestroy {
       // tslint:disable-next-line:no-shadowed-variable
       const map = this.map;
       this.stateService.state.style.getLayers('main').forEach(layer => {
-        if (map.getLayer(layer.id)) {
-          map.removeLayer(layer.id);
+        if (map) {
+          if (map.getLayer(layer.id)) {
+            map.removeLayer(layer.id);
+          }
+          map.addLayer(layer);
         }
-        map.addLayer(layer);
       });
     }
     // this.map.setStyle(this.state.style);
@@ -363,7 +366,7 @@ export class MapComponent implements OnInit, OnDestroy {
       const startPoiId = this.activatedRoute.snapshot.queryParams['startPoi'];
       const startPoi = this.features.features.find(f => f.properties.id === startPoiId);
       if (startPoi) {
-       this.sidebarService.startPointListener.next(startPoi);
+        this.sidebarService.startPointListener.next(startPoi);
       } else {
         this.dialog.open(NotificationDialogComponent, {
           data: {
@@ -378,7 +381,7 @@ export class MapComponent implements OnInit, OnDestroy {
       const endPoiId = this.activatedRoute.snapshot.queryParams['endPoi'];
       const endPoi = this.features.features.find(f => f.properties.id === endPoiId);
       if (endPoi) {
-       this.sidebarService.endPointListener.next(endPoi);
+        this.sidebarService.endPointListener.next(endPoi);
       } else {
         this.dialog.open(NotificationDialogComponent, {
           data: {
@@ -397,8 +400,8 @@ export class MapComponent implements OnInit, OnDestroy {
       const data = {
         type: 'FeatureCollection',
         features: this.geojsonSource.data.features
-                    .filter(f => f.isPoint && f.hasLevel(this.stateService.state.floor.level))
-                    .map(f => f.json)
+          .filter(f => f.isPoint && f.hasLevel(this.stateService.state.floor.level))
+          .map(f => f.json)
       } as FeatureCollection;
       const source = map.getSource('clusters') as any;
       if (source) {

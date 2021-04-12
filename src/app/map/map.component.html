@@ -35,7 +35,10 @@
         *ngIf="showStartPoint"
         [geometry]="{
           'type': 'Point',
-          'coordinates': stateService.state.defaultLocation.coordinates
+          'coordinates': [
+            stateService.state.defaultLocation.coordinates[0] - 0.0000099,
+            stateService.state.defaultLocation.coordinates[1] + 0.0000039
+          ]
        }"
         [properties]="{
           'level': stateService.state.defaultLocation.level

@@ -410,6 +410,20 @@ export default class Style extends Observable {
     this.notify('filter-change');
   }
 
+  setAmenityVisibility(amenity: string, visible: boolean) {
+    const poiIconsLayer = this.getLayer('proximiio-pois-icons');
+    const poiLabelsLayer = this.getLayer('proximiio-pois-labels');
+
+    [poiIconsLayer, poiLabelsLayer].forEach(layer => {
+      if (!layer.filter) {
+        return;
+      }
+      layer.filter.push([visible ? '==' : '!=', ['get','amenity'], amenity])
+    });
+
+    this.notify('filter-change');
+  }
+
   get polygonEditing() {
     return this.metadata[METADATA_POLYGON_EDITING] || false;
   }
