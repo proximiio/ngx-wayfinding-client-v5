@@ -917,9 +917,6 @@ THE SOFTWARE.
 ngx-mapbox-gl
 MIT
 
-ngx-take-until-destroy
-MIT
-
 object-to-formdata
 MIT
 MIT License

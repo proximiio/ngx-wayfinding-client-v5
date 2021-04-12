@@ -16,6 +16,11 @@ const proximiApiInstance = axios.create({
 });
 proximiApiInstance.defaults.headers.common['Authorization'] = `Bearer ${Settings.token}`;
 
+const ewqApiInstance = axios.create({
+  baseURL: Settings.ewq_api
+});
+ewqApiInstance.defaults.headers.common['Authorization'] = `apikey ${Settings.ewq_apikey}`;
+
 app.use(cors());
 app.use(bodyParser.urlencoded({
   extended: true
@@ -60,6 +65,19 @@ app.get(Settings.basepath+'/auth', async (function(request, response, next) {
         defaultPlace: defaultPlace
       }
     });
+  } catch (error) {
+    next(error);
+  }
+}));
+
+
+app.get(Settings.basepath+'/ewqSearch', async (function(request, response, next) {
+  const ean = request.query.ean;
+  try {
+    const res = await (ewqApiInstance.get(`/${ean}?expand=articles`));
+    const anchors = res.data.data[0]?.anchors;
+    const anchorKeys = anchors ? Object.keys(anchors) : [];
+    response.send(JSON.stringify(anchorKeys[0]));
   } catch (error) {
     next(error);
   }

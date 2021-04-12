@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+
+const AUTH_URL = environment.authUrl;
 
 @Injectable({providedIn: 'root'})
 export class SidebarService {
@@ -11,7 +15,9 @@ export class SidebarService {
   public selectedPlaceListener = new Subject<any>();
   public accessibleOnlyToggleListener = new Subject<boolean>();
 
-  constructor() {}
+  constructor(
+    private http: HttpClient
+  ) {}
 
   public closeSidebar() {
     this.appDrawer.close();
@@ -26,6 +32,14 @@ export class SidebarService {
   public toggleSidebar() {
     this.appDrawer.toggle();
     this.sidebarStatus.next(this.appDrawer.opened);
+  }
+
+  public ewqSearch(ean: string) {
+    const params = new HttpParams().append('ean', ean);
+    return this.http.get(
+      AUTH_URL + '/ewqSearch',
+      { params }
+    )
   }
 
   getSidebarStatusListener() {

@@ -4,6 +4,8 @@ import { AuthService } from '../../auth/auth.service';
 import { SidebarService } from './sidebar.service';
 import Place from '../../map/models/place.model';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { NotificationDialogComponent } from '../notification-dialog/notification-dialog.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -23,6 +25,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   selectedPlace;
   startPoi;
   endPoi;
+  ean;
+  eanSearching = false;
   showPlaceSelector = true;
   endPointLabel = 'What are you looking for?';
   startPointLabel = 'Where are you now?';
@@ -38,7 +42,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    public sidebarService: SidebarService
+    public sidebarService: SidebarService,
+    private dialog: MatDialog
   ) {
     this.currentUser = this.authService.getCurrentUser();
     this.config = this.authService.getCurrentUserConfig();
@@ -121,6 +126,45 @@ export class SidebarComponent implements OnInit, OnDestroy {
         .filter(item => item.isInside);
     }
     return sortedPois;
+  }
+
+  searchForEan() {
+    if (this.ean.length > 1) {
+      this.eanSearching = true;
+      this.sidebarService.ewqSearch(this.ean).subscribe((poiId: string) => {
+        this.eanSearching = false;
+        if (poiId) {
+          const foundPoi = this.pois.find(i => i.properties.id === poiId);
+          if (foundPoi) {
+            this.sidebarService.endPointListener.next(foundPoi);
+          } else {
+            this.dialog.open(NotificationDialogComponent, {
+            data: {
+              header: `No poi found.`,
+              message: `We have didn't found any poi for this EAN code!`,
+              closeText: `Okay, got it`
+            }
+          });
+          }
+        } else {
+          this.dialog.open(NotificationDialogComponent, {
+            data: {
+              header: `No anchors found.`,
+              message: `We have didn't found any anchor points for this EAN code!`,
+              closeText: `Okay, got it`
+            }
+          });
+        }
+      });
+    } else {
+      this.dialog.open(NotificationDialogComponent, {
+        data: {
+          header: `Not enough characters.`,
+          message: `You have to input at least two characters for EAN code!`,
+          closeText: `Okay, got it`
+        }
+      });
+    }
   }
 
   poiSearchFn(term: string, item) {
