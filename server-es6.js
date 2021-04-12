@@ -72,7 +72,7 @@ app.get(Settings.basepath+'/ewqSearch', async (request, response, next) => {
   const ean = request.query.ean;
   try {
     const res = await ewqApiInstance.get(`/${ean}?expand=articles`);
-    const anchors = res.data.data[0]?.anchors;
+    const anchors = res.data.data[0] ? res.data.data[0].anchors : null;
     const anchorKeys = anchors ? Object.keys(anchors) : [];
     response.send(JSON.stringify(anchorKeys[0]));
   } catch (error) {
