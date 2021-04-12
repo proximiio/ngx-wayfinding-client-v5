@@ -34,8 +34,8 @@ export class StateService {
     places: [],
     style: new Style({}),
     styles: [],
-    latitude: 24.920937162654695,
-    longitude: 60.1560911121457,
+    latitude: 24.920981065391345,
+    longitude: 60.15627643534694,
     loadingRoute: false,
     noPlaces: false,
     options: {
@@ -46,7 +46,7 @@ export class StateService {
       bounds: [[0, 0], [0, 0]]
     },
     defaultLocation: {
-      coordinates: [24.920937162654695, 60.1560911121457],
+      coordinates: [24.920981065391345, 60.15627643534694],
       level: 1,
       isStartPoint: true
     },

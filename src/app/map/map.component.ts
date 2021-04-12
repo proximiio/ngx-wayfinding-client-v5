@@ -467,7 +467,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
       if (route) {
         const bbox = turf.bbox(route.geometry);
-        map.fitBounds(bbox, { padding: 300 });
+        map.fitBounds(bbox, { padding: 130 });
       }
     }
     this.stateService.state = {...this.stateService.state, floor, style: this.stateService.state.style};
@@ -531,7 +531,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       if (this.map) {
         const bbox = turf.bbox(route.geometry);
-        this.map.fitBounds(bbox, { padding: 300 });
+        this.map.fitBounds(bbox, { padding: 130 });
       }
     }
   }
