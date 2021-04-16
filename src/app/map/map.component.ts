@@ -167,6 +167,7 @@ export class MapComponent implements OnInit, OnDestroy {
       const routeStart = this.routingSource.route[this.routingSource.start.properties.level];
       this.centerOnRoute(routeStart);
       this.stateService.state = {...this.stateService.state, loadingRoute: false};
+      this.sidebarService.closeSidebar();
       return;
     }
 
