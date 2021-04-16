@@ -51,10 +51,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe((state: BreakpointState) => {
-        if (state.breakpoints['(max-width: 599.99px)']) {
+        if (state.breakpoints['(max-width: 599.98px)']) {
           this.sidebarService.sidenavMode = 'over';
           this.sidenavIsOpened = false;
-        } else if (state.breakpoints['(min-width: 600px) and (max-width: 959.99px)']) {
+        } else if (state.breakpoints['(min-width: 600px) and (max-width: 959.98px)']) {
           this.sidebarService.sidenavMode = 'over';
           this.sidenavIsOpened = false;
         } else if (!state.matches) {
