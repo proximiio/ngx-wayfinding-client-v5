@@ -22,6 +22,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NotificationDialogComponent } from '../core/notification-dialog/notification-dialog.component';
 import { StateService } from '../core/state.service';
 import { SettingsDialogComponent } from '../core/settings-dialog/settings-dialog.component';
+import * as Proximiio from './Proximiio.js';
 
 @Component({
   selector: 'app-map',
@@ -50,6 +51,7 @@ export class MapComponent implements OnInit, OnDestroy {
   clusterSource: ClusterSource = new ClusterSource();
   imageSourceManager: ImageSourceManager = new ImageSourceManager();
   showStartPoint = false;
+  routeFactory;
 
   private subs = [];
 
@@ -65,6 +67,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.currentUserData = this.authService.getCurrentUserData();
     this.features = this.currentUserData.features;
     this.amenities = this.currentUserData.amenities;
+    this.routeFactory = new Proximiio.RouteFactory(JSON.stringify(this.features.features), 'en')
 
     this.onPlaceSelect = this.onPlaceSelect.bind(this);
     this.onFloorSelect = this.onFloorSelect.bind(this);
@@ -177,8 +180,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
     if (event === 'loading-finished') {
       const routeStart = this.routingSource.route[this.routingSource.start.properties.level];
+      const textNavigation = this.routeFactory.generateRoute(JSON.stringify(this.routingSource.points), JSON.stringify(this.endPoi));
       this.centerOnRoute(routeStart);
-      this.stateService.state = {...this.stateService.state, loadingRoute: false};
+      this.stateService.state = {...this.stateService.state, loadingRoute: false, textNavigation};
       return;
     }
 

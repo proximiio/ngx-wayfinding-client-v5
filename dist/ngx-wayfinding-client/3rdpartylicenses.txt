@@ -488,7 +488,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 fingerprintjs2
 MIT
 Fingerprintjs2 – Modern & flexible browser fingerprint library v2
-https://github.com/Valve/fingerprintjs2
+https://github.com/fingerprintjs/fingerprintjs
 Copyright (c) 2018– Jonas Haag (jonas@lophus.org)
 Copyright (c) 2015– Valentin Vasilyev (valentin.vasilyev@outlook.com)
 Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.

@@ -1,15 +1,13 @@
-var http = require('http');
-var express = require('express');
-var app = express();
-var Settings = require('./settings');
-var httpPort = process.env.PORT || Settings.port;
-var bodyParser = require('body-parser');
-var cors = require('cors');
-var axios = require('axios');
-var _ = require('lodash');
-var path = require('path');
-var async = require('asyncawait/async');
-var await = require('asyncawait/await');
+const http = require('http');
+const express = require('express');
+const app = express();
+const Settings = require('./settings');
+const httpPort = process.env.PORT || Settings.port;
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const axios = require('axios');
+const _ = require('lodash');
+const path = require('path');
 
 const proximiApiInstance = axios.create({
   baseURL: Settings.proximi_api
@@ -28,14 +26,14 @@ app.get(Settings.basepath+'/token', function(request, response) {
   response.send(Settings.token);
 });
 
-app.get(Settings.basepath+'/auth', async (function(request, response, next) {
+app.get(Settings.basepath+'/auth', async (request, response, next) => {
   try {
-    const currentUser = await (proximiApiInstance.get(`/core/current_user`));
-    const config = await (proximiApiInstance.get(`/config`));
-    const floors = await (proximiApiInstance.get(`/core/floors`));
-    const places = await (proximiApiInstance.get(`/core/places`));
-    const features = await (proximiApiInstance.get(`/${Settings.geo_version}/geo/features`));
-    const amenities = await (proximiApiInstance.get(`/${Settings.geo_version}/geo/amenities`));
+    const currentUser = await proximiApiInstance.get(`/core/current_user`);
+    const config = await proximiApiInstance.get(`/config`);
+    const floors = await proximiApiInstance.get(`/core/floors`);
+    const places = await proximiApiInstance.get(`/core/places`);
+    const features = await proximiApiInstance.get(`/${Settings.geo_version}/geo/features`);
+    const amenities = await proximiApiInstance.get(`/${Settings.geo_version}/geo/amenities`);
 
     const featuresToAdd = [];
     features.data.features = features.data.features.map((feature, key) => {
@@ -48,14 +46,14 @@ app.get(Settings.basepath+'/auth', async (function(request, response, next) {
         if (polygon) {
           polygon.properties.type = 'shop-custom';
           polygon.properties.poi_id = feature.properties.id;
-          polygon.id = key;
+          polygon.id = JSON.stringify(key);
           if (polygon.properties['label-line'] && polygon.properties['label-line'][0] instanceof Array && polygon.properties['label-line'][1] instanceof Array) {
             const labelLineFeature = JSON.parse(JSON.stringify(feature));
             labelLineFeature.geometry = {
               coordinates: polygon.properties['label-line'],
               type: 'LineString'
             }
-            labelLineFeature.id = key+9999;
+            labelLineFeature.id = JSON.stringify(key+9999);
             labelLineFeature.properties.type = 'shop-label';
             polygon.properties.label_id = labelLineFeature.id;
             featuresToAdd.push(labelLineFeature);
@@ -85,9 +83,9 @@ app.get(Settings.basepath+'/auth', async (function(request, response, next) {
   } catch (error) {
     next(error);
   }
-}));
+});
 
-app.get(Settings.basepath+'/*', function(req,res) {
+app.get(Settings.basepath+'/*',(req,res) => {
   res.sendFile(path.join(__dirname,'dist/ngx-wayfinding-client/index.html'));
 });
 
@@ -97,10 +95,10 @@ app.post(Settings.basepath+'/analytics/ahoy/visits', function(request, res) {
   proximiApiInstance.post(`/v4/geo/metrics`, data).then(function (response) {
     res.send(response.data);
   })
-  .catch(function (error) {
-    console.log(error);
-    res.send(error);
-  });
+    .catch(function (error) {
+      console.log(error);
+      res.send(response.data);
+    });
 });
 
 app.post(Settings.basepath+'/analytics/ahoy/events', function(request, res) {
@@ -109,13 +107,13 @@ app.post(Settings.basepath+'/analytics/ahoy/events', function(request, res) {
   proximiApiInstance.post(`/v4/geo/metrics`, data).then(function (response) {
     res.send(response.data);
   })
-  .catch(function (error) {
-    console.log(error);
-    res.send(error);
-  });
+    .catch(function (error) {
+      console.log(error);
+      res.send(error);
+    });
 });
 
 const server = http.createServer(app);
-server.listen(httpPort, '127.0.0.1', function() {
+server.listen(httpPort, '127.0.0.1', () => {
   console.log(`** Production Server is listening on localhost:${httpPort}, open your browser on http://localhost:${httpPort}${Settings.basepath} **`)
 });

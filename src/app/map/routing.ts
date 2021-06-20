@@ -72,6 +72,6 @@ export default class Routing {
       }
 
     });
-    return levelPaths;
+    return {levelPaths, points};
   }
 }

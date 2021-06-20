@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="poi">
   <button (click)="onDetailsClose()" class="close"><fa-icon [icon]="['fal', 'times']"></fa-icon></button>
   <div class="img-holder">
     <img [src]="poi.properties.images[0] ? getImageUrl() : 'https://picsum.photos/500/300'" [alt]="poi.properties.title">

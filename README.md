@@ -24,12 +24,7 @@ As first, it's required to fill the `token` variable in `settings.js` file with 
 
 In the same file you can also change `port` and `basepath` variables but it's necessary to do subsequently changes to `./src/environments` files and `./angular.json` file on line 26 (a.k.a 'baseHref' property). These steps are completely optional.
 
-To run production server with node.js >= 7.10.1 you should run
-```
-node server-es6.js
-```
-
-To run production server with node.js < 7.10.1 you should run
+To run production server with node.js run
 ```
 node server.js
 ```
