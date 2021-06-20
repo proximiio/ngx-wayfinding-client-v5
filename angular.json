@@ -36,7 +36,10 @@
               "./node_modules/mapbox-gl/dist/mapbox-gl.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/@turf/turf/turf.min.js",
+              "src/vendor/mustache.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -3,6 +3,20 @@ import { SidebarService } from '../sidebar.service';
 import { StateService } from '../../state.service';
 import { AuthService } from '../../../auth/auth.service';
 import { Subscription } from 'rxjs';
+import Feature from '../../../map/models/feature.model';
+
+interface StepModel {
+  bearingFromLastStep: number;
+  coordinates: { coordinates: [number, number] };
+  direction: string;
+  distanceFromLastStep: number;
+  instruction?: string[];
+  isWaypoint: boolean;
+  level: number;
+  levelChangerId: string;
+  lineStringFeatureFromLastStep: Feature;
+  waypointId: string;
+}
 
 @Component({
   selector: 'app-details',
@@ -12,27 +26,7 @@ import { Subscription } from 'rxjs';
 export class DetailsComponent implements OnInit, OnDestroy {
   poi;
   showInstructions = false;
-  steps = [{
-    number: 0,
-    description: 'Walk straight for 60 steps',
-    directionIcon: ['fal', 'arrow-up'],
-    stepIcon: ['fal', 'shoe-prints']
-  }, {
-    number: 1,
-    description: 'Turn right and take elevator to 3rd floor',
-    directionIcon: ['fal', 'arrow-right'],
-    stepIcon: ['fal', 'sort']
-  }, {
-    number: 2,
-    description: 'Turn left and walk 30 steps',
-    directionIcon: ['fal', 'arrow-left'],
-    stepIcon: ['fal', 'shoe-prints']
-  }, {
-    number: 3,
-    description: 'Your destination is on the left',
-    directionIcon: ['fal', 'arrow-left'],
-    stepIcon: ['fal', 'pennant']
-  }];
+  steps = [];
   details = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
   limit = 200;
   showingMore = false;
@@ -52,6 +46,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.poi = poi;
         if (this.poi.properties.metadata && this.poi.properties.metadata.description) {
           this.details = this.poi.properties.metadata.description.en;
+        }
+        if (this.stateService.state.textNavigation) {
+          this.buildNavigationSteps(this.stateService.state.textNavigation.steps);
         }
       }
     });
@@ -77,11 +74,66 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const d = new Date();
     const weekDay = d.getDay();
 
-    if (this.poi.properties.metadata && this.poi.properties.metadata.openHours && this.poi.properties.metadata.openHours[weekDay - 1].en) {
-      return this.poi.properties.metadata.openHours[weekDay - 1].en;
+    if (this.poi.properties.metadata && this.poi.properties.metadata.openHours && this.poi.properties.metadata.openHours[weekDay].en) {
+      return this.poi.properties.metadata.openHours[weekDay].en;
     } else {
       return 'No open hours available';
     }
+  }
+
+  buildNavigationSteps(steps: StepModel[]) {
+    steps = steps.filter(i => i.instruction);
+    this.steps = steps.map((step: StepModel) => {
+      let directionIcon;
+      let stepIcon;
+      switch (step.direction) {
+        case 'LEFT': {
+          directionIcon = 'arrow-left';
+          stepIcon = 'shoe-prints';
+          break;
+        }
+        case 'SLIGHT_LEFT': {
+          directionIcon = 'arrow-left';
+          stepIcon = 'shoe-prints';
+          break;
+        }
+        case 'RIGHT': {
+          directionIcon = 'arrow-right';
+          stepIcon = 'shoe-prints';
+          break;
+        }
+        case 'SLIGHT_RIGHT': {
+          directionIcon = 'arrow-right';
+          stepIcon = 'shoe-prints';
+          break;
+        }
+        case 'UP_ESCALATOR': {
+          directionIcon = 'arrow-up';
+          stepIcon = 'caret-square-up';
+          break;
+        }
+        case 'DOWN_ESCALATOR': {
+          directionIcon = 'arrow-up';
+          stepIcon = 'caret-square-down';
+          break;
+        }
+        case 'FINISH': {
+          directionIcon = 'arrow-up';
+          stepIcon = 'pennant';
+          break;
+        }
+        default: {
+          directionIcon = 'compass';
+          stepIcon = 'shoe-prints';
+          break;
+        }
+      }
+      return {
+        description: step.instruction.join(''),
+        directionIcon: ['fal', directionIcon],
+        stepIcon: ['fal', stepIcon]
+      };
+    });
   }
 
   ngOnDestroy() {

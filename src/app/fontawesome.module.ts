@@ -38,7 +38,15 @@ import {
   faPennant,
   faRoute,
   faAngleDown,
-  faWalking, faAngleUp, faCog
+  faWalking,
+  faAngleUp,
+  faCog,
+  faCompass,
+  faAngleLeft,
+  faAngleRight,
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+  faArrowCircleDown, faArrowCircleUp, faCaretSquareDown, faCaretSquareUp
 } from '../vendor/pro-light-svg-icons';
 
 @NgModule({
@@ -81,6 +89,12 @@ export class FontawesomeModule {
       faArrowDown,
       faArrowLeft,
       faArrowRight,
+      faAngleLeft,
+      faAngleRight,
+      faAngleDoubleLeft,
+      faAngleDoubleRight,
+      faCaretSquareDown,
+      faCaretSquareUp,
       faShoePrints,
       faSort,
       faPennant,
@@ -88,7 +102,8 @@ export class FontawesomeModule {
       faAngleDown,
       faAngleUp,
       faWalking,
-      faCog
+      faCog,
+      faCompass
     );
   }
 }

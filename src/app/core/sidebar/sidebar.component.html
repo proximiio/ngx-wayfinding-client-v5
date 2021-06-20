@@ -4,6 +4,6 @@
   <app-shop-picker></app-shop-picker>
   <app-amenity-picker></app-amenity-picker>
 </ng-container>
-<ng-container *ngIf="sidebarService.selectedEndPoi">
-  <app-details></app-details>
+<ng-container>
+  <app-details [hidden]="!sidebarService.selectedEndPoi"></app-details>
 </ng-container>

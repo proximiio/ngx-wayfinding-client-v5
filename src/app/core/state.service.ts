@@ -21,6 +21,7 @@ export interface State {
     level: number,
     isStartPoint: boolean
   };
+  readonly textNavigation: any;
   accessibleRoute: boolean;
 }
 
@@ -50,6 +51,7 @@ export class StateService {
       level: 0,
       isStartPoint: true
     },
+    textNavigation: null,
     accessibleRoute: false
   };
 }
