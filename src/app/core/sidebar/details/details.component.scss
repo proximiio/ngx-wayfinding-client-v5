@@ -1,0 +1,161 @@
+@import '../../../../styles/variables';
+
+.container {
+  background-color: rgba(255 255 255 / 100%);
+  box-shadow: 0 0 15px rgb(0 0 0 / 10%);
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 1rem;
+  position: relative;
+  left: 0;
+  transition: all .25s linear;
+  min-height: 143px;
+  z-index: 0;
+  max-height: calc(100vh - 150px);
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  button {
+    cursor: pointer;
+  }
+
+  .close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: white;
+    background: $default-color;
+    border: 0;
+    border-radius: 15px;
+    padding: .5rem .8rem;
+    font-size: 20px;
+    &:hover {
+      background: darken($default-color, 3%);
+    }
+  }
+
+  .img-holder {
+    img {
+      width: 100%;
+    }
+  }
+
+  .content {
+    padding: 1rem 2rem;
+    padding-right: 4rem;
+    background: white;
+    position: relative;
+    top: -20px;
+    border-radius: 0 20px 0 0;
+
+    .title {
+      color: $default-color;
+      margin-bottom: 5px;
+    }
+
+    .open-hours {
+      color: $default-color;
+      margin-bottom: 0;
+      font-weight: 400
+    }
+
+    h4 {
+      margin-top: 0;
+      font-size: 14px;
+    }
+
+    p {
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: .5px;
+
+      a {
+        display: block;
+        font-weight: 500;
+        color: #222;
+        margin-top: 10px;
+        text-decoration: none;
+
+        &:hover {
+          color: $default-color;
+        }
+      }
+    }
+
+    .instructions-toggle,
+    .accessible-toggle {
+      display: block;
+      width: 100%;
+      margin-bottom: .5rem;
+      cursor: pointer;
+      background: white;
+      text-align: center;
+      border-radius: 5px;
+      font-weight: 500;
+      padding: .5rem;
+      outline: 0;
+      transition: all .25s linear;
+
+      fa-icon {
+        margin-right: .5rem;
+      }
+
+      &:hover {
+        opacity: .7;
+        transform: scale(1.05);
+      }
+    }
+
+    .instructions-toggle {
+      border: 2px solid $default-color;
+      color: $default-color;
+    }
+    .accessible-toggle {
+      border: 0;
+      color: $accent-color;
+    }
+
+    .mat-expansion-panel ::ng-deep {
+      box-shadow: none;
+      background: white;
+      .mat-expansion-panel-body {
+        padding: 0;
+      }
+      .mat-list-item {
+        border-top: 1px dashed $default-color;
+        color: #222;
+        .mat-list-item-content {
+          padding: 0;
+          .mat-list-text {
+            p:first-child {
+              color: $default-color;
+              fa-icon {
+                margin-right: 5px;
+              }
+            }
+            p:last-child {
+              margin-top: 5px;
+            }
+          }
+        }
+      }
+    }
+
+    &.accessibleOnly {
+      .instructions-toggle {
+        border-color: $accent-color;
+        color: $accent-color;
+      }
+      .accessible-toggle {
+        color: $default-color;
+      }
+      .mat-expansion-panel ::ng-deep {
+        .mat-list-item {
+          border-color: $accent-color;
+          .mat-list-text p:first-child {
+            color: $accent-color;
+          }
+        }
+      }
+    }
+  }
+}

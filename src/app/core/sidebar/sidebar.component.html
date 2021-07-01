@@ -1,54 +1,9 @@
-<div class="sidebar">
-  <a href="javascript:;" (click)="sidebarService.closeSidebar();" *ngIf="sidebarService.sidenavMode === 'over'" class="close-sidebar">
-    <fa-icon [icon]="['fal', 'times']"></fa-icon>
-  </a>
-  <div class="brand">
-    <img [src]="config.logo ? config.logo : 'assets/proximiio-logo-vertical.png'">
-  </div>
-  <mat-form-field appearance="outline" *ngIf="showPlaceSelector">
-    <mat-label>{{ placeSelectorLabel }}</mat-label>
-    <ng-select ngSelectMat [items]="places" bindLabel="name" (change)="onPlaceSelect($event)" [(ngModel)]="selectedPlace"></ng-select>
-    <span matPrefix><fa-icon [icon]="['fal', 'map-marker-alt']" transform="up-3"></fa-icon></span>
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>{{ endPointLabel }}</mat-label>
-    <ng-select ngSelectMat groupBy="category" [items]="pois" bindLabel="properties.title" (change)="onEndPointSelect($event)" [(ngModel)]="endPoi" [searchFn]="poiSearchFn">
-      <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-        {{ item.category }}
-      </ng-template>
-      <ng-template ng-option-tmp let-item="item" let-index="index">
-        <img height="28" width="28" [src]="item.icon"/>
-        {{ item.properties.title | slice: 0:18 }} {{ item.properties.title.length > 18 ? '...' : '' }}
-        <span class="level">L<small>{{ item.properties.level }}</small></span>
-      </ng-template>
-    </ng-select>
-    <span matPrefix><fa-icon [icon]="['fal', 'search']" transform="up-3"></fa-icon></span>
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>{{ startPointLabel }}</mat-label>
-    <ng-select ngSelectMat groupBy="category" [items]="pois" bindLabel="properties.title" (change)="onStartPointSelect($event)" [(ngModel)]="startPoi" [searchFn]="poiSearchFn">
-      <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-        {{ item.category }}
-      </ng-template>
-      <ng-template ng-option-tmp let-item="item" let-index="index">
-        <img height="28" width="28" [src]="item.icon"/>
-        {{ item.properties.title | slice: 0:18 }} {{ item.properties.title.length > 18 ? '...' : '' }}
-        <span class="level">L<small>{{ item.properties.level }}</small></span>
-      </ng-template>
-    </ng-select>
-    <span matPrefix><fa-icon [icon]="['fal', 'dot-circle']" transform="up-3"></fa-icon></span>
-  </mat-form-field>
-  <div *ngIf="showOnlyAccessibleToggle">
-    <button type="button" class="accessible-btn" (click)="onAccessibleOnlyToggle()">
-      <fa-icon [icon]="['fal', 'wheelchair']" size="lg"></fa-icon>
-      <span>Accessible routes only</span>
-      <fa-icon [icon]="['fal', 'toggle-off']" *ngIf="!onlyAccessible" class="toggle-off" size="2x"></fa-icon>
-      <fa-icon [icon]="['fal', 'toggle-on']" *ngIf="onlyAccessible" class="toggle-on" size="2x"></fa-icon>
-    </button>
-  </div>
-  <div class="powered-by" *ngIf="showPoweredBy">
-    <img src="assets/proximiio-logo-only.png" alt="Proximi.io">
-    <h4 class="title">Powered by Proximi.io</h4>
-  </div>
-</div>
-
+<app-search></app-search>
+<app-floor-picker></app-floor-picker>
+<ng-container *ngIf="!sidebarService.selectedEndPoi">
+  <app-shop-picker></app-shop-picker>
+  <app-amenity-picker></app-amenity-picker>
+</ng-container>
+<ng-container>
+  <app-details [hidden]="!sidebarService.selectedEndPoi"></app-details>
+</ng-container>

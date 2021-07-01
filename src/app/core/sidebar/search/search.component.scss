@@ -1,0 +1,143 @@
+@import '../../../../styles/variables';
+
+.container {
+  padding: 1rem 2rem;
+  padding-right: 0;
+  padding-bottom: 2.5rem;
+  position: absolute;
+  top: 0;
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255 255 255 / 0%);
+    transition: all .2s linear;
+    z-index: 10;
+  }
+
+  fa-icon {
+    color: $default-color;
+    position: relative;
+    z-index: 13;
+    top: 34px;
+    transition: all .3s linear;
+    &.search-icon {
+      left: 15px;
+    }
+    &.close-icon {
+      right: 85px;
+      top: 71px;
+      position: fixed;
+      opacity: 0;
+      cursor: pointer;
+      &:hover {
+        color: #e7265b;
+      }
+    }
+  }
+
+  .ng-select.custom ::ng-deep {
+    min-width: 428px;
+    .ng-select-container  {
+      cursor: pointer;
+      width: 428px;
+      min-height: 0px;
+      border-radius: 50px;
+      height: 46px;
+      background-color: rgba(255 255 255 / 90%);
+      border: 2px solid rgb(0 0 0 / 15%);
+      box-shadow: 0 5px 10px rgb(0 0 0 / 5%);
+      transition: all .3s linear;
+
+      &:hover {
+        border: 2px solid rgb(0 0 0 / 25%);
+        box-shadow: 0 5px 10px rgb(0 0 0 / 8%);
+      }
+      .ng-value-container {
+        cursor: pointer;
+        padding-left: 50px;
+        .ng-placeholder,
+        .ng-input input {
+          cursor: pointer;
+          color: $default-color;
+        }
+        .ng-input {
+          transition: all .3s linear;
+          input {
+            padding-left: 65px;
+          }
+        }
+      }
+      .ng-arrow-wrapper,
+      .ng-clear-wrapper {
+        display: none;
+      }
+    }
+    .ng-dropdown-panel {
+      border: 0;
+      border-radius: 0;
+      background-color: transparent;
+      box-shadow: none;
+      .ng-dropdown-panel-items {
+        max-height: 420px;
+        overflow: hidden;
+        .ng-option {
+          background-color: transparent;
+          color: $default-color;
+          padding-left: 65px;
+          font-size: 28px;
+          &.ng-option-marked {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  &.search-opened {
+    .overlay {
+      display: block;
+      background-color: rgba(255 255 255 / 75%);
+      bottom: 0;
+    }
+
+    fa-icon {
+      &.search-icon {
+        top: 55px;
+        left: 25px;
+      }
+      &.close-icon {
+        opacity: 1;
+      }
+    }
+
+    .ng-select.custom ::ng-deep {
+      position: fixed;
+      left: 2rem;
+      right: 2rem;
+      z-index: 12;
+
+      .ng-select-container  {
+        width: 100%;
+        border-radius: 80px;
+        height: 80px;
+        border-width: 3px;
+
+        .ng-value-container {
+          padding-left: 75px;
+
+          .ng-placeholder,
+          .ng-input input {
+            font-size: 28px;
+          }
+
+          .ng-input {
+            top: 20px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,9 +1,12 @@
+@import '../../styles/variables';
+
 :host {
   position: relative;
   display: block;
   width: 100%;
   height: 100%;
   min-height: 320px;
+  z-index: 0;
   >div {
     height: 100%;
   }
@@ -16,7 +19,67 @@ mgl-map {
 
   ::ng-deep .mapboxgl-map {
     min-height: 320px;
+    .mapboxgl-ctrl-top-right {
+      top: 100px;
+      right: 20px;
+    }
+    .mapboxgl-ctrl-group {
+      background-color: $default-color;
+      color: white;
+      box-shadow: none;
+      border-radius: 48px;
+      > button {
+        width: 48px !important;
+        height: 48px !important;
+        padding: .8rem;
+        border-radius: 48px!important;
+        &.mapboxgl-ctrl-compass {
+          margin: 0.1em 2px !important;
+          .mapboxgl-ctrl-icon {
+            background-image: url('../../assets/compass-regular.svg');
+          }
+        }
+      }
+    }
   }
+}
+
+.my-location,
+.settings {
+  background-color: $default-color;
+  color: white;
+  box-shadow: none;
+  border-radius: 48px;
+  border: 0;
+  position: fixed;
+  right: 30px;
+  top: 45px;
+  z-index: 5;
+  width: 52px;
+  height: 52px;
+  padding: .9rem;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    background-color: darken($default-color, 3%);
+  }
+}
+
+.my-location {
+  .icon {
+    background-image: url('../../assets/location-regular.svg');
+    background-repeat: no-repeat;
+    display: block;
+    height: 48px;
+    width: 48px;
+    background-size: 24px;
+  }
+}
+
+.settings {
+  top: auto;
+  bottom: 45px;
 }
 
 .map-floors {

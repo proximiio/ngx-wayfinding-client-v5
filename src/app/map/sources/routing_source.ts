@@ -15,6 +15,7 @@ export default class RoutingSource extends DataSource {
   lines?: Feature[];
   changes: ChangeContainer[];
   route: any;
+  points: any;
   routing: Routing;
 
   constructor() {
@@ -36,8 +37,10 @@ export default class RoutingSource extends DataSource {
 
     if (start && finish) {
       this.notify('loading-start');
-      const levelPaths = this.routing.route(start, finish);
-      this.route = levelPaths;
+      const route = this.routing.route(start, finish);
+      const levelPaths = route.levelPaths;
+      this.route = route.levelPaths;
+      this.points = route.points;
       if (levelPaths) {
         const lines = [] as Feature[];
         const levels = Object.keys(levelPaths);

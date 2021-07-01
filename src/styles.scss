@@ -1,7 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 // @import "~@ng-select/ng-select/themes/material.theme.css";
-
+@import "~@ng-select/ng-select/themes/default.theme.css";
 @import '~@angular/material/theming';
+@import 'styles/variables';
 
 // always include only once per project
 @include mat-core();
@@ -14,11 +15,11 @@
 // import custom componenet themes
 // unofficial naming convention to support nice ordering of files in IDE
 // to see theme under the original style file of the componenent
-@import 'styles/ng-select.scss-theme';
+// @import 'styles/ng-select.scss-theme';
 
 // you only have to add additional componenets here (instead of in every theme class)
 @mixin custom-components-theme($theme) {
-  @include ng-select-theme($theme);
+  // @include ng-select-theme($theme);
 }
 
 // specify theme class eg: <body class="my-theme"> ... </body>
@@ -54,4 +55,7 @@
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  button {
+    font-family: Roboto, "Helvetica Neue", sans-serif!important;
+  }
 }

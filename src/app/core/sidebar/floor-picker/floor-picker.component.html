@@ -1,0 +1,23 @@
+<div class="container" [ngClass]="{'open': sidebarOpened}">
+  <h3 class="title">Floor</h3>
+  <div class="selector">
+    <button class="current-floor" (click)="pickerOpened = !pickerOpened">
+      {{ stateService.state.floor.level + 1 }}<span>{{ stateService.state.floor.level + 1 | ordinal:false }}</span>
+      <fa-icon [icon]="pickerOpened ? ['fal', 'chevron-up'] : ['fal', 'chevron-down']"></fa-icon>
+    </button>
+    <div class="floor-toggle">
+      <button (click)="onFloorChange('down')"><fa-icon [icon]="['fal', 'chevron-left']"></fa-icon></button>
+      <button (click)="onFloorChange('up')"><fa-icon [icon]="['fal', 'chevron-right']"></fa-icon></button>
+    </div>
+  </div>
+  <div class="picker" *ngIf="pickerOpened">
+    <button *ngFor="let floor of stateService.state.floors"
+            [ngClass]="{'active': floor.level === stateService.state.floor.level}"
+            (click)="onFloorPick(floor)">
+      {{ floor.level + 1 }}<span>{{ floor.level + 1 | ordinal: false }}</span>
+    </button>
+  </div>
+  <div class="toggle" (click)="sidebarOpened = !sidebarOpened">
+    <fa-icon [icon]="sidebarOpened ? ['fal', 'chevron-double-left'] : ['fal', 'chevron-double-right']"></fa-icon>
+  </div>
+</div>

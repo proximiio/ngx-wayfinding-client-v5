@@ -1,0 +1,72 @@
+@import '../../../../styles/variables';
+
+.container {
+  padding: 1rem 2rem;
+  padding-right: 4rem;
+  background-color: rgba(255 255 255 / 90%);
+  box-shadow: 0 0 15px rgb(0 0 0 / 10%);
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 1rem;
+  position: relative;
+  left: 0;
+  transition: all .25s linear;
+  min-height: 200px;
+  z-index: 0;
+
+  .title {
+    position: relative;
+    color: $default-color;
+    transition: all .25s linear;
+  }
+
+  &:not(.open) {
+    left: -390px;
+
+    .title {
+      position: absolute;
+      right: -36px;
+      top: calc(50% - 30px);
+      transform: rotate(-90deg);
+    }
+  }
+
+  .categories {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    >li {
+      display: inline-block;
+      text-align: center;
+      margin-right: 10px;
+      width: 60px;
+      vertical-align: top;
+      .icon {
+        background-color: $default-color;
+        color: white;
+        font-size: 22px;
+        border-radius: 10px;
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+      }
+      p {
+        font-size: 12px;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .toggle {
+    position: absolute;
+    right: .5rem;
+    top: calc(50% - 20px);
+    font-size: 26px;
+    color: $default-color;
+    padding: .5rem;
+    cursor: pointer;
+
+    &:hover {
+      color: darken($default-color, 3%);
+    }
+  }
+}

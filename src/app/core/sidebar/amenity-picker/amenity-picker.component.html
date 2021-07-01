@@ -1,0 +1,14 @@
+<div class="container" [ngClass]="{'open': sidebarOpened}">
+  <h3 class="title">Search for amenities</h3>
+  <ul class="categories">
+    <li *ngFor="let item of data">
+      <div class="icon">
+        <fa-icon [icon]="item.icon"></fa-icon>
+      </div>
+      <p>{{ item.title }}</p>
+    </li>
+  </ul>
+  <div class="toggle" (click)="sidebarOpened = !sidebarOpened">
+    <fa-icon [icon]="sidebarOpened ? ['fal', 'chevron-double-left'] : ['fal', 'chevron-double-right']"></fa-icon>
+  </div>
+</div>

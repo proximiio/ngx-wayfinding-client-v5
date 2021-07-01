@@ -13,13 +13,17 @@ import { FontawesomeModule } from './fontawesome.module';
 import { DEFAULT_CONFIG, NgForageOptions, NgForageConfig, Driver } from 'ngforage';
 import { environment } from '../environments/environment';
 import { NotificationDialogComponent } from './core/notification-dialog/notification-dialog.component';
+import { SidebarModule } from './core/sidebar/sidebar.module';
+import { SettingsDialogComponent } from './core/settings-dialog/settings-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const APP_PREFIX = environment.appPrefix;
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotificationDialogComponent
+    NotificationDialogComponent,
+    SettingsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -28,8 +32,10 @@ const APP_PREFIX = environment.appPrefix;
     AngularMaterialModule,
     CoreModule,
     AuthModule,
+    SidebarModule,
     MapModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthGuard,
@@ -46,6 +52,6 @@ const APP_PREFIX = environment.appPrefix;
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [NotificationDialogComponent]
+  entryComponents: [NotificationDialogComponent, SettingsDialogComponent]
 })
 export class AppModule { }
