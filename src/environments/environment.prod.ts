@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  authUrl: '/wayfinding',
-  ahoyUrl: '/wayfinding/analytics',
+  authUrl: '/wayfinding-demo',
+  ahoyUrl: '/wayfinding-demo/analytics',
   appPrefix: 'ngx-wayfinding-'
 };
