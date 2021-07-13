@@ -46,6 +46,7 @@ app.get(Settings.basepath+'/auth', async (request, response, next) => {
         if (polygon) {
           polygon.properties.type = 'shop-custom';
           polygon.properties.poi_id = feature.properties.id;
+          polygon.properties.amenity = feature.properties.amenity;
           polygon.id = JSON.stringify(key);
           if (polygon.properties['label-line'] && polygon.properties['label-line'][0] instanceof Array && polygon.properties['label-line'][1] instanceof Array) {
             const labelLineFeature = JSON.parse(JSON.stringify(feature));

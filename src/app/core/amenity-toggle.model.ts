@@ -1,6 +1,6 @@
-
 export interface AmenityToggleModel {
-  label: string;
-  icon: string;
-  amenities: string[];
+  title: string;
+  icon: string[];
+  id: string;
+  active: boolean;
 }
