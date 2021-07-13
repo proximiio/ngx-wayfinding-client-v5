@@ -40,14 +40,28 @@
       margin-right: 10px;
       width: 60px;
       vertical-align: top;
+      cursor: pointer;
       .icon {
-        background-color: $accent-color;
-        color: white;
+        background-color: #868686;
+        color: #fff;
         font-size: 22px;
         border-radius: 10px;
         width: 60px;
         height: 60px;
         line-height: 60px;
+      }
+
+      &:hover .icon {
+        background-color: darken(#868686, 10%);
+      }
+      &.active {
+        .icon {
+          background-color: $accent-color;
+          color: white;
+        }
+        &:hover .icon {
+           background-color: darken($accent-color, 10%);
+        }
       }
       p {
         font-size: 12px;
