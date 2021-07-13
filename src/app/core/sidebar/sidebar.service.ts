@@ -21,12 +21,7 @@ export class SidebarService {
   public endPointLabel = 'Etsi kartalta';
   public startPointLabel = 'Where are you now?';
   public placeSelectorLabel = 'Pick up a place';
-  public amenityToggles: AmenityToggleModel[] = [{
-    label: 'All Visible',
-    icon: 'assets/kaikki_kohteet.svg',
-    amenities: ['all']
-  }];
-  public activeAmenitiesToggle = ['all'];
+  public hiddenAmenities: string[] = [];
   public sidebarStatus = new Subject<boolean>();
   public startPointListener = new Subject<any>();
   public endPointListener = new Subject<any>();
@@ -75,8 +70,12 @@ export class SidebarService {
   }
 
   onAmenityToggle(item: AmenityToggleModel) {
-    this.activeAmenitiesToggle = this.activeAmenitiesToggle[0] === item.amenities[0] ? [''] : item.amenities;
-    this.amenityToggleListener.next(this.activeAmenitiesToggle);
+    if (item.active) {
+      this.hiddenAmenities = this.hiddenAmenities.filter(i => i !== item.id)
+    } else {
+      this.hiddenAmenities.push(item.id);
+    }
+    this.amenityToggleListener.next(this.hiddenAmenities);
   }
 
   get sortedPOIs() {

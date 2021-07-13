@@ -1,7 +1,7 @@
 <div class="container" [ngClass]="{'open': sidebarOpened}">
   <h3 class="title">Shops & Restaurants</h3>
   <ul class="categories">
-    <li *ngFor="let item of data">
+    <li *ngFor="let item of data" [class.active]="item.active" (click)="onFilterClick(item)">
       <div class="icon">
         <fa-icon [icon]="item.icon"></fa-icon>
       </div>

@@ -52,6 +52,7 @@ export class MapComponent implements OnInit, OnDestroy {
   imageSourceManager: ImageSourceManager = new ImageSourceManager();
   showStartPoint = false;
   routeFactory;
+  hiddenAmenities = null;
 
   private subs = [];
 
@@ -117,8 +118,36 @@ export class MapComponent implements OnInit, OnDestroy {
         } else {
           this.onFloorChange(floor);
         }
+      }),
+      this.sidebarService.getAmenityToggleListener().subscribe(amenities => {
+        if (amenities.length > 0) {
+          this.hiddenAmenities = [...amenities];
+        } else {
+          this.hiddenAmenities = null;
+        }
+        this.setFilters();
       })
     );
+  }
+
+  setFilters() {
+    // proximiio-pois-icons, proximiio-pois-labels
+    const layers = ['proximiio-pois-icons', 'proximiio-pois-labels'];
+    layers.forEach(layer => {
+      if (this.map.getLayer(layer)) {
+        setTimeout(() => {
+          const l = this.map.getLayer(layer);
+          const filters = [...l.filter];
+          const amenityFilter = filters.findIndex(f => f[1][1] === 'amenity');
+          if (amenityFilter !== -1) {
+            filters[amenityFilter] = ['match', ['get', 'amenity'], this.hiddenAmenities ? this.hiddenAmenities : ['undefined'], false, true];
+          } else {
+            filters.push(['match', ['get', 'amenity'], this.hiddenAmenities ? this.hiddenAmenities : ['undefined'], false, true]);
+          }
+          this.map.setFilter(layer, filters);
+        });
+      }
+    });
   }
 
   async initialize() {
@@ -470,7 +499,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
       if (route) {
         const bbox = turf.bbox(route.geometry);
-        map.fitBounds(bbox, { padding: 150, bearing: this.stateService.state.options.bearing, pitch: this.stateService.state.options.pitch });
+        map.fitBounds(bbox, { padding: 250, bearing: this.stateService.state.options.bearing, pitch: this.stateService.state.options.pitch });
       }
     }
     this.stateService.state = {...this.stateService.state, floor, style: this.stateService.state.style};
@@ -495,6 +524,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   onRouteCancel() {
+    this.map.zoomTo(this.stateService.state.options.zoom);
     this.routingSource.cancel();
   }
 
@@ -560,7 +590,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       if (this.map) {
         const bbox = turf.bbox(route.geometry);
-        this.map.fitBounds(bbox, { padding: 150, bearing: this.stateService.state.options.bearing, pitch: this.stateService.state.options.pitch });
+        this.map.fitBounds(bbox, { padding: 250, bearing: this.stateService.state.options.bearing, pitch: this.stateService.state.options.pitch });
       }
     }
   }
