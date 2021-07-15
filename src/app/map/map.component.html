@@ -49,7 +49,7 @@
         'all',
         ['==', ['get','type'], 'shop-custom'],
         ['==', ['to-number', ['get','level']], this.stateService.state.floor.level],
-        ['match', ['get', 'amenity'], hiddenAmenities ? hiddenAmenities : ['undefined'], false, true]
+        ['match', ['get', 'amenity'], filteredAmenities ? filteredAmenities : ['undefined'], true, false]
       ]"
       [layout]="{}"
       [paint]="{
@@ -71,7 +71,7 @@
         'all',
         ['==', ['get','type'], 'poi-custom'],
         ['==', ['to-number', ['get','level']], this.stateService.state.floor.level],
-        ['match', ['get', 'amenity'], hiddenAmenities ? hiddenAmenities : ['undefined'], false, true]
+        ['match', ['get', 'amenity'], filteredAmenities ? filteredAmenities : ['undefined'], true, false]
       ]"
       [layout]="{
         'icon-image': '{amenity}',
@@ -113,7 +113,7 @@
         'all',
         ['==', ['get','type'], 'shop-label'],
         ['==', ['to-number', ['get','level']], this.stateService.state.floor.level],
-        ['match', ['get', 'amenity'], hiddenAmenities ? hiddenAmenities : ['undefined'], false, true]
+        ['match', ['get', 'amenity'], filteredAmenities ? filteredAmenities : ['undefined'], true, false]
       ]"
       [layout]="{
         'symbol-placement': 'line-center',
