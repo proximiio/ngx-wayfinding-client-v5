@@ -36,6 +36,7 @@ export class MapComponent implements OnInit, OnDestroy {
   currentUserData;
   amenities = [];
   amenityBaseLinks: any = {};
+  amenityIds: string[] = [];
   features: any = {};
   showRaster = true;
   imagesIteration = 0;
@@ -52,7 +53,7 @@ export class MapComponent implements OnInit, OnDestroy {
   imageSourceManager: ImageSourceManager = new ImageSourceManager();
   showStartPoint = false;
   routeFactory;
-  hiddenAmenities = null;
+  filteredAmenities = null;
 
   private subs = [];
 
@@ -83,6 +84,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.onOptionsChange = this.onOptionsChange.bind(this);
 
     this.updateImages();
+    this.filteredAmenities = this.amenityIds;
   }
 
   ngOnInit() {
@@ -120,10 +122,30 @@ export class MapComponent implements OnInit, OnDestroy {
         }
       }),
       this.sidebarService.getAmenityToggleListener().subscribe(amenities => {
-        if (amenities.length > 0) {
-          this.hiddenAmenities = [...amenities];
+        if (!this.sidebarService.filteredShop && !this.sidebarService.filteredAmenity) {
+          this.filteredAmenities = this.amenityIds;
+        } else if (this.sidebarService.filteredShop && !this.sidebarService.filteredAmenity) {
+          const shopIds = [
+            '44010f6f-9963-4433-ad86-40b89b829c41:c693d414-4613-4c6c-95da-771e52759873',
+            '44010f6f-9963-4433-ad86-40b89b829c41:d111c5e4-1a63-48b3-94de-5fa7b309daaf',
+            '44010f6f-9963-4433-ad86-40b89b829c41:da5435e2-9179-4ca6-86e4-652b7e8d109b',
+            '44010f6f-9963-4433-ad86-40b89b829c41:c96e80d7-6683-4ca0-bc64-b6ed3fc824e2',
+            '44010f6f-9963-4433-ad86-40b89b829c41:f62dd757-4057-4015-97a0-c66d8934f7d8'
+          ].filter(i => i !== this.sidebarService.filteredShop.id);
+          const allOtherAmenities = this.amenityIds.filter( ( el ) => !shopIds.includes( el ) );
+          this.filteredAmenities = [...allOtherAmenities];
+        } else if (!this.sidebarService.filteredShop && this.sidebarService.filteredAmenity) {
+          const amenityIds = [
+            '44010f6f-9963-4433-ad86-40b89b829c41:e762ea14-70e2-49b7-9938-f6870f9ab18f',
+            '44010f6f-9963-4433-ad86-40b89b829c41:61042c8a-87a3-40e4-afa8-3a2c3c09fbf8',
+            '44010f6f-9963-4433-ad86-40b89b829c41:62c605cc-75c0-449a-987c-3bdfef2c1642',
+            '44010f6f-9963-4433-ad86-40b89b829c41:57ef933b-ff2e-4db1-bc99-d21f2053abb2',
+            '44010f6f-9963-4433-ad86-40b89b829c41:2cd016a5-8703-417c-af07-d49aef074ad3'
+          ].filter(i => i !== this.sidebarService.filteredAmenity.id);
+          const allOtherAmenities = this.amenityIds.filter( ( el ) => !amenityIds.includes( el ) );
+          this.filteredAmenities = [...allOtherAmenities];
         } else {
-          this.hiddenAmenities = null;
+          this.filteredAmenities = [...amenities];
         }
         this.setFilters();
       })
@@ -140,9 +162,9 @@ export class MapComponent implements OnInit, OnDestroy {
           const filters = [...l.filter];
           const amenityFilter = filters.findIndex(f => f[1][1] === 'amenity');
           if (amenityFilter !== -1) {
-            filters[amenityFilter] = ['match', ['get', 'amenity'], this.hiddenAmenities ? this.hiddenAmenities : ['undefined'], false, true];
+            filters[amenityFilter] = ['match', ['get', 'amenity'], this.filteredAmenities ? this.filteredAmenities : ['undefined'], true, false];
           } else {
-            filters.push(['match', ['get', 'amenity'], this.hiddenAmenities ? this.hiddenAmenities : ['undefined'], false, true]);
+            filters.push(['match', ['get', 'amenity'], this.filteredAmenities ? this.filteredAmenities : ['undefined'], true, false]);
           }
           this.map.setFilter(layer, filters);
         });
@@ -374,6 +396,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.imageSourceManager.setLevel(map, this.stateService.state.floor.level);
       await this.onPlaceSelect(this.stateService.state.place);
       this.handleQueryParams();
+      this.setFilters();
     }
   }
 
@@ -504,6 +527,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
     this.stateService.state = {...this.stateService.state, floor, style: this.stateService.state.style};
     this.updateCluster();
+    this.setFilters();
   }
 
   generateRoute() {
@@ -524,7 +548,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   onRouteCancel() {
-    this.map.zoomTo(this.stateService.state.options.zoom);
+    if (this.map) {
+      this.map.zoomTo(this.stateService.state.options.zoom);
+    }
     this.routingSource.cancel();
   }
 
@@ -628,6 +654,7 @@ export class MapComponent implements OnInit, OnDestroy {
       .filter(a => a.icon)
       .forEach(amenity => {
         images[amenity.id] = { uri: amenity.icon };
+        this.amenityIds.push(amenity.id);
       });
 
     this.images = images;

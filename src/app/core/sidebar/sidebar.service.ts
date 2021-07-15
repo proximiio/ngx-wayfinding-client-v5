@@ -5,6 +5,7 @@ import { AuthService } from '../../auth/auth.service';
 import { isPointWithinRadius } from 'geolib';
 import Floor from '../../map/models/floor.model';
 import { StateService } from '../state.service';
+import Feature from '../../map/models/feature.model';
 
 @Injectable({providedIn: 'root'})
 export class SidebarService {
@@ -21,7 +22,9 @@ export class SidebarService {
   public endPointLabel = 'Etsi kartalta';
   public startPointLabel = 'Where are you now?';
   public placeSelectorLabel = 'Pick up a place';
-  public hiddenAmenities: string[] = [];
+  public filteredShop = null;
+  public filteredAmenity = null;
+  public filteredArray: string[] = [];
   public sidebarStatus = new Subject<boolean>();
   public startPointListener = new Subject<any>();
   public endPointListener = new Subject<any>();
@@ -60,8 +63,8 @@ export class SidebarService {
   }
 
   onSetEndPoi(poi) {
-    this.selectedEndPoi = poi;
-    this.endPointListener.next(poi);
+    this.selectedEndPoi = this.features.features.find(f => f.id === poi?.id);
+    this.endPointListener.next(this.selectedEndPoi);
   }
 
   onAccessibleRouteToggle() {
@@ -69,13 +72,14 @@ export class SidebarService {
     this.accessibleOnlyToggleListener.next();
   }
 
-  onAmenityToggle(item: AmenityToggleModel) {
-    if (item.active) {
-      this.hiddenAmenities = this.hiddenAmenities.filter(i => i !== item.id)
-    } else {
-      this.hiddenAmenities.push(item.id);
+  onAmenityToggle(type: string, item: AmenityToggleModel) {
+    if (type === 'shop') {
+      this.filteredShop = this.filteredShop?.id === item.id ? null : item;
+    } else if (type === 'amenity') {
+      this.filteredAmenity = this.filteredAmenity?.id === item.id ? null : item;
     }
-    this.amenityToggleListener.next(this.hiddenAmenities);
+    this.filteredArray = [this.filteredShop ? this.filteredShop.id : 'undefined', this.filteredAmenity ? this.filteredAmenity.id : 'undefined2'];
+    this.amenityToggleListener.next(this.filteredArray);
   }
 
   get sortedPOIs() {
