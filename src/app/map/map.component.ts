@@ -148,6 +148,7 @@ export class MapComponent implements OnInit, OnDestroy {
           this.filteredAmenities = [...amenities];
         }
         this.setFilters();
+        this.setState();
       })
     );
   }
@@ -170,6 +171,30 @@ export class MapComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  setState() {
+    const features = this.features.features.filter(f => f.properties.metadata && f.properties.metadata.polygon_id);
+    for (const f of features) {
+      const polygon = this.features.features.find(i => i.properties.id === f.properties.metadata.polygon_id);
+      if (polygon) {
+        if (this.filteredAmenities.includes(f.properties.amenity)) {
+          this.map.setFeatureState({
+            source: 'main',
+            id: polygon.id
+          }, {
+            disabled: false
+          });
+        } else {
+          this.map.setFeatureState({
+            source: 'main',
+            id: polygon.id
+          }, {
+            disabled: true
+          });
+        }
+      }
+    }
   }
 
   async initialize() {
