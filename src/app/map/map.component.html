@@ -26,7 +26,8 @@
   <button class="settings" (click)="onSettings()">
     <fa-icon [icon]="['fal', 'cog']" size="lg"></fa-icon>
   </button>
-  <mgl-map
+  <div id="proximiioMap"></div>
+  <!--<mgl-map
     *ngIf="!stateService.state.initializing"
     [style]="stateService.state.style"
     (load)="onLoad($event)"
@@ -175,5 +176,5 @@
       >
       </mgl-image>
     </ng-container>
-  </mgl-map>
+  </mgl-map>-->
 </div>

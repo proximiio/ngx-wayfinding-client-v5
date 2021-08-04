@@ -31,7 +31,7 @@ export class SidebarService {
   public selectedPlaceListener = new Subject<any>();
   public accessibleOnlyToggleListener = new Subject<boolean>();
   public amenityToggleListener = new Subject<string[]>();
-  public floorChangeListener = new Subject<string | Floor>();
+  public floorChangeListener = new Subject<string | any>();
 
   constructor(
     private stateService: StateService,

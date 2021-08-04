@@ -25,6 +25,6 @@ export class FloorPickerComponent implements OnInit {
   }
 
   onFloorPick(floor: Floor) {
-    this.sidebarService.floorChangeListener.next(floor);
+    this.sidebarService.floorChangeListener.next(floor as Floor);
   }
 }
