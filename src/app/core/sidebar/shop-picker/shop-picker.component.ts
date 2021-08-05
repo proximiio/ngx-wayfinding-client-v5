@@ -44,13 +44,13 @@ export class ShopPickerComponent implements OnInit {
 
   onFilterClick(item: AmenityToggleModel) {
     for (const i of this.data) {
-      if (item.active && this.sidebarService.filteredShop?.id === item.id) {
+      if (item.active && this.sidebarService.filteredShop === item.id) {
         i.active = true;
       } else {
         i.active = item.id === i.id;
       }
     }
-    this.sidebarService.onAmenityToggle('shop', item);
+    this.sidebarService.onAmenityToggle('shop', item.id);
   }
 
 }

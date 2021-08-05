@@ -30,7 +30,7 @@ export class SidebarService {
   public endPointListener = new Subject<any>();
   public selectedPlaceListener = new Subject<any>();
   public accessibleOnlyToggleListener = new Subject<boolean>();
-  public amenityToggleListener = new Subject<string[]>();
+  public amenityToggleListener = new Subject<any>();
   public floorChangeListener = new Subject<string | any>();
 
   constructor(
@@ -72,14 +72,15 @@ export class SidebarService {
     this.accessibleOnlyToggleListener.next();
   }
 
-  onAmenityToggle(type: string, item: AmenityToggleModel) {
-    if (type === 'shop') {
-      this.filteredShop = this.filteredShop?.id === item.id ? null : item;
-    } else if (type === 'amenity') {
-      this.filteredAmenity = this.filteredAmenity?.id === item.id ? null : item;
+  onAmenityToggle(category: string, amenityId: string) {
+    if (category === 'shop') {
+      this.filteredShop = this.filteredShop === amenityId ? null : amenityId;
+    } else if (category === 'amenities') {
+      this.filteredAmenity = this.filteredAmenity === amenityId ? null : amenityId;
     }
-    this.filteredArray = [this.filteredShop ? this.filteredShop.id : 'undefined', this.filteredAmenity ? this.filteredAmenity.id : 'undefined2'];
-    this.amenityToggleListener.next(this.filteredArray);
+    /*this.filteredArray = [this.filteredShop ? this.filteredShop.id : 'undefined', this.filteredAmenity ? this.filteredAmenity.id : 'undefined2'];
+    this.amenityToggleListener.next(this.filteredArray);*/
+    this.amenityToggleListener.next({category, amenityId});
   }
 
   get sortedPOIs() {

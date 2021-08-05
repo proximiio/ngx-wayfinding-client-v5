@@ -43,13 +43,13 @@ export class AmenityPickerComponent implements OnInit {
 
   onFilterClick(item: AmenityToggleModel) {
     for (const i of this.data) {
-      if (item.active && this.sidebarService.filteredAmenity?.id === item.id) {
+      if (item.active && this.sidebarService.filteredAmenity === item.id) {
         i.active = true;
       } else {
         i.active = item.id === i.id;
       }
     }
-    this.sidebarService.onAmenityToggle('amenity', item);
+    this.sidebarService.onAmenityToggle('amenities', item.id);
   }
 
 }
