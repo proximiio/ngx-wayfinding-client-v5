@@ -34,12 +34,6 @@ export class MapComponent implements OnInit, OnDestroy {
             this.onMyLocation();
           }
         }
-        /*this.endPoi = poi;
-        if (poi && (!this.startPoi)) {
-          this.centerOnPoi(poi);
-        }
-        this.handlePolygonSelection(poi);
-        this.generateRoute();*/
       }),
       this.sidebarService.getFloorChangeListener().subscribe(floor => {
         if (floor.id) {
@@ -79,7 +73,8 @@ export class MapComponent implements OnInit, OnDestroy {
           kioskSettings: {
             coordinates: this.stateService.state.defaultLocation.coordinates,
             level: this.stateService.state.defaultLocation.level
-          }
+          },
+          initPolygons: true
         });
 
         this.map.getMapboxInstance().addControl(new mapboxgl.NavigationControl({
@@ -88,6 +83,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
         this.map.getRouteFoundListener().subscribe(res => {
           this.stateService.state = {...this.stateService.state, textNavigation: res.TBTNav};
+        });
+
+        this.map.getPolygonClickListener().subscribe(poi => {
+          this.sidebarService.onSetEndPoi(poi);
         });
 
         this.map.getPlaceSelectListener().subscribe(res => {
