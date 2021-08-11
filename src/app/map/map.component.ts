@@ -91,12 +91,12 @@ export class MapComponent implements OnInit, OnDestroy {
 
         this.map.getPlaceSelectListener().subscribe(res => {
           const mapState = this.map.state;
-          this.stateService.state = {...this.stateService.state, place: mapState.place, floors: mapState.floors, floor: mapState.floor};
+          this.stateService.state = {...this.stateService.state, place: mapState.place, floors: mapState.floors, floor: mapState.floor, allFeatures: mapState.allFeatures, amenities: mapState.amenities};
         })
 
         this.map.getFloorSelectListener().subscribe(res => {
           const mapState = this.map.state;
-          this.stateService.state = {...this.stateService.state, place: mapState.place, floors: mapState.floors, floor: mapState.floor};
+          this.stateService.state = {...this.stateService.state, place: mapState.place, floors: mapState.floors, floor: mapState.floor, allFeatures: mapState.allFeatures, amenities: mapState.amenities};
         })
 
         this.map.setAmenitiesCategory('shop', [

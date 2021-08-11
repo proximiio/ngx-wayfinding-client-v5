@@ -1,19 +1,8 @@
 <div [class]="'theme-wrapper ' + theme$">
-  <ng-container *ngIf="userIsAuthenticated">
-    <div class="content">
-      <app-sidebar></app-sidebar>
-      <app-map></app-map>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="!userIsAuthenticated">
-    <div class="content">
-      <p *ngIf="isLoading" style="margin: 2rem 0; text-align: center;">
-        Loading...<br/>
-        <mat-spinner color="accent" diameter="38" style="margin: 2rem auto;"></mat-spinner>
-      </p>
-      <router-outlet #o="outlet"></router-outlet>
-    </div>
-  </ng-container>
+  <div class="content">
+    <app-sidebar></app-sidebar>
+    <app-map></app-map>
+  </div>
 </div>
 
 

@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidebarService } from '../sidebar.service';
 import { StateService } from '../../state.service';
-import { AuthService } from '../../../auth/auth.service';
 import { Subscription } from 'rxjs';
-import Feature from '../../../map/models/feature.model';
+import Feature from 'proximiio-js-library/lib/models/feature';
+import * as Settings from '../../../../../settings';
 
 interface StepModel {
   bearingFromLastStep: number;
@@ -33,7 +33,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
   private sub: Subscription;
 
   constructor(
-    private authService: AuthService,
     public sidebarService: SidebarService,
     public stateService: StateService
   ) {
@@ -67,7 +66,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   getImageUrl() {
-    return `https://api.proximi.fi/v5/geo/${this.poi.properties.images[0]}?token=${this.authService.getToken()}`;
+    return `https://api.proximi.fi/v5/geo/${this.poi.properties.images[0]}?token=${Settings.token}`;
   }
 
   getOpenHours() {

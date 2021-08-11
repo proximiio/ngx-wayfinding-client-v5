@@ -15,10 +15,11 @@ export class SearchComponent implements OnInit {
   constructor(public sidebarService: SidebarService) {}
 
   ngOnInit() {
-    this.pois = this.sidebarService.sortedPOIs;
+
   }
 
   onSearchOpen() {
+    this.pois = this.sidebarService.sortedPOIs;
     this.searchOpen = true;
   }
 

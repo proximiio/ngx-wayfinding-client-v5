@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StateService } from '../../state.service';
 import { SidebarService } from '../sidebar.service';
-import Floor from '../../../map/models/floor.model';
+import { FloorModel } from 'proximiio-js-library/lib/models/floor';
 
 @Component({
   selector: 'app-floor-picker',
@@ -24,7 +24,7 @@ export class FloorPickerComponent implements OnInit {
     this.sidebarService.floorChangeListener.next(way);
   }
 
-  onFloorPick(floor: Floor) {
-    this.sidebarService.floorChangeListener.next(floor as Floor);
+  onFloorPick(floor: FloorModel) {
+    this.sidebarService.floorChangeListener.next(floor as FloorModel);
   }
 }

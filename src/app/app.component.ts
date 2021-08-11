@@ -1,52 +1,29 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from './auth/auth.service';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import Fingerprint2 from 'fingerprintjs2';
 import ahoy from 'ahoy.js';
 import { environment } from '../environments/environment';
+import * as Settings from '../../settings';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  userIsAuthenticated = false;
+export class AppComponent implements OnInit {
   isLoading = false;
   theme$ = 'custom-theme';
-  currentUserConfig;
   fingerprint;
   sendAnalytics = true;
-  private authListenerSubs: Subscription;
 
   constructor(
-    private authService: AuthService,
     overlayContainer: OverlayContainer
   ) {
     overlayContainer.getContainerElement().classList.add(this.theme$);
   }
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.authService.autoAuthUser();
-    this.userIsAuthenticated = this.authService.getIsAuth();
-    this.authListenerSubs = this.authService
-      .getAuthStatusListener()
-      .subscribe(isAuthenticated => {
-        this.isLoading = false;
-        this.userIsAuthenticated = isAuthenticated;
-        this.currentUserConfig =  this.authService.getCurrentUserConfig();
-        setTimeout(() => {
-          this.startAhoyTracking();
-        }, 500);
-      });
-    if (!this.userIsAuthenticated) {
-      this.authService.login();
-    } else {
-      this.currentUserConfig =  this.authService.getCurrentUserConfig();
-      this.startAhoyTracking();
-    }
+    this.startAhoyTracking();
   }
 
   startAhoyTracking() {
@@ -70,18 +47,12 @@ export class AppComponent implements OnInit, OnDestroy {
           trackVisits: true,
           cookies: true,
           cookieDomain: null,
-          headers: {'Authorization': `Bearer ${this.authService.getToken()}`},
+          headers: {'Authorization': `Bearer ${Settings.token}`},
           visitParams: {fingerprint: fingerprint},
           withCredentials: false
         });
         ahoy.trackAll();
       });
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.authListenerSubs) {
-      this.authListenerSubs.unsubscribe();
     }
   }
 }
