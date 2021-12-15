@@ -139,3 +139,76 @@
     }
   }
 }
+
+@media only screen and (max-width: 599.98px) {
+  .container {
+    top: .5rem;
+    left: .5rem;
+
+    fa-icon {
+      font-size: 12px;
+      top: 8px;
+      &.close-icon {
+        right: 25px;
+        top: 18px;
+      }
+    }
+
+    .ng-select.custom ::ng-deep {
+      min-width: 305px;
+      .ng-select-container {
+        width: 305px;
+        height: 32px;
+        .ng-value-container {
+          padding-left: 35px;
+          .ng-input {
+            input {
+              padding-left: 35px;
+            }
+          }
+        }
+      }
+      .ng-dropdown-panel {
+        .ng-dropdown-panel-items {
+          .ng-option {
+            padding-left: 35px;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+
+    &.search-opened {
+      fa-icon {
+        font-size: 10px;
+        &.search-icon {
+          top: 10px;
+          left: 15px;
+        }
+      }
+
+      .ng-select.custom ::ng-deep {
+        left: .5rem;
+        right: .5rem;
+
+        .ng-select-container  {
+          height: 40px;
+          border-width: 2px;
+
+          .ng-value-container {
+            padding-left: 50px;
+
+            .ng-placeholder,
+            .ng-input input {
+              font-size: 18px;
+            }
+
+            .ng-input {
+              top: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

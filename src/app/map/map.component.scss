@@ -174,7 +174,11 @@
 }
 
 @media only screen and (max-width: 599.98px) {
+  .my-location,
+  .settings {
+    right: .5rem;
+  }
   .my-location {
-    top: 100px;
+    top: 60px;
   }
 }
