@@ -172,3 +172,9 @@
     color: white;
   }
 }
+
+@media only screen and (max-width: 599.98px) {
+  .my-location {
+    top: 100px;
+  }
+}

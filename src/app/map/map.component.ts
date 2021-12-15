@@ -7,6 +7,8 @@ import { SettingsDialogComponent } from '../core/settings-dialog/settings-dialog
 import { MatDialog } from '@angular/material/dialog';
 import { SidebarService } from '../core/sidebar/sidebar.service';
 import { Subscription } from 'rxjs';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { PaddingOptions } from 'mapbox-gl';
 
 @Component({
   selector: 'app-map',
@@ -14,6 +16,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit, OnDestroy {
+  private mapPadding: PaddingOptions = { top: 250, bottom:250, left: 500, right: 250 };
   private map;
   private endPoi;
   private subs: Subscription[] = [];
@@ -21,7 +24,8 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(
     private sidebarService: SidebarService,
     private stateService: StateService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private breakpointObserver: BreakpointObserver
   ) {
     this.subs.push(
       this.sidebarService.getEndPointListener().subscribe(poi => {
@@ -56,7 +60,18 @@ export class MapComponent implements OnInit, OnDestroy {
           }
         }
       })
-    )
+    );
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.mapPadding = { top: 50, bottom: 300, left: 50, right: 50 };
+          if (this.map) this.map.setBoundsPadding(this.mapPadding);
+        } else {
+          this.mapPadding = { top: 250, bottom: 250, left: 450, right: 250 };
+          if (this.map) this.map.setBoundsPadding(this.mapPadding);
+        }
+      });
   }
 
   ngOnInit() {
@@ -74,12 +89,32 @@ export class MapComponent implements OnInit, OnDestroy {
             coordinates: this.stateService.state.defaultLocation.coordinates,
             level: this.stateService.state.defaultLocation.level
           },
-          initPolygons: true
+          initPolygons: true,
+          showLevelDirectionIcon: true,
+          fitBoundsPadding: this.mapPadding
         });
 
-        this.map.getMapboxInstance().addControl(new mapboxgl.NavigationControl({
-          showZoom: false
-        }));
+        this.map.getMapReadyListener(ready => {
+          this.map.getMapboxInstance().addControl(new mapboxgl.NavigationControl({
+            showZoom: false
+          }));
+
+          this.map.setAmenitiesCategory('shop', [
+            '44010f6f-9963-4433-ad86-40b89b829c41:c693d414-4613-4c6c-95da-771e52759873',
+            '44010f6f-9963-4433-ad86-40b89b829c41:d111c5e4-1a63-48b3-94de-5fa7b309daaf',
+            '44010f6f-9963-4433-ad86-40b89b829c41:da5435e2-9179-4ca6-86e4-652b7e8d109b',
+            '44010f6f-9963-4433-ad86-40b89b829c41:c96e80d7-6683-4ca0-bc64-b6ed3fc824e2',
+            '44010f6f-9963-4433-ad86-40b89b829c41:f62dd757-4057-4015-97a0-c66d8934f7d8'
+          ]);
+
+          this.map.setAmenitiesCategory('amenities', [
+            '44010f6f-9963-4433-ad86-40b89b829c41:e762ea14-70e2-49b7-9938-f6870f9ab18f',
+            '44010f6f-9963-4433-ad86-40b89b829c41:61042c8a-87a3-40e4-afa8-3a2c3c09fbf8',
+            '44010f6f-9963-4433-ad86-40b89b829c41:62c605cc-75c0-449a-987c-3bdfef2c1642',
+            '44010f6f-9963-4433-ad86-40b89b829c41:57ef933b-ff2e-4db1-bc99-d21f2053abb2',
+            '44010f6f-9963-4433-ad86-40b89b829c41:2cd016a5-8703-417c-af07-d49aef074ad3'
+          ]);
+        });
 
         this.map.getRouteFoundListener().subscribe(res => {
           this.stateService.state = {...this.stateService.state, textNavigation: res.TBTNav};
@@ -98,22 +133,6 @@ export class MapComponent implements OnInit, OnDestroy {
           const mapState = this.map.state;
           this.stateService.state = {...this.stateService.state, place: mapState.place, floors: mapState.floors, floor: mapState.floor, allFeatures: mapState.allFeatures, amenities: mapState.amenities};
         })
-
-        this.map.setAmenitiesCategory('shop', [
-          '44010f6f-9963-4433-ad86-40b89b829c41:c693d414-4613-4c6c-95da-771e52759873',
-          '44010f6f-9963-4433-ad86-40b89b829c41:d111c5e4-1a63-48b3-94de-5fa7b309daaf',
-          '44010f6f-9963-4433-ad86-40b89b829c41:da5435e2-9179-4ca6-86e4-652b7e8d109b',
-          '44010f6f-9963-4433-ad86-40b89b829c41:c96e80d7-6683-4ca0-bc64-b6ed3fc824e2',
-          '44010f6f-9963-4433-ad86-40b89b829c41:f62dd757-4057-4015-97a0-c66d8934f7d8'
-        ]);
-
-        this.map.setAmenitiesCategory('amenities', [
-          '44010f6f-9963-4433-ad86-40b89b829c41:e762ea14-70e2-49b7-9938-f6870f9ab18f',
-          '44010f6f-9963-4433-ad86-40b89b829c41:61042c8a-87a3-40e4-afa8-3a2c3c09fbf8',
-          '44010f6f-9963-4433-ad86-40b89b829c41:62c605cc-75c0-449a-987c-3bdfef2c1642',
-          '44010f6f-9963-4433-ad86-40b89b829c41:57ef933b-ff2e-4db1-bc99-d21f2053abb2',
-          '44010f6f-9963-4433-ad86-40b89b829c41:2cd016a5-8703-417c-af07-d49aef074ad3'
-        ]);
       });
   }
 

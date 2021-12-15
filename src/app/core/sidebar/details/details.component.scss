@@ -5,14 +5,16 @@
   box-shadow: 0 0 15px rgb(0 0 0 / 10%);
   border-radius: 0 10px 10px 0;
   margin-bottom: 1rem;
-  position: relative;
+  position: absolute;
   left: 0;
+  top: 310px;
   transition: all .25s linear;
   min-height: 143px;
   z-index: 0;
   max-height: calc(100vh - 150px);
   overflow-x: hidden;
   overflow-y: auto;
+  width: 451px;
 
   button {
     cursor: pointer;
@@ -28,6 +30,7 @@
     border-radius: 15px;
     padding: .5rem .8rem;
     font-size: 20px;
+    z-index: 4;
     &:hover {
       background: darken($default-color, 3%);
     }
@@ -41,11 +44,14 @@
 
   .content {
     padding: 1rem 2rem;
-    padding-right: 4rem;
     background: white;
     position: relative;
     top: -20px;
     border-radius: 0 20px 0 0;
+
+    &.header {
+      padding-bottom: 0;
+    }
 
     .title {
       color: $default-color;
@@ -61,6 +67,7 @@
     h4 {
       margin-top: 0;
       font-size: 14px;
+      margin-bottom: 0;
     }
 
     p {
@@ -155,6 +162,35 @@
             color: $accent-color;
           }
         }
+      }
+    }
+  }
+}
+
+
+@media only screen and (max-width: 959.98px) {
+  .container {
+    bottom: 0;
+    top: auto;
+    left: 0;
+    right: 0;
+    position: fixed;
+    width: 100%;
+    margin-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    max-height: 450px;
+
+    .img-holder {
+      display: inline-block;
+      width: 40%;
+    }
+
+    .content {
+      position: static;
+      &.header {
+        display: inline-block;
+        top: 0;
+        vertical-align: top;
       }
     }
   }

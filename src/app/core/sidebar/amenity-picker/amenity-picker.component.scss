@@ -7,11 +7,13 @@
   box-shadow: 0 0 15px rgb(0 0 0 / 10%);
   border-radius: 0 10px 10px 0;
   margin-bottom: 1rem;
-  position: relative;
+  position: absolute;
   left: 0;
+  top: 565px;
   transition: all .25s linear;
   min-height: 200px;
   z-index: 0;
+  width: 355px;
 
   .title {
     position: relative;
@@ -20,7 +22,7 @@
   }
 
   &:not(.open) {
-    left: -390px;
+    left: -380px;
 
     .title {
       position: absolute;
