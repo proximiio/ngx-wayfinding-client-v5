@@ -1,25 +1,32 @@
-import Floor from '../map/models/floor.model';
-import Place from '../map/models/place.model';
-import Style from '../map/models/style.model';
 import { Injectable } from '@angular/core';
+import { FloorModel } from 'proximiio-js-library/lib/models/floor';
+import { PlaceModel } from 'proximiio-js-library/lib/models/place';
+import StyleModel from 'proximiio-js-library/lib/models/style';
+import { FeatureCollection } from 'proximiio-js-library/lib/models/feature';
+import { AmenityModel } from 'proximiio-js-library/lib/models/amenity';
 
 export interface State {
   readonly initializing: boolean;
-  readonly floor: Floor;
-  readonly floors: Floor[];
-  readonly place: Place;
-  readonly places: Place[];
-  readonly style: Style;
-  readonly styles: Style[];
+  readonly floor: FloorModel;
+  readonly floors: FloorModel[];
+  readonly place: PlaceModel;
+  readonly places: PlaceModel[];
+  readonly style: StyleModel;
+  readonly styles: StyleModel[];
+  readonly allFeatures: FeatureCollection;
+  readonly amenities: AmenityModel[];
   readonly latitude: number;
   readonly longitude: number;
   readonly loadingRoute: boolean;
-  readonly options: any;
+  options: {
+    zoom: number,
+    pitch: number,
+    bearing: number
+  };
   readonly noPlaces: boolean;
-  readonly defaultLocation: {
+  defaultLocation: {
     coordinates: [number, number],
-    level: number,
-    isStartPoint: boolean
+    level: number
   };
   readonly textNavigation: any;
   accessibleRoute: boolean;
@@ -29,27 +36,26 @@ export interface State {
 export class StateService {
   state: State = {
     initializing: true,
-    floor: new Floor({}),
+    floor: new FloorModel({}),
     floors: [],
-    place: new Place({}),
+    place: new PlaceModel({}),
     places: [],
-    style: new Style({}),
+    style: new StyleModel({}),
     styles: [],
+    allFeatures: new FeatureCollection({}),
+    amenities: [],
     latitude: 60.1669635,
     longitude: 24.9217484,
     loadingRoute: false,
     noPlaces: false,
     options: {
-      coordinates: [0, 0],
       zoom: 19,
       pitch: 40,
       bearing: 10,
-      bounds: [[0, 0], [0, 0]]
     },
     defaultLocation: {
       coordinates: [51.48091652702158, 25.336680584406395],
-      level: 0,
-      isStartPoint: true
+      level: 0
     },
     textNavigation: null,
     accessibleRoute: false

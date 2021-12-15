@@ -1,11 +1,9 @@
 @import '../../../../styles/variables';
 
 .container {
-  padding: 1rem 2rem;
-  padding-right: 0;
-  padding-bottom: 2.5rem;
   position: absolute;
-  top: 0;
+  top: 2rem;
+  left: 1rem;
 
   .overlay {
     position: fixed;
@@ -19,16 +17,16 @@
 
   fa-icon {
     color: $default-color;
-    position: relative;
+    position: absolute;
     z-index: 13;
-    top: 34px;
+    top: 12px;
     transition: all .3s linear;
     &.search-icon {
       left: 15px;
     }
     &.close-icon {
       right: 85px;
-      top: 71px;
+      top: 55px;
       position: fixed;
       opacity: 0;
       cursor: pointer;
@@ -105,7 +103,7 @@
 
     fa-icon {
       &.search-icon {
-        top: 55px;
+        top: 23px;
         left: 25px;
       }
       &.close-icon {

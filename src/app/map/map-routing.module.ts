@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MapComponent } from './map.component';
-import { AuthGuard } from '../auth/auth.guard';
 
 const routes: Routes = [
   {
@@ -14,7 +13,6 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Map'
     },
-    canActivate: [AuthGuard],
     pathMatch: 'full'
   }
 ];

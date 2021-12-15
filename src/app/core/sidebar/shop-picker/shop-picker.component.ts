@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AmenityToggleModel } from '../../amenity-toggle.model';
 import { SidebarService } from '../sidebar.service';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-shop-picker',
@@ -36,7 +37,16 @@ export class ShopPickerComponent implements OnInit {
     active: true
   }];
 
-  constructor(private sidebarService: SidebarService) { }
+  constructor(
+    private sidebarService: SidebarService,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium])
+      .subscribe((state: BreakpointState) => {
+        this.sidebarOpened = !state.matches;
+      });
+  }
 
   ngOnInit() {
 
@@ -44,13 +54,13 @@ export class ShopPickerComponent implements OnInit {
 
   onFilterClick(item: AmenityToggleModel) {
     for (const i of this.data) {
-      if (item.active && this.sidebarService.filteredShop?.id === item.id) {
+      if (item.active && this.sidebarService.filteredShop === item.id) {
         i.active = true;
       } else {
         i.active = item.id === i.id;
       }
     }
-    this.sidebarService.onAmenityToggle('shop', item);
+    this.sidebarService.onAmenityToggle('shop', item.id);
   }
 
 }

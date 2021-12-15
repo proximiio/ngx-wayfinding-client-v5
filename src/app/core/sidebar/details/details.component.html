@@ -3,11 +3,12 @@
   <div class="img-holder">
     <img [src]="poi.properties.images[0] ? getImageUrl() : 'https://picsum.photos/500/300'" [alt]="poi.properties.title">
   </div>
-  <div class="content" [ngClass]="{'accessibleOnly': stateService.state.accessibleRoute}">
+  <div class="content header">
     <h2 class="title">{{ poi.properties.title }}</h2>
     <h4 class="open-hours">{{ getOpenHours() }}</h4>
     <h4 class="level">{{ poi.properties.level + 1 | ordinal }} floor</h4>
-
+  </div>
+  <div class="content" [ngClass]="{'accessibleOnly': stateService.state.accessibleRoute}">
     <p>
       {{ details | slice:0: limit }} {{ details.length > limit ? '...' : '' }}
       <a *ngIf="details.length > limit" href="javascript:;" (click)="limit = details.length; showingMore = true">Show more <fa-icon [icon]="['fal', 'angle-down']"></fa-icon></a>
