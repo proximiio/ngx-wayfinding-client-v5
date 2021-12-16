@@ -14,6 +14,7 @@
       <a *ngIf="details.length > limit" href="javascript:;" (click)="limit = details.length; showingMore = true">Show more <fa-icon [icon]="['fal', 'angle-down']"></fa-icon></a>
       <a *ngIf="showingMore" href="javascript:;" (click)="limit = 200; showingMore = false">Show less <fa-icon [icon]="['fal', 'angle-up']"></fa-icon></a>
     </p>
+    <p><strong>Distance</strong>: {{ distanceInMeters | number: '1.0-0' }}m / {{ distanceInMinutes }}</p>
 
     <button (click)="toggleInstructions()" class="instructions-toggle">
       <fa-icon [icon]="showInstructions ? ['fal', 'angle-down'] : stateService.state.accessibleRoute ? ['fal', 'wheelchair'] : ['fal', 'route']"></fa-icon>

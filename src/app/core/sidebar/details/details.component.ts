@@ -4,6 +4,7 @@ import { StateService } from '../../state.service';
 import { Subscription } from 'rxjs';
 import Feature from 'proximiio-js-library/lib/models/feature';
 import * as Settings from '../../../../../settings';
+import * as humanizeDuration from 'humanize-duration';
 
 interface StepModel {
   bearingFromLastStep: number;
@@ -30,6 +31,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
   details = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
   limit = 200;
   showingMore = false;
+  distanceInMeters;
+  distanceInMinutes;
+  averageWalkSpeed = 4.5;  // km/h
   private sub: Subscription;
 
   constructor(
@@ -48,6 +52,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
         }
         if (this.stateService.state.textNavigation) {
           this.buildNavigationSteps(this.stateService.state.textNavigation.steps);
+          this.distanceInMeters = this.stateService.state.textNavigation.distanceMeters;
+          this.distanceInMinutes = humanizeDuration(((this.distanceInMeters/1000) / this.averageWalkSpeed) * 3600000, { delimiter: ' and ', round: true });
         }
       }
     });
