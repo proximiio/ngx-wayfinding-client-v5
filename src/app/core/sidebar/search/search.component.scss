@@ -140,7 +140,7 @@
   }
 }
 
-@media only screen and (max-width: 599.98px) {
+@media only screen and (max-width: 959.98px) {
   .container {
     top: .5rem;
     left: .5rem;
@@ -155,9 +155,12 @@
     }
 
     .ng-select.custom ::ng-deep {
-      min-width: 305px;
+      left: .5rem;
+      right: .5rem;
+      position: fixed;
+      min-width: 280px;
       .ng-select-container {
-        width: 305px;
+        width: 100%;
         height: 32px;
         .ng-value-container {
           padding-left: 35px;
