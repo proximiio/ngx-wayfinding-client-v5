@@ -173,6 +173,19 @@
   }
 }
 
+.loading {
+  text-align: center;
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 30%;
+  bottom: 0;
+
+  mat-spinner {
+    margin: 2rem auto;
+  }
+}
+
 @media only screen and (max-width: 959.98px) {
   .my-location,
   .settings {

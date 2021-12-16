@@ -5,6 +5,7 @@ import { MapRoutingModule } from './map-routing.module';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { CoreModule } from '../core/core.module';
 import { FontawesomeModule } from '../fontawesome.module';
+import { AngularMaterialModule } from '../angular-material.module';
 
 @NgModule({
     imports: [
@@ -12,6 +13,7 @@ import { FontawesomeModule } from '../fontawesome.module';
         CoreModule,
         FontawesomeModule,
         MapRoutingModule,
+        AngularMaterialModule,
         NgxMapboxGLModule
     ],
     exports: [
