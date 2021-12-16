@@ -156,9 +156,9 @@
 
     .ng-select.custom ::ng-deep {
       left: .5rem;
-      right: .5rem;
+      right: 60px;
       position: fixed;
-      min-width: 280px;
+      min-width: 260px;
       .ng-select-container {
         width: 100%;
         height: 32px;

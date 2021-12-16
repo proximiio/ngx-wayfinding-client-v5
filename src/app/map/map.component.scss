@@ -173,12 +173,20 @@
   }
 }
 
-@media only screen and (max-width: 599.98px) {
+@media only screen and (max-width: 959.98px) {
   .my-location,
   .settings {
     right: .5rem;
+    width: 36px;
+    height: 36px;
+    padding: .6rem;
   }
   .my-location {
-    top: 60px;
+    top: .5rem;
+    .icon {
+      height: 32px;
+      width: 32px;
+      background-size: 18px;
+    }
   }
 }
