@@ -16,6 +16,7 @@ import { PaddingOptions } from 'mapbox-gl';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit, OnDestroy {
+  public mapLoaded = false;
   private mapPadding: PaddingOptions = { top: 250, bottom:250, left: 500, right: 250 };
   private map;
   private endPoi;
@@ -94,7 +95,15 @@ export class MapComponent implements OnInit, OnDestroy {
           fitBoundsPadding: this.mapPadding
         });
 
-        this.map.getMapReadyListener(ready => {
+        this.map.getMapReadyListener().subscribe(ready => {
+          setTimeout(() => {
+            this.mapLoaded = true;
+          }, 1000);
+          setTimeout(() => {
+            this.map.getMapboxInstance().resize();
+            this.onMyLocation();
+          }, 1000);
+
           this.map.getMapboxInstance().addControl(new mapboxgl.NavigationControl({
             showZoom: false
           }));
