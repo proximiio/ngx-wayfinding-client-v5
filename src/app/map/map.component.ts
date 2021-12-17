@@ -103,7 +103,6 @@ export class MapComponent implements OnInit, OnDestroy {
             this.map.getMapboxInstance().resize();
             this.onMyLocation();
           }, 1000);
-
           this.map.getMapboxInstance().addControl(new mapboxgl.NavigationControl({
             showZoom: false
           }));
