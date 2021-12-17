@@ -94,7 +94,7 @@ export class MapComponent implements OnInit, OnDestroy {
           fitBoundsPadding: this.mapPadding
         });
 
-        this.map.getMapReadyListener(ready => {
+        this.map.getMapReadyListener().subscribe(ready => {
           this.map.getMapboxInstance().addControl(new mapboxgl.NavigationControl({
             showZoom: false
           }));
