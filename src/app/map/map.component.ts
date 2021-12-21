@@ -56,11 +56,15 @@ export class MapComponent implements OnInit, OnDestroy {
         if (res) {
           if ((res.category === 'shop' && !this.sidebarService.filteredShop) || (res.category === 'amenities' && !this.sidebarService.filteredAmenity)) {
             this.map.removeAmenityFilter(res.amenityId, res.category);
-            this.map.cancelRoute();
-            this.onMyLocation();
+            if (res.category === 'amenities') {
+              this.map.cancelRoute();
+              this.onMyLocation();
+            }
           } else {
             this.map.setAmenityFilter(res.amenityId, res.category);
-            this.map.findRouteToNearestFeature(res.amenityId);
+            if (res.category === 'amenities') {
+              this.map.findRouteToNearestFeature(res.amenityId);
+            }
           }
         }
       })
