@@ -56,8 +56,11 @@ export class MapComponent implements OnInit, OnDestroy {
         if (res) {
           if ((res.category === 'shop' && !this.sidebarService.filteredShop) || (res.category === 'amenities' && !this.sidebarService.filteredAmenity)) {
             this.map.removeAmenityFilter(res.amenityId, res.category);
+            this.map.cancelRoute();
+            this.onMyLocation();
           } else {
             this.map.setAmenityFilter(res.amenityId, res.category);
+            this.map.findRouteToNearestFeature(res.amenityId);
           }
         }
       })
@@ -92,7 +95,8 @@ export class MapComponent implements OnInit, OnDestroy {
           },
           initPolygons: true,
           showLevelDirectionIcon: true,
-          fitBoundsPadding: this.mapPadding
+          fitBoundsPadding: this.mapPadding,
+          animatedRoute: true
         });
 
         this.map.getMapReadyListener().subscribe(ready => {
