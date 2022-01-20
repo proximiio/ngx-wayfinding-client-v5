@@ -8,7 +8,6 @@ import { CoreModule } from './core/core.module';
 import { AngularMaterialModule } from './angular-material.module';
 import { FontawesomeModule } from './fontawesome.module';
 import { environment } from '../environments/environment';
-import { NotificationDialogComponent } from './core/notification-dialog/notification-dialog.component';
 import { SidebarModule } from './core/sidebar/sidebar.module';
 import { SettingsDialogComponent } from './core/settings-dialog/settings-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,7 +17,6 @@ const APP_PREFIX = environment.appPrefix;
 @NgModule({
   declarations: [
     AppComponent,
-    NotificationDialogComponent,
     SettingsDialogComponent
   ],
   imports: [
@@ -34,6 +32,6 @@ const APP_PREFIX = environment.appPrefix;
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [NotificationDialogComponent, SettingsDialogComponent]
+  entryComponents: [SettingsDialogComponent]
 })
 export class AppModule { }
