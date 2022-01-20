@@ -59,7 +59,7 @@ src // app source folder
       map.component.html // map component html file, map container and few more elements are sitting there
       map.component.ts // all the magic around the map happens here, check out comments
       ...
-  ./assets // nothing important here, you can store there custom images you want to use there
+  ./assets // nothing important here, you can store there custom images you want to use
   ./environments // only required to change there something in case port or basepath has been changed
   ./styles // little bit of styling
     _variables.scss // there are only two variables for 'default-color' and for 'accent-color', defining text colors, buttons etc.
