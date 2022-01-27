@@ -52,6 +52,7 @@ export class AmenityPickerComponent implements OnInit {
   }
 
   onFilterClick(item: AmenityToggleModel) {
+    // handle active toggling
     for (const i of this.data) {
       if (item.active && this.sidebarService.filteredAmenity === item.id) {
         i.active = true;
@@ -59,6 +60,7 @@ export class AmenityPickerComponent implements OnInit {
         i.active = item.id === i.id;
       }
     }
+    // will do some job at sidebarService, two arguments are expected, category title (same as was defined in setAmenityCategory method) and amenity id
     this.sidebarService.onAmenityToggle('amenities', item.id);
   }
 

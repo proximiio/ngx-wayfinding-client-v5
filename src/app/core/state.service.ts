@@ -15,8 +15,6 @@ export interface State {
   readonly styles: StyleModel[];
   readonly allFeatures: FeatureCollection;
   readonly amenities: AmenityModel[];
-  readonly latitude: number;
-  readonly longitude: number;
   readonly loadingRoute: boolean;
   options: {
     zoom: number,
@@ -44,8 +42,6 @@ export class StateService {
     styles: [],
     allFeatures: new FeatureCollection({}),
     amenities: [],
-    latitude: 60.1669635,
-    longitude: 24.9217484,
     loadingRoute: false,
     noPlaces: false,
     options: {
@@ -54,7 +50,7 @@ export class StateService {
       bearing: 10,
     },
     defaultLocation: {
-      coordinates: [51.48091652702158, 25.336680584406395],
+      coordinates: [51.48091652702158, 25.336680584406395], // longitude, latitude
       level: 0
     },
     textNavigation: null,

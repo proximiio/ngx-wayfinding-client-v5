@@ -37,8 +37,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/@turf/turf/turf.min.js",
-              "src/vendor/mustache.js"
+              "./node_modules/@turf/turf/turf.min.js"
             ]
           },
           "configurations": {

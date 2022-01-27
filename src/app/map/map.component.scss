@@ -32,8 +32,11 @@
         height: 48px !important;
         padding: .8rem;
         border-radius: 48px!important;
-        &.mapboxgl-ctrl-compass {
+        &.mapboxgl-ctrl-compass,
+        &.mapboxgl-ctrl-geolocate {
           margin: 0.1em 2px !important;
+        }
+        &.mapboxgl-ctrl-compass {
           .mapboxgl-ctrl-icon {
             background-image: url('../../assets/compass-regular.svg');
           }
