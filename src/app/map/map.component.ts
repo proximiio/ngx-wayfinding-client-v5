@@ -17,6 +17,7 @@ import { PaddingOptions } from 'mapbox-gl';
 })
 export class MapComponent implements OnInit, OnDestroy {
   public mapLoaded = false;
+  private destinationFromUrl = false;
   private mapPadding: PaddingOptions = { top: 250, bottom:250, left: 500, right: 250 };
   private map;
   private endPoi;
@@ -28,15 +29,23 @@ export class MapComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private breakpointObserver: BreakpointObserver
   ) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const destinationParam = urlParams.get('destinationFeature'); // in case you change url param name in urlParams option of map constuctor, change that too
+
+    // if there is a destination defined in url params, we need to handle poi selection to show details component
+    if (destinationParam) {
+      this.destinationFromUrl = true;
+    }
+
     this.subs.push(
       // we subscribe for end point listener events here
       this.sidebarService.getEndPointListener().subscribe(poi => {
         this.endPoi = poi;
         if (this.map) {
-          if (poi) {
-            // if map is loaded and the poi is not null in listener event, tell map to find a route
+          if (poi && !this.destinationFromUrl) {
+            // if map is loaded, the poi is not null in listener event and destination is not set from url, tell map to find a route
             this.map.findRouteByIds(poi.id, null, this.stateService.state.accessibleRoute);
-          } else {
+          } else if (!poi) {
             // otherwise cancel route if it's rendered and return me to default location
             this.map.cancelRoute();
             this.onMyLocation();
@@ -161,6 +170,15 @@ export class MapComponent implements OnInit, OnDestroy {
         // when route will be found, write turn by turn navigation response into state service so it will be accessible from details component
         this.map.getRouteFoundListener().subscribe(res => {
           this.stateService.state = {...this.stateService.state, textNavigation: res.TBTNav};
+
+          // if destination is defined in url params and route is found, set destination in the app
+          if (this.destinationFromUrl) {
+            this.sidebarService.onSetEndPoi(res.end);
+            setTimeout(() => {
+              this.map.centerToRoute();
+            }, 1000);
+            this.destinationFromUrl = false; // must be set to false to enable rerouting by search/click
+          }
         });
 
         // set destination point for routing based on click event
