@@ -104,7 +104,8 @@ export class MapComponent implements OnInit, OnDestroy {
             coordinates: this.stateService.state.defaultLocation.coordinates,
             level: this.stateService.state.defaultLocation.level
           },
-          fitBoundsPadding: this.mapPadding // setting the padding option to use for zooming into the bounds when route is drawn
+          fitBoundsPadding: this.mapPadding, // setting the padding option to use for zooming into the bounds when route is drawn,
+          handleUrlParams: true // enable handling url params, this way you can load map with predefined route generated
         });
 
         // subscribing to map ready listener
@@ -118,7 +119,7 @@ export class MapComponent implements OnInit, OnDestroy {
           // little bit of hacking
           setTimeout(() => {
             this.map.getMapboxInstance().resize();
-            this.onMyLocation();
+            // this.onMyLocation(); // center to default location, if needed comment this out
           }, 1000);
 
           // setting mapbox navigationControl buttons

@@ -92,7 +92,8 @@ const map = new Proximiio.Map({
     coordinates: this.stateService.state.defaultLocation.coordinates,
     level: this.stateService.state.defaultLocation.level
   },
-  fitBoundsPadding: this.mapPadding
+  fitBoundsPadding: this.mapPadding,
+  handleUrlParams: true
 });
 ```
 So what you need to do to make demo working like it's intended is
@@ -104,6 +105,21 @@ And that's it, now after clicking on the poi/searching for it in search bar, sho
 There's a lot of place for a customizations so definitely check documentation of [Proximi.io JS Library - Map Component](https://github.com/proximiio/proximiio-js-library#map-component), to learn all the methods and listeners you can use.
 
 For example, if you don't want the kiosk behavior, just set that to false and for finding route methods you just have to provide also the start point data `map.findRouteByIds('idTo', 'idFrom')` and it should be working.
+
+#### Initiate map with url params
+
+In demo we have `handleUrlParams` enabled as default, so you can pass some url params into browser url to load map with predefined route generated for example. We can just serve them like this:
+
+For production server
+```
+http://localhost:6001/wayfinding/map?defaultPlace=placeIdOrTitle&startFeature=featureIdOrTitle&destinationFeature=featureIdOrTitle
+```
+For development server
+```
+http://localhost:4200/wayfinding/map?defaultPlace=placeIdOrTitle&startFeature=featureIdOrTitle&destinationFeature=featureIdOrTitle
+```
+
+You can omit **defaultPlace** param, for kiosk settings you can also omit **startFeature**.
 
 ### Retrieving Map State
 
