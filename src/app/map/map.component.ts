@@ -182,7 +182,7 @@ export class MapComponent implements OnInit, OnDestroy {
         });
 
         // set destination point for routing based on click event
-        this.map.getPoiClickListener().subscribe(poi => {
+        this.map.getPolygonClickListener().subscribe(poi => {
           this.sidebarService.onSetEndPoi(poi);
         });
 
