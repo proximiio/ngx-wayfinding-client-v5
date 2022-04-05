@@ -119,17 +119,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
         // subscribing to map ready listener
         this.map.getMapReadyListener().subscribe(ready => {
-
-          // little bit of hacking
-          setTimeout(() => {
-            this.mapLoaded = true;
-          }, 1000);
-
-          // little bit of hacking
-          setTimeout(() => {
-            this.map.getMapboxInstance().resize();
-            // this.onMyLocation(); // center to default location, if needed comment this out
-          }, 1000);
+          this.mapLoaded = true;
+          // this.onMyLocation(); // center to default location, if needed comment this out
 
           // setting mapbox navigationControl buttons
           this.map.getMapboxInstance().addControl(new mapboxgl.NavigationControl({

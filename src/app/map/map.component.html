@@ -1,7 +1,3 @@
-<div *ngIf="!mapLoaded" class="loading">
-  <mat-spinner diameter="150" strokeWidth="1" color="primary"></mat-spinner>
-  <h2>Welcome to the venue!</h2>
-</div>
 <div [hidden]="!mapLoaded">
   <button class="my-location" (click)="onMyLocation()">
     <span class="icon"></span>
@@ -10,4 +6,8 @@
     <fa-icon [icon]="['fal', 'cog']" size="lg"></fa-icon>
   </button>
   <div id="proximiioMap"></div>
+</div>
+<div *ngIf="!mapLoaded" class="loading">
+  <mat-spinner diameter="150" strokeWidth="1" color="primary"></mat-spinner>
+  <h2>Welcome to the venue!</h2>
 </div>
