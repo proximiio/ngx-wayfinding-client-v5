@@ -24,6 +24,8 @@
     "@fortawesome/angular-fontawesome": "^0.8.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@ng-select/ng-select": "^6.1.0",
+    "@ngx-translate/core": "^13.0.0",
+    "@ngx-translate/http-loader": "^6.0.0",
     "@turf/along": "^6.3.0",
     "@turf/turf": "^6.3.0",
     "ahoy.js": "^0.3.8",
@@ -38,7 +40,7 @@
     "ngforage": "^6.0.0",
     "ngx-mapbox-gl": "^6.0.4",
     "ngx-take-until-destroy": "^5.4.0",
-    "proximiio-js-library": "^1.9.6",
+    "proximiio-js-library": "^1.9.10",
     "rxjs": "~6.6.3",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.3"

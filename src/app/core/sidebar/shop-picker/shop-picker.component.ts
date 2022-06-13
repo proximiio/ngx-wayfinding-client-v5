@@ -11,7 +11,7 @@ import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/l
 export class ShopPickerComponent implements OnInit {
   sidebarOpened = true;
   data: AmenityToggleModel[] = [{
-    title: 'Cafés', // category title
+    title: 'cafes', // category title
     icon: ['fal', 'coffee'], // category fontAwesome icon, please add in fontawesome.module.ts in case it's missing
     id: 'another-amenity-id', // amenity id, must be the same as defined in setAmenityCategory method
     active: true // set category as active

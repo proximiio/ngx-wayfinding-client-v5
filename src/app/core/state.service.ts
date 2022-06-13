@@ -50,7 +50,7 @@ export class StateService {
       bearing: 10,
     },
     defaultLocation: {
-      coordinates: [0, 0], // longitude, latitude
+      coordinates: [51.48091652702158, 25.336680584406395], // longitude, latitude
       level: 0
     },
     textNavigation: null,

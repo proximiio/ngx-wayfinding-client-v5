@@ -9,6 +9,7 @@ import { SidebarService } from '../core/sidebar/sidebar.service';
 import { Subscription } from 'rxjs';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { PaddingOptions } from 'mapbox-gl';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-map',
@@ -27,7 +28,8 @@ export class MapComponent implements OnInit, OnDestroy {
     private sidebarService: SidebarService,
     private stateService: StateService,
     private dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private translateService: TranslateService,
   ) {
     const urlParams = new URLSearchParams(window.location.search);
     const destinationParam = urlParams.get('destinationFeature'); // in case you change url param name in urlParams option of map constuctor, change that too
@@ -114,7 +116,8 @@ export class MapComponent implements OnInit, OnDestroy {
             level: this.stateService.state.defaultLocation.level
           },
           fitBoundsPadding: this.mapPadding, // setting the padding option to use for zooming into the bounds when route is drawn,
-          handleUrlParams: true // enable handling url params, this way you can load map with predefined route generated
+          handleUrlParams: true, // enable handling url params, this way you can load map with predefined route generated
+          language: this.translateService.currentLang, // init with predefined language setting
         });
 
         // subscribing to map ready listener

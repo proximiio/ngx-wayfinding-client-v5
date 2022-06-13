@@ -1,5 +1,5 @@
 <div class="container" [ngClass]="{'open': sidebarOpened}">
-  <h3 class="title">Floor</h3>
+  <h3 class="title">{{ 'floor' | translate }}</h3>
   <div class="selector">
     <button class="current-floor" (click)="pickerOpened = !pickerOpened">
       {{ stateService.state.floor.level + 1 }}<span>{{ stateService.state.floor.level + 1 | ordinal:false }}</span>
