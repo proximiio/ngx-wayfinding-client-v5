@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { StateService } from '../../state.service';
 import { SidebarService } from '../sidebar.service';
 import { FloorModel } from 'proximiio-js-library/lib/models/floor';
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-floor-picker',
@@ -15,15 +14,8 @@ export class FloorPickerComponent implements OnInit {
 
   constructor(
     private sidebarService: SidebarService,
-    public stateService: StateService,
-    private breakpointObserver: BreakpointObserver
-  ) {
-    this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium])
-      .subscribe((state: BreakpointState) => {
-        this.sidebarOpened = !state.matches;
-      });
-  }
+    public stateService: StateService
+  ) {}
 
   ngOnInit() {
   }

@@ -207,11 +207,18 @@
     padding: .6rem;
   }
   .my-location {
-    top: .5rem;
+    top: auto;
+    bottom: 4.25rem;
     .icon {
       height: 32px;
       width: 32px;
-      background-size: 18px;
+      background-size: 17px;
     }
+  }
+  .settings {
+    bottom: 1.5rem;
+  }
+  .loading {
+    padding-top: 50%;
   }
 }

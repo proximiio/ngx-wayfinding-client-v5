@@ -1,4 +1,4 @@
-<div class="container" [ngClass]="{'open': sidebarOpened}">
+<div class="container">
   <h3 class="title">{{ 'searchForAmenities' | translate }}</h3>
   <ul class="categories">
     <li *ngFor="let item of data" [class.active]="item.active" (click)="onFilterClick(item)">
@@ -8,7 +8,4 @@
       <p>{{ item.title | translate }}</p>
     </li>
   </ul>
-  <div class="toggle" (click)="sidebarOpened = !sidebarOpened">
-    <fa-icon [icon]="sidebarOpened ? ['fal', 'chevron-double-left'] : ['fal', 'chevron-double-right']"></fa-icon>
-  </div>
 </div>

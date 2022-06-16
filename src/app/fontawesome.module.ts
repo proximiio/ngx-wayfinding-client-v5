@@ -103,7 +103,8 @@ export class FontawesomeModule {
       faAngleUp,
       faWalking,
       faCog,
-      faCompass
+      faCompass,
+      faChevronRight
     );
   }
 }

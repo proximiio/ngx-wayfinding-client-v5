@@ -1,35 +1,10 @@
 @import '../../../../styles/variables';
 
 .container {
-  padding: 1rem 2rem;
-  padding-right: 4rem;
-  background-color: rgba(255 255 255 / 90%);
-  box-shadow: 0 0 15px rgb(0 0 0 / 10%);
-  border-radius: 0 10px 10px 0;
-  margin-bottom: 1rem;
-  position: absolute;
-  left: 0;
-  top: 310px;
-  transition: all .25s linear;
-  min-height: 200px;
-  z-index: 0;
-  width: 355px;
-
   .title {
     position: relative;
     color: $default-color;
     transition: all .25s linear;
-  }
-
-  &:not(.open) {
-    left: -380px;
-
-    .title {
-      position: absolute;
-      right: -36px;
-      top: calc(50% - 30px);
-      transform: rotate(-90deg);
-    }
   }
 
   .categories {
@@ -72,76 +47,25 @@
       }
     }
   }
-
-  .toggle {
-    position: absolute;
-    right: .5rem;
-    top: calc(50% - 20px);
-    font-size: 26px;
-    color: $default-color;
-    padding: .5rem;
-    cursor: pointer;
-
-    &:hover {
-      color: darken($default-color, 3%);
-    }
-  }
 }
 
 @media only screen and (max-width: 959.98px) {
   .container {
-    padding: .5rem;
-    padding-right: 4rem;
-    border-radius: 0 5px 5px 0;
-    margin-bottom: 1rem;
-    left: 0;
-    top: 170px;
-    min-height: 150px;
-    width: 235px;
-
+    display: inline-block;
     .title {
-      font-size: 14px;
-      margin: .5rem 0;
-    }
-
-    &:not(.open) {
-      left: -255px;
-
-      .title {
-        font-size: 14px;
-        right: -28px;
-        top: calc(50% - 14px);
-      }
+      display: none;
     }
 
     .categories {
       margin: 0;
       padding: 0;
       >li {
-        margin-right: 5px;
-        width: 42px;
-        .icon {
-          font-size: 14px;
-          border-radius: 5px;
-          width: 42px;
-          height: 42px;
-          line-height: 42px;
-        }
         p {
-          font-size: 10px;
-          margin-top: 4px;
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
         }
       }
-    }
-
-    .toggle {
-      right: .2rem;
-      top: calc(50% - 18px);
-      font-size: 18px;
-      padding: .5rem;
     }
   }
 }

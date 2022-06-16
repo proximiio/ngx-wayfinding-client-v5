@@ -58,6 +58,27 @@
       margin-bottom: 5px;
     }
 
+    a.url {
+      display: inline-block;
+      background: white;
+      border: 2px solid $default-color;
+      text-align: center;
+      border-radius: 50px;
+      font-weight: 500;
+      transition: all 0.25s linear;
+      color: $default-color;
+      text-decoration: none;
+      font-size: 18px;
+      width: 36px;
+      height: 36px;
+      line-height: 39px;
+      &:hover {
+        background: $default-color;
+        border-color: $default-color;
+        color: white;
+      }
+    }
+
     .open-hours {
       color: $default-color;
       margin-bottom: 0;
@@ -89,7 +110,8 @@
     }
 
     .instructions-toggle,
-    .accessible-toggle {
+    .accessible-toggle,
+    .show-route {
       display: block;
       width: 100%;
       margin-bottom: .5rem;
@@ -120,6 +142,12 @@
       border: 0;
       color: $accent-color;
     }
+    .show-route {
+      border: 2px solid $default-color;
+      background-color: $default-color;
+      color: white;
+    }
+
 
     .mat-expansion-panel ::ng-deep {
       box-shadow: none;
@@ -165,8 +193,21 @@
       }
     }
   }
-}
+  .toggle {
+    position: absolute;
+    display: none;
+    font-size: 30px;
+    color: $default-color;
+    padding: .5rem;
+    cursor: pointer;
+    transform: rotate(-90deg);
+    z-index: 6;
 
+    &:hover {
+      color: darken($default-color, 3%);
+    }
+  }
+}
 
 @media only screen and (max-width: 959.98px) {
   .container {
@@ -178,49 +219,37 @@
     width: 100%;
     margin-bottom: 0;
     border-radius: 10px 10px 0 0;
-    max-height: 450px;
+    max-height: 100%;
 
-    .img-holder {
-      display: inline-block;
-      width: 40%;
-    }
-
-    .content {
-      position: static;
-      &.header {
-        display: inline-block;
-        top: 0;
-        vertical-align: top;
+    &.haveRoute {
+      max-height: 35%;
+      .toggle {
+        display: block;
+        left: calc(50% - 18px);
       }
-    }
-  }
-}
-
-@media only screen and (max-width: 959.98px) {
-  .container {
-    max-height: 260px;
-    .close {
-      right: 5px;
-      top: 5px;
-      border-radius: 10px;
-      padding: 4px 8px;
-      font-size: 16px;
-      z-index: 4;
-    }
-    .content {
-      padding: .5rem;
-      h2 {
-        font-size: 14px;
+      .img-holder {
+        img {
+          height: 0;
+        }
       }
-      h4 {
-        font-size: 10px;
+      .content {
+        .show-route {
+          display: none;
+        }
+        p {
+          display: none;
+        }
       }
-      p {
-        font-size: 10px;
-      }
-      .instructions-toggle,
-      .accessible-toggle {
-        font-size: 10px;
+      &.open {
+        max-height: 100%;
+        .img-holder {
+          img {
+            height: auto;
+          }
+        }
+        .content p {
+          display: block;
+        }
       }
     }
   }

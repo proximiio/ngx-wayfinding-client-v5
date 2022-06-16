@@ -1,4 +1,15 @@
-<div class="container" *ngIf="poi">
+<div
+  class="container"
+  *ngIf="poi"
+  [ngClass]="{ haveRoute: haveRouteDetails, open: sidebarOpened }"
+>
+  <div class="toggle" (click)="sidebarOpened = !sidebarOpened">
+    <fa-icon
+      [icon]="
+        sidebarOpened ? ['fal', 'chevron-left'] : ['fal', 'chevron-right']
+      "
+    ></fa-icon>
+  </div>
   <button (click)="onDetailsClose()" class="close">
     <fa-icon [icon]="['fal', 'times']"></fa-icon>
   </button>
@@ -23,7 +34,7 @@
     class="content"
     [ngClass]="{ accessibleOnly: stateService.state.accessibleRoute }"
   >
-    <p>
+    <p *ngIf="details">
       {{ details | slice: 0:limit }} {{ details.length > limit ? "..." : "" }}
       <a
         *ngIf="details.length > limit"
@@ -40,54 +51,63 @@
         <fa-icon [icon]="['fal', 'angle-up']"></fa-icon
       ></a>
     </p>
-    <p>
+
+    <p *ngIf="haveRouteDetails">
       <strong>{{ "distance" | translate }}</strong
       >: {{ distanceInMeters | number: "1.0-0" }}m /
       {{ distanceInMinutes }}
     </p>
 
-    <button (click)="toggleInstructions()" class="instructions-toggle">
-      <fa-icon
-        [icon]="
-          showInstructions
-            ? ['fal', 'angle-down']
-            : stateService.state.accessibleRoute
-            ? ['fal', 'wheelchair']
-            : ['fal', 'route']
-        "
-      ></fa-icon>
-      {{
-        (showInstructions ? "hideInstructions" : "showInstructions") | translate
-      }}
-    </button>
-    <button (click)="toggleAccessibleRoute()" class="accessible-toggle">
-      <fa-icon
-        [icon]="
-          stateService.state.accessibleRoute
-            ? ['fal', 'walking']
-            : ['fal', 'wheelchair']
-        "
-      ></fa-icon>
-      {{
-        (stateService.state.accessibleRoute
-          ? "showFastestRoute"
-          : "showAccessibleRoute"
-        ) | translate
-      }}
+    <button (click)="onShowRoute()" class="show-route">
+      <fa-icon [icon]="['fal', 'walking']"></fa-icon>
+      {{ "takeMeThere" | translate }}
     </button>
 
-    <mat-expansion-panel [disabled]="true" [expanded]="showInstructions">
-      <mat-panel-description>
-        <mat-list>
-          <mat-list-item *ngFor="let step of steps">
-            <p matLine>
-              <fa-icon [icon]="step.directionIcon"></fa-icon>
-              <fa-icon [icon]="step.stepIcon"></fa-icon>
-            </p>
-            <p matLine>{{ step.description }}</p>
-          </mat-list-item>
-        </mat-list>
-      </mat-panel-description>
-    </mat-expansion-panel>
+    <div *ngIf="haveRouteDetails">
+      <button (click)="toggleInstructions()" class="instructions-toggle">
+        <fa-icon
+          [icon]="
+            showInstructions
+              ? ['fal', 'angle-down']
+              : stateService.state.accessibleRoute
+              ? ['fal', 'wheelchair']
+              : ['fal', 'route']
+          "
+        ></fa-icon>
+        {{
+          (showInstructions ? "hideInstructions" : "showInstructions")
+            | translate
+        }}
+      </button>
+      <button (click)="toggleAccessibleRoute()" class="accessible-toggle">
+        <fa-icon
+          [icon]="
+            stateService.state.accessibleRoute
+              ? ['fal', 'walking']
+              : ['fal', 'wheelchair']
+          "
+        ></fa-icon>
+        {{
+          (stateService.state.accessibleRoute
+            ? "showFastestRoute"
+            : "showAccessibleRoute"
+          ) | translate
+        }}
+      </button>
+
+      <mat-expansion-panel [disabled]="true" [expanded]="showInstructions">
+        <mat-panel-description>
+          <mat-list>
+            <mat-list-item *ngFor="let step of steps">
+              <p matLine>
+                <fa-icon [icon]="step.directionIcon"></fa-icon>
+                <fa-icon [icon]="step.stepIcon"></fa-icon>
+              </p>
+              <p matLine>{{ step.description }}</p>
+            </mat-list-item>
+          </mat-list>
+        </mat-panel-description>
+      </mat-expansion-panel>
+    </div>
   </div>
 </div>

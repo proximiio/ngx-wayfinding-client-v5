@@ -6,6 +6,9 @@ import Feature from "proximiio-js-library/lib/models/feature";
 import * as Settings from "../../../../../settings";
 import * as humanizeDuration from "humanize-duration";
 import { TranslateService } from "@ngx-translate/core";
+import { MapService } from "src/app/map/map.service";
+
+const defaultDetails = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
 interface StepModel {
   bearingFromLastStep: number;
@@ -26,21 +29,23 @@ interface StepModel {
   styleUrls: ["./details.component.scss"],
 })
 export class DetailsComponent implements OnInit, OnDestroy {
+  sidebarOpened = false;
   poi;
   showInstructions = false;
   steps = [];
-  details =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+  details = defaultDetails;
   limit = 200;
   showingMore = false;
   distanceInMeters;
   distanceInMinutes;
   averageWalkSpeed = 4.5; // km/h
+  haveRouteDetails = false;
   currentLanguage: string;
-  private sub: Subscription;
+  private subs: Subscription[] = [];
 
   constructor(
     public sidebarService: SidebarService,
+    public mapService: MapService,
     public stateService: StateService,
     private translateService: TranslateService
   ) {
@@ -49,25 +54,32 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.sidebarService.getEndPointListener().subscribe((poi) => {
-      if (poi) {
-        this.poi = poi;
-        this.poi.properties.title =
-          this.poi.properties.title_i18n &&
-          this.poi.properties.title_i18n[this.currentLanguage]
-            ? this.poi.properties.title_i18n[this.currentLanguage]
-            : this.poi.properties.title;
-        if (
-          this.poi.properties.wayfinding_metadata &&
-          this.poi.properties.wayfinding_metadata["1"]
-        ) {
-          this.details = this.poi.properties.wayfinding_metadata["1"][
-            this.currentLanguage
-          ]
-            ? this.poi.properties.wayfinding_metadata["1"][this.currentLanguage]
-            : this.poi.properties.wayfinding_metadata["1"].en;
+    this.subs.push(
+      this.sidebarService.getEndPointListener().subscribe((poi) => {
+        this.haveRouteDetails = false;
+        this.details = defaultDetails;
+        this.steps = [];
+        if (poi) {
+          this.poi = poi;
+          this.poi.properties.title =
+            this.poi.properties.title_i18n &&
+            this.poi.properties.title_i18n[this.currentLanguage]
+              ? this.poi.properties.title_i18n[this.currentLanguage]
+              : this.poi.properties.title;
+          if (
+            this.poi.properties.wayfinding_metadata &&
+            this.poi.properties.wayfinding_metadata['1']
+          ) {
+            this.details = this.poi.properties.wayfinding_metadata['1'][
+              this.currentLanguage
+            ]
+              ? this.poi.properties.wayfinding_metadata['1'][this.currentLanguage]
+              : this.poi.properties.wayfinding_metadata['1'].en;
+          }
         }
-        if (this.stateService.state.textNavigation) {
+      }),
+      this.mapService.getRouteFoundListener().subscribe((found) => {
+        if (found && this.stateService.state.textNavigation) {
           this.buildNavigationSteps(
             this.stateService.state.textNavigation.steps
           );
@@ -77,13 +89,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
             (this.distanceInMeters / 1000 / this.averageWalkSpeed) * 3600000,
             { delimiter: " and ", round: true, language: this.currentLanguage }
           );
+          this.haveRouteDetails = true;
         }
-      }
-    });
+      })
+    );
   }
 
   onDetailsClose() {
     this.sidebarService.onSetEndPoi(null);
+    this.details = defaultDetails;
   }
 
   toggleInstructions() {
@@ -172,7 +186,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  onShowRoute() {
+    this.mapService.showRouteListener.next();
+  }
+
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.subs.forEach((s) => s.unsubscribe());
   }
 }

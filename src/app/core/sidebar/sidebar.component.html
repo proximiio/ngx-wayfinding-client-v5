@@ -1,9 +1,38 @@
-<app-search></app-search>
-<app-floor-picker></app-floor-picker>
-<!--<ng-container>
-  <app-shop-picker [hidden]="sidebarService.selectedEndPoi"></app-shop-picker>
-  <app-amenity-picker [hidden]="sidebarService.selectedEndPoi"></app-amenity-picker>
-</ng-container>-->
+<div class="container">
+  <app-search></app-search>
+  <app-floor-picker [ngClass]="{ open: filtersOpened }"></app-floor-picker>
+
+  <!--<div
+    [hidden]="sidebarService.selectedEndPoi"
+    class="filters"
+    [ngClass]="{ open: filtersOpened }"
+  >
+    <div class="inner">
+      <app-shop-picker></app-shop-picker>
+      <app-amenity-picker></app-amenity-picker>
+      <div class="toggle" (click)="filtersOpened = !filtersOpened">
+        <fa-icon
+          [icon]="
+            filtersOpened
+              ? ['fal', 'chevron-double-left']
+              : ['fal', 'chevron-double-right']
+          "
+        ></fa-icon>
+      </div>
+    </div>
+  </div>-->
+
+  <div class="toggle" (click)="filtersOpened = !filtersOpened">
+    <fa-icon
+      [icon]="
+        filtersOpened
+          ? ['fal', 'chevron-double-left']
+          : ['fal', 'chevron-double-right']
+      "
+    ></fa-icon>
+  </div>
+</div>
+
 <ng-container>
   <app-details [hidden]="!sidebarService.selectedEndPoi"></app-details>
 </ng-container>
