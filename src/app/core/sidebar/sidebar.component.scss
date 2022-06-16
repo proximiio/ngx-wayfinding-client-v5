@@ -1,0 +1,108 @@
+@import '../../../styles/variables';
+
+.container {
+  .toggle {
+    position: absolute;
+    right: .5rem;
+    top: calc(50% - 20px);
+    font-size: 26px;
+    color: $default-color;
+    padding: .5rem;
+    cursor: pointer;
+
+    &:hover {
+      color: darken($default-color, 3%);
+    }
+  }
+  >.toggle {
+    display: none;
+  }
+}
+
+.filters {
+  padding: 1rem 2rem;
+  padding-right: 4rem;
+  background-color: rgba(255 255 255 / 90%);
+  box-shadow: 0 0 15px rgb(0 0 0 / 10%);
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 1rem;
+  position: absolute;
+  left: 0;
+  top: 310px;
+  transition: all .25s linear;
+  min-height: 143px;
+  z-index: 2;
+  width: 355px;
+
+  &:not(.open) {
+    left: -400px;
+  }
+}
+
+@media only screen and (max-width: 959.98px) {
+  .container {
+    position: fixed;
+    padding: 1.5rem;
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 1rem;
+    left: 0;
+    top: 0;
+    right: 0;
+    min-height: 70px;
+    z-index: 1;
+    width: auto;
+    background-color: hsla(0,0%,100%,.9);
+    box-shadow: 0 0 15px rgb(0 0 0 / 10%);
+
+    >.toggle {
+      display: block;
+      top: auto;
+      bottom: 0rem;
+      right: calc(50% - 18px);
+      font-size: 18px;
+      padding: .5rem;
+      transform: rotate(-90deg);
+      font-size: 30px;
+    }
+
+    .inner {
+      overflow: auto;
+      white-space: nowrap;
+      margin-bottom: 1.5rem;
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+      &::-webkit-scrollbar {
+        width: 0;
+        height: 3px;
+        background: #ccc;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: $accent-color;;
+      }
+    }
+    app-floor-picker:not(.open) {
+      display: none;
+    }
+  }
+  .filters {
+    position: static;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    min-height: auto;
+    width: auto;
+    padding: 0;
+    display: block!important;
+
+    &:not(.open) {
+      app-shop-picker,
+      app-amenity-picker {
+        display: none;
+      }
+    }
+
+    .toggle {
+      display: none;
+    }
+  }
+}

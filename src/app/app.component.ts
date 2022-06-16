@@ -4,6 +4,7 @@ import Fingerprint2 from 'fingerprintjs2';
 import ahoy from 'ahoy.js';
 import { environment } from '../environments/environment';
 import * as Settings from '../../settings';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +18,17 @@ export class AppComponent implements OnInit {
   sendAnalytics = true;
 
   constructor(
-    overlayContainer: OverlayContainer
+    overlayContainer: OverlayContainer,
+    translate: TranslateService
   ) {
     overlayContainer.getContainerElement().classList.add(this.theme$);
+    let langFromUrl = window.document.URL.split('/').pop();
+    if (langFromUrl !== 'en' && langFromUrl !== 'fi' && langFromUrl !== 'sv') {
+      langFromUrl = null;
+    }
+    translate.addLangs(['en', 'fi', 'sv']);
+    translate.setDefaultLang(langFromUrl ? langFromUrl : 'en');
+    translate.use(langFromUrl ? langFromUrl : 'en');
   }
 
   ngOnInit(): void {

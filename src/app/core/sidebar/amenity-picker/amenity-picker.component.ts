@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AmenityToggleModel } from '../../amenity-toggle.model';
 import { SidebarService } from '../sidebar.service';
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-amenity-picker',
@@ -38,15 +37,8 @@ export class AmenityPickerComponent implements OnInit {
   }];
 
   constructor(
-    private sidebarService: SidebarService,
-    private breakpointObserver: BreakpointObserver
-  ) {
-    this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium])
-      .subscribe((state: BreakpointState) => {
-        this.sidebarOpened = !state.matches;
-      });
-  }
+    private sidebarService: SidebarService
+  ) {}
 
   ngOnInit() {
   }

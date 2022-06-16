@@ -7,6 +7,7 @@ import { FontawesomeModule } from '../fontawesome.module';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgSelectFormFieldControlDirective } from './ng-select.directive';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { NgSelectFormFieldControlDirective } from './ng-select.directive';
   ],
   exports: [
     NgSelectFormFieldControlDirective,
+    TranslateModule
   ]
 })
 export class CoreModule {}
