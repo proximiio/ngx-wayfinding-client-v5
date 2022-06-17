@@ -1,6 +1,6 @@
 <div class="container">
   <app-search></app-search>
-  <app-floor-picker [ngClass]="{ open: filtersOpened }"></app-floor-picker>
+  <app-floor-picker [ngClass]="{ open: filtersOpened }" [hidden]="sidebarService.selectedEndPoi"></app-floor-picker>
 
   <!--<div
     [hidden]="sidebarService.selectedEndPoi"
