@@ -1,13 +1,13 @@
-<div>
-  <button class="my-location" (click)="onMyLocation()">
-    <span class="icon"></span>
+<main>
+  <button class="my-location" (click)="onMyLocation()" aria-label="My Location" title="My Location">
+    <span aria-hidden="true" class="icon"></span>
   </button>
-  <!--<button class="settings" (click)="onSettings()">
-    <fa-icon [icon]="['fal', 'cog']" size="lg"></fa-icon>
+  <!--<button class="settings" (click)="onSettings()" aria-label="Settings" title="Settings">
+    <fa-icon aria-hidden="true" [icon]="['fal', 'cog']" size="lg"></fa-icon>
   </button>-->
   <div id="proximiioMap"></div>
-</div>
-<div *ngIf="!mapLoaded" class="loading">
+</main>
+<main *ngIf="!mapLoaded" class="loading">
   <mat-spinner diameter="150" strokeWidth="1" color="primary"></mat-spinner>
-  <h2>{{ 'welcomeMessage' | translate }}</h2>
-</div>
+  <h1>{{ 'welcomeMessage' | translate }}</h1>
+</main>

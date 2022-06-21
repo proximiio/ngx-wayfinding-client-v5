@@ -1,38 +1,45 @@
-<div class="container">
-  <app-search></app-search>
-  <app-floor-picker [ngClass]="{ open: filtersOpened }" [hidden]="sidebarService.selectedEndPoi"></app-floor-picker>
+<main class="container">
+  <nav>
+    <app-search></app-search>
+    <app-floor-picker
+      [ngClass]="{ open: filtersOpened }"
+      [hidden]="sidebarService.selectedEndPoi"
+    ></app-floor-picker>
 
-  <div
-    [hidden]="sidebarService.selectedEndPoi"
-    class="filters"
-    [ngClass]="{ open: filtersOpened }"
-  >
-    <div class="inner">
-      <app-shop-picker></app-shop-picker>
-      <app-amenity-picker></app-amenity-picker>
-      <div class="toggle" (click)="filtersOpened = !filtersOpened">
-        <fa-icon
-          [icon]="
-            filtersOpened
-              ? ['fal', 'chevron-double-left']
-              : ['fal', 'chevron-double-right']
-          "
-        ></fa-icon>
+    <div
+      [hidden]="sidebarService.selectedEndPoi"
+      class="filters"
+      [ngClass]="{ open: filtersOpened }"
+    >
+      <div class="inner">
+        <app-shop-picker></app-shop-picker>
+        <app-amenity-picker></app-amenity-picker>
+        <div class="toggle" (click)="filtersOpened = !filtersOpened">
+          <fa-icon
+            [icon]="
+              filtersOpened
+                ? ['fal', 'chevron-double-left']
+                : ['fal', 'chevron-double-right']
+            "
+          ></fa-icon>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="toggle" (click)="filtersOpened = !filtersOpened">
-    <fa-icon
-      [icon]="
-        filtersOpened
-          ? ['fal', 'chevron-double-left']
-          : ['fal', 'chevron-double-right']
-      "
-    ></fa-icon>
-  </div>
-</div>
+    <div class="toggle" (click)="filtersOpened = !filtersOpened">
+      <fa-icon
+        [icon]="
+          filtersOpened
+            ? ['fal', 'chevron-double-left']
+            : ['fal', 'chevron-double-right']
+        "
+      ></fa-icon>
+    </div>
+  </nav>
 
-<ng-container>
-  <app-details [hidden]="!sidebarService.selectedEndPoi"></app-details>
-</ng-container>
+  <ng-container>
+    <nav [hidden]="!sidebarService.selectedEndPoi">
+      <app-details></app-details>
+    </nav>
+  </ng-container>
+</main>

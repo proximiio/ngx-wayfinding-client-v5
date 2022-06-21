@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { SidebarService } from '../sidebar.service';
 
 @Component({
@@ -12,10 +12,12 @@ export class SearchComponent implements OnInit {
   searchOpen = false;
   optionsOpen = false;
 
-  constructor(public sidebarService: SidebarService) {}
+  constructor(public sidebarService: SidebarService, private elRef: ElementRef) {}
 
   ngOnInit() {
-
+    const input = this.elRef.nativeElement.children[0].children[2].children[0].children[0].children[1].children[0];
+    input.title = 'Search';
+    console.log(input);
   }
 
   onSearchOpen() {
