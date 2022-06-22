@@ -16,8 +16,10 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     const input = this.elRef.nativeElement.children[0].children[2].children[0].children[0].children[1].children[0];
+    const placeholder = this.elRef.nativeElement.children[0].children[2].children[0].children[0].children[0];
+    placeholder.id = 'inputLabel';
     input.title = 'Search';
-    console.log(input);
+    input.setAttribute('aria-labelledby', 'inputLabel');
   }
 
   onSearchOpen() {
