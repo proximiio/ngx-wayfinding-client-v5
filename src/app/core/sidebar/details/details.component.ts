@@ -8,7 +8,8 @@ import * as humanizeDuration from "humanize-duration";
 import { TranslateService } from "@ngx-translate/core";
 import { MapService } from "src/app/map/map.service";
 
-const defaultDetails = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+const defaultDetails =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
 interface StepModel {
   bearingFromLastStep: number;
@@ -68,13 +69,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
               : this.poi.properties.title;
           if (
             this.poi.properties.wayfinding_metadata &&
-            this.poi.properties.wayfinding_metadata['1']
+            this.poi.properties.wayfinding_metadata["1"]
           ) {
-            this.details = this.poi.properties.wayfinding_metadata['1'][
+            this.details = this.poi.properties.wayfinding_metadata["1"][
               this.currentLanguage
             ]
-              ? this.poi.properties.wayfinding_metadata['1'][this.currentLanguage]
-              : this.poi.properties.wayfinding_metadata['1'].en;
+              ? this.poi.properties.wayfinding_metadata["1"][
+                  this.currentLanguage
+                ]
+              : this.poi.properties.wayfinding_metadata["1"].en;
           }
         }
       }),
@@ -83,9 +86,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.buildNavigationSteps(
             this.stateService.state.textNavigation.steps
           );
-          this.distanceInMeters =
-            this.stateService.state.textNavigation.distanceMeters;
+          this.distanceInMeters = this.stateService.state.routeDetails.distance
+            ? this.stateService.state.routeDetails.distance
+            : this.stateService.state.textNavigation.distanceMeters;
           this.distanceInMinutes = humanizeDuration(
+            this.stateService.state.routeDetails.duration ?
+            this.stateService.state.routeDetails.duration.realistic * 1000 :
             (this.distanceInMeters / 1000 / this.averageWalkSpeed) * 3600000,
             { delimiter: " and ", round: true, language: this.currentLanguage }
           );

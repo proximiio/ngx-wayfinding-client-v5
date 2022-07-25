@@ -197,7 +197,9 @@ export class MapComponent implements OnInit, OnDestroy {
         this.stateService.state = {
           ...this.stateService.state,
           textNavigation: res.TBTNav,
+          routeDetails: res.details,
         };
+        console.log(this.stateService.state);
 
         // send route found event to map service
         this.mapService.routeFoundListener.next(true);

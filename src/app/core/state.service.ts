@@ -27,6 +27,7 @@ export interface State {
     level: number
   };
   readonly textNavigation: any;
+  readonly routeDetails: any;
   accessibleRoute: boolean;
 }
 
@@ -54,6 +55,7 @@ export class StateService {
       level: 0
     },
     textNavigation: null,
+    routeDetails: null,
     accessibleRoute: false
   };
 }
