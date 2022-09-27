@@ -44,6 +44,7 @@ export class MapComponent implements OnInit, OnDestroy {
   ) {
     const urlParams = new URLSearchParams(window.location.search);
     const destinationParam = urlParams.get("destinationFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
+    this.stateService.state.kioskMode = !!urlParams.get("kioskMode");
 
     // if there is a destination defined in url params, we need to handle poi selection to show details component
     if (destinationParam) {
@@ -61,7 +62,7 @@ export class MapComponent implements OnInit, OnDestroy {
               .getMapboxInstance()
               .flyTo({ center: poi.geometry.coordinates, zoom: 19 });
             this.map.setFloorByLevel(poi.properties.level);
-            this.map.setFeaturesHighlight([poi.id], '#9200c7', 46, 0.4);
+            this.map.setFeaturesHighlight([poi.id], "#9200c7", 46, 0.4);
           } else if (!poi) {
             // otherwise cancel route if it's rendered, remove highlight and return me to default location
             this.map.cancelRoute();
@@ -151,7 +152,7 @@ export class MapComponent implements OnInit, OnDestroy {
         //   autoLocate: false, // if enabled map will automatically focus on user location
         //   position: 'bottom-right', //  position on the map to which the control will be added.
         // },
-        showLevelDirectionIcon: true // if enabled arrow icon will be shown at the levelchanger indicating direction of level change along the found route
+        showLevelDirectionIcon: true, // if enabled arrow icon will be shown at the levelchanger indicating direction of level change along the found route
       });
 
       // subscribing to map ready listener
@@ -199,7 +200,7 @@ export class MapComponent implements OnInit, OnDestroy {
         }
 
         // set features highlight
-        this.map.setFeaturesHighlight([res.start.id, res.end.id], '#000', 70);
+        this.map.setFeaturesHighlight([res.start.id, res.end.id], "#000", 70);
       });
 
       // set destination point for routing based on click event and cancel previous route if generated

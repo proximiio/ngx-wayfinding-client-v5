@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 // @import "~@ng-select/ng-select/themes/material.theme.css";
 @import "~@ng-select/ng-select/themes/default.theme.css";
+@import 'simple-keyboard/build/css/index.css';
 @import '~@angular/material/theming';
+@import 'styles/keyboard';
 @import 'styles/variables';
 
 // always include only once per project

@@ -42,6 +42,7 @@
     "ngx-take-until-destroy": "^5.4.0",
     "proximiio-js-library": "^1.9.12",
     "rxjs": "~6.6.3",
+    "simple-keyboard": "^3.4.162",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.3"
   },

@@ -28,6 +28,7 @@ export interface State {
   };
   readonly textNavigation: any;
   accessibleRoute: boolean;
+  kioskMode: boolean;
 }
 
 @Injectable({providedIn: 'root'})
@@ -54,6 +55,7 @@ export class StateService {
       level: 0
     },
     textNavigation: null,
-    accessibleRoute: false
+    accessibleRoute: false,
+    kioskMode: false
   };
 }
