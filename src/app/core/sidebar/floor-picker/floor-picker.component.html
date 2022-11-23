@@ -2,8 +2,7 @@
   <h3 class="title">{{ "floor" | translate }}</h3>
   <div class="selector">
     <button class="current-floor" (click)="pickerOpened = !pickerOpened">
-      {{ stateService.state.floor.level + 1
-      }}<span>{{ stateService.state.floor.level + 1 | ordinal: false }}</span>
+      {{ stateService.state.floor.name }}
       <fa-icon
         [icon]="pickerOpened ? ['fal', 'chevron-up'] : ['fal', 'chevron-down']"
       ></fa-icon>
@@ -31,7 +30,7 @@
       [ngClass]="{ active: floor.level === stateService.state.floor.level }"
       (click)="onFloorPick(floor)"
     >
-      {{ floor.level + 1 }}<span>{{ floor.level + 1 | ordinal: false }}</span>
+      {{ floor.name }}
     </button>
   </div>
   <div class="toggle" (click)="sidebarOpened = !sidebarOpened">
