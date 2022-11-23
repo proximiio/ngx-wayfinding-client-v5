@@ -46,7 +46,7 @@ import {
   faAngleRight,
   faAngleDoubleLeft,
   faAngleDoubleRight,
-  faArrowCircleDown, faArrowCircleUp, faCaretSquareDown, faCaretSquareUp
+  faArrowCircleDown, faArrowCircleUp, faCaretSquareDown, faCaretSquareUp, faBars
 } from '../vendor/pro-light-svg-icons';
 
 @NgModule({
@@ -104,7 +104,8 @@ export class FontawesomeModule {
       faWalking,
       faCog,
       faCompass,
-      faChevronRight
+      faChevronRight,
+      faBars
     );
   }
 }

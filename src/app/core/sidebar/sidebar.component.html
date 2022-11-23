@@ -1,30 +1,47 @@
-<main class="container">
+<main class="container" [ngClass]="{ open: filtersOpened }">
   <nav>
     <app-search></app-search>
-    <app-floor-picker
-      [ngClass]="{ open: filtersOpened }"
-      [hidden]="sidebarService.selectedEndPoi"
-    ></app-floor-picker>
+
+    <div class="menu-section">
+      <app-floor-picker></app-floor-picker>
+    </div>
+    <div class="menu-dropdown">
+      <button mat-icon-button [matMenuTriggerFor]="floorMenu">
+        <span class="fa-layers fa-fw">
+          <fa-icon
+            [icon]="['fal', 'angle-up']"
+            transform="grow-12 up-7"
+          ></fa-icon>
+          <fa-icon
+            [icon]="['fal', 'angle-down']"
+            transform="grow-12 down-7"
+          ></fa-icon>
+        </span>
+      </button>
+      <mat-menu #floorMenu="matMenu" [classList]="'floor-picker-dropdown'">
+        <app-floor-picker></app-floor-picker>
+      </mat-menu>
+    </div>
 
     <!--<div
-    [hidden]="sidebarService.selectedEndPoi"
-    class="filters"
-    [ngClass]="{ open: filtersOpened }"
-  >
-    <div class="inner">
-      <app-shop-picker></app-shop-picker>
-      <app-amenity-picker></app-amenity-picker>
-      <div class="toggle" (click)="filtersOpened = !filtersOpened">
-        <fa-icon
-          [icon]="
-            filtersOpened
-              ? ['fal', 'chevron-double-left']
-              : ['fal', 'chevron-double-right']
-          "
-        ></fa-icon>
+      [hidden]="sidebarService.selectedEndPoi"
+      class="filters"
+      [ngClass]="{ open: filtersOpened }"
+    >
+      <div class="inner">
+        <app-shop-picker></app-shop-picker>
+        <app-amenity-picker></app-amenity-picker>
+        <div class="toggle" (click)="filtersOpened = !filtersOpened">
+          <fa-icon
+            [icon]="
+              filtersOpened
+                ? ['fal', 'chevron-double-left']
+                : ['fal', 'chevron-double-right']
+            "
+          ></fa-icon>
+        </div>
       </div>
-    </div>
-  </div>-->
+    </div>-->
 
     <div class="toggle" (click)="filtersOpened = !filtersOpened">
       <fa-icon

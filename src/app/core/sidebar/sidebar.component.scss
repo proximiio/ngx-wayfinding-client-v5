@@ -1,20 +1,20 @@
-@import '../../../styles/variables';
+@import "../../../styles/variables";
 
 .container {
   .toggle {
     position: absolute;
-    right: .5rem;
+    right: 0.5rem;
     top: calc(50% - 20px);
     font-size: 26px;
     color: $default-color;
-    padding: .5rem;
+    padding: 0.5rem;
     cursor: pointer;
 
     &:hover {
       color: darken($default-color, 3%);
     }
   }
-  >.toggle {
+  > .toggle {
     display: none;
   }
 }
@@ -29,13 +29,28 @@
   position: absolute;
   left: 0;
   top: 310px;
-  transition: all .25s linear;
+  transition: all 0.25s linear;
   min-height: 143px;
   z-index: 2;
   width: 355px;
 
   &:not(.open) {
     left: -400px;
+  }
+}
+
+.menu-dropdown {
+  display: none;
+  position: absolute;
+  right: 0.5rem;
+  top: 210px;
+  gap: 5px;
+
+  .mat-icon-button {
+    background: black;
+    font-size: 16px;
+    line-height: 35px;
+    color: white;
   }
 }
 
@@ -51,37 +66,43 @@
     min-height: 70px;
     z-index: 1;
     width: auto;
-    background-color: hsla(0,0%,100%,.9);
+    background-color: hsla(0, 0%, 100%, 0.9);
     box-shadow: 0 0 15px rgb(0 0 0 / 10%);
 
-    >.toggle {
+    .toggle {
       display: block;
       top: auto;
       bottom: 0rem;
       right: calc(50% - 18px);
       font-size: 18px;
-      padding: .5rem;
+      padding: 0.5rem;
       transform: rotate(-90deg);
-      font-size: 30px;
+      font-size: 18px;
     }
 
     .inner {
       overflow: auto;
       white-space: nowrap;
       margin-bottom: 1.5rem;
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
       &::-webkit-scrollbar {
         width: 0;
         height: 3px;
         background: #ccc;
       }
       &::-webkit-scrollbar-thumb {
-        background: $accent-color;;
+        background: $accent-color;
       }
     }
     app-floor-picker:not(.open) {
       display: none;
+    }
+    &:not(.open) {
+      padding-bottom: 0;
+      .menu-dropdown {
+        top: 110px;
+      }
     }
   }
   .filters {
@@ -92,7 +113,7 @@
     min-height: auto;
     width: auto;
     padding: 0;
-    display: block!important;
+    display: block !important;
 
     &:not(.open) {
       app-shop-picker,
@@ -104,5 +125,12 @@
     .toggle {
       display: none;
     }
+  }
+
+  .menu-section {
+    display: none;
+  }
+  .menu-dropdown {
+    display: flex;
   }
 }
