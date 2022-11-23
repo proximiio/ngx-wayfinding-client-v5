@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import Proximiio from "proximiio-js-library";
 import * as Settings from "../../../settings";
 import * as mapboxgl from "mapbox-gl";
-import { StateService } from "../core/state.service";
+import { KioskModel, StateService } from "../core/state.service";
 import { SettingsDialogComponent } from "../core/settings-dialog/settings-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { SidebarService } from "../core/sidebar/sidebar.service";
@@ -31,7 +31,9 @@ export class MapComponent implements OnInit, OnDestroy {
     right: 250,
   };
   private map;
+  private startPoiId: string;
   private endPoi;
+  private kiosk: KioskModel;
   private subs: Subscription[] = [];
 
   constructor(
@@ -50,7 +52,30 @@ export class MapComponent implements OnInit, OnDestroy {
       this.destinationFromUrl = true;
     }
 
+    // find kiosk by url param in stateService
+    this.kiosk = this.stateService.state.kiosks.find(
+      (i) => i.name === urlParams.get("kiosk")
+    );
+
+    // if kiosk is found use it's settings to initiate the map
+    if (this.kiosk) {
+      this.stateService.state.options.bearing = this.kiosk.bearing;
+      this.stateService.state.options.pitch = this.kiosk.pitch;
+      this.stateService.state.defaultLocation.coordinates = [
+        this.kiosk.longitude,
+        this.kiosk.latitude,
+      ];
+      this.stateService.state.defaultLocation.level = this.kiosk.level;
+    }
+
     this.subs.push(
+      // we subscribe for start point listener events here
+      this.sidebarService.getStartPointListener().subscribe((poi) => {
+        if (this.mapLoaded) {
+          this.map.getMapboxInstance().resize();
+        }
+        this.setStartPoi(poi);
+      }),
       // we subscribe for end point listener events here
       this.sidebarService.getEndPointListener().subscribe((poi) => {
         this.endPoi = poi;
@@ -61,7 +86,7 @@ export class MapComponent implements OnInit, OnDestroy {
               .getMapboxInstance()
               .flyTo({ center: poi.geometry.coordinates, zoom: 19 });
             this.map.setFloorByLevel(poi.properties.level);
-            this.map.setFeaturesHighlight([poi.id], '#9200c7', 46, 0.4);
+            this.map.setFeaturesHighlight([poi.id], "#9200c7", 46, 0.4);
           } else if (!poi) {
             // otherwise cancel route if it's rendered, remove highlight and return me to default location
             this.map.cancelRoute();
@@ -86,7 +111,7 @@ export class MapComponent implements OnInit, OnDestroy {
           // if we have destination point selected, redraw the route based on accessible status
           this.map.findRouteByIds(
             this.endPoi.id,
-            null,
+            this.stateService.state.kioskMode ? null : this.startPoiId,
             this.stateService.state.accessibleRoute
           );
         }
@@ -110,6 +135,10 @@ export class MapComponent implements OnInit, OnDestroy {
       // subscribe to show route listener and show route based on that
       this.mapService.getShowRouteListener().subscribe(() => {
         this.onShowRoute();
+      }),
+      // reset view after idle time is reached, this is set in app.component.ts
+      this.mapService.getResetViewListener().subscribe(() => {
+        this.onResetView();
       })
     );
     this.breakpointObserver
@@ -137,9 +166,9 @@ export class MapComponent implements OnInit, OnDestroy {
           bearing: this.stateService.state.options.bearing,
         },
         defaultPlaceId: "place-id", // if you have more than 1 place in your account, it's a good idea to define defaultPlaceId for the map, otherwise the first one will be picked up
-        isKiosk: true, // if enabled starting point for routing will be based on values defined in kioskSettings, if disabled findRoute methods will expect start point to be send.
+        isKiosk: this.stateService.state.kioskMode, // if enabled starting point for routing will be based on values defined in kioskSettings, if disabled findRoute methods will expect start point to be send.
         kioskSettings: {
-          coordinates: this.stateService.state.defaultLocation.coordinates,
+          coordinates: this.stateService.state.defaultLocation.coordinates as [number, number],
           level: this.stateService.state.defaultLocation.level,
         },
         fitBoundsPadding: this.mapPadding, // setting the padding option to use for zooming into the bounds when route is drawn,
@@ -151,11 +180,13 @@ export class MapComponent implements OnInit, OnDestroy {
         //   autoLocate: false, // if enabled map will automatically focus on user location
         //   position: 'bottom-right', //  position on the map to which the control will be added.
         // },
-        showLevelDirectionIcon: true // if enabled arrow icon will be shown at the levelchanger indicating direction of level change along the found route
+        showLevelDirectionIcon: true, // if enabled arrow icon will be shown at the levelchanger indicating direction of level change along the found route
+        animatedRoute: true,
       });
 
       // subscribing to map ready listener
       this.map.getMapReadyListener().subscribe((ready) => {
+        this.mapService.mapReadyListener.next(true);
         this.mapLoaded = true;
         // this.onMyLocation(); // center to default location, if needed comment this out
 
@@ -165,6 +196,10 @@ export class MapComponent implements OnInit, OnDestroy {
             showZoom: false,
           })
         );
+
+        if (this.kiosk?.bounds) {
+          this.map.getMapboxInstance().setMaxBounds(this.kiosk.bounds);
+        }
 
         /*
           // set amenity category group 'shop', those have to be set in shop-picker component afterwards
@@ -199,7 +234,7 @@ export class MapComponent implements OnInit, OnDestroy {
         }
 
         // set features highlight
-        this.map.setFeaturesHighlight([res.start.id, res.end.id], '#000', 70);
+        this.map.setFeaturesHighlight([res.start.id, res.end.id], "#000", 70);
       });
 
       // set destination point for routing based on click event and cancel previous route if generated
@@ -242,6 +277,34 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  // set different start point handling function
+  setStartPoi(poi) {
+    if (!this.stateService.state.kioskMode) {
+      // assign selected poi
+      const startPoi = poi;
+      this.startPoiId = poi.id;
+
+      // centerize map
+      this.map.getMapboxInstance().flyTo({
+        center: startPoi.coordinates,
+        bearing: this.stateService.state.options.bearing,
+        pitch: this.stateService.state.options.pitch,
+        zoom: this.stateService.state.options.zoom,
+      });
+
+      // set to start point floor
+      this.map.setFloorByLevel(startPoi.properties.level);
+      // if we also have an endpoint generate route
+      if (this.endPoi) {
+        this.map.findRouteByIds(
+          this.endPoi.id,
+          this.startPoiId,
+          this.stateService.state.accessibleRoute
+        );
+      }
+    }
+  }
+
   // this method will centerize the map to default location
   onMyLocation() {
     if (this.map) {
@@ -251,6 +314,7 @@ export class MapComponent implements OnInit, OnDestroy {
         pitch: this.stateService.state.options.pitch,
         zoom: this.stateService.state.options.zoom,
       });
+      this.map.setFloorByLevel(this.stateService.state.defaultLocation.level);
     }
   }
 
@@ -286,9 +350,16 @@ export class MapComponent implements OnInit, OnDestroy {
     if (this.map) {
       this.map.findRouteByIds(
         this.endPoi.id,
-        null,
+        this.stateService.state.kioskMode ? null : this.startPoiId,
         this.stateService.state.accessibleRoute
       );
+    }
+  }
+
+  onResetView() {
+    if (this.map) {
+      this.sidebarService.onSetEndPoi(null);
+      this.map.refetch();
     }
   }
 

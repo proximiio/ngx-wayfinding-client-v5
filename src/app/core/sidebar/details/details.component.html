@@ -110,4 +110,37 @@
       </mat-expansion-panel>
     </div>
   </div>
+  <div class="start-box" *ngIf="!stateService.state.kioskMode">
+    <form [formGroup]="startPoiForm">
+      <div mat-dialog-content>
+        <mat-form-field appearance="outline">
+          <mat-label>Start Point</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Start Point"
+            formControlName="startPoi"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            [displayWith]="displayFn"
+            (optionSelected)="onStartPoiSelect($event)"
+          >
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{
+                option.properties.title + " - Floor: " + option.properties.level
+              }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="startPoiForm.get('startPoi').invalid"
+            >Please enter a valid start poi.</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
 </div>

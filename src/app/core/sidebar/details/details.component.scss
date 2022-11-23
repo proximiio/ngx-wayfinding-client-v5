@@ -207,6 +207,15 @@
       color: darken($default-color, 3%);
     }
   }
+  .start-box {
+    margin-top: -1.5rem;
+    .mat-dialog-content {
+      text-align: center;
+    }
+    mat-form-field {
+      width: 80%;
+    }
+  }
 }
 
 @media only screen and (max-width: 959.98px) {
@@ -251,6 +260,9 @@
           display: block;
         }
       }
+    }
+    .start-box {
+      font-size: 12px;
     }
   }
 }
