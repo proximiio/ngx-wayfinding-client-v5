@@ -204,7 +204,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
       // set destination point for routing based on click event and cancel previous route if generated
       this.map.getPoiClickListener().subscribe((poi) => {
-        this.map.cancelRoute();
+        if (this.map.state.textNavigation) {
+          this.map.cancelRoute();
+          // handle polygon selection after previous route cancel, only required when polygons are enabled
+          // this.map.handlePolygonSelection(poi);
+        }
         this.sidebarService.onSetEndPoi(poi);
       });
 
