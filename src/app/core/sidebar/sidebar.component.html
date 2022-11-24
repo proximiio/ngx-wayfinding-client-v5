@@ -2,7 +2,7 @@
   <nav>
     <app-search></app-search>
 
-    <div class="menu-section">
+    <div class="menu-section" [hidden]="sidebarService.selectedEndPoi || sidebarService.filteredShop">
       <app-floor-picker></app-floor-picker>
     </div>
     <div class="menu-dropdown">
@@ -23,8 +23,8 @@
       </mat-menu>
     </div>
 
-    <!--<div
-      [hidden]="sidebarService.selectedEndPoi"
+    <div
+      [hidden]="sidebarService.selectedEndPoi || sidebarService.filteredShop"
       class="filters"
       [ngClass]="{ open: filtersOpened }"
     >
@@ -41,7 +41,7 @@
           ></fa-icon>
         </div>
       </div>
-    </div>-->
+    </div>
 
     <div class="toggle" (click)="filtersOpened = !filtersOpened">
       <fa-icon
@@ -57,6 +57,12 @@
   <ng-container>
     <nav [hidden]="!sidebarService.selectedEndPoi">
       <app-details></app-details>
+    </nav>
+  </ng-container>
+
+  <ng-container>
+    <nav [hidden]="!sidebarService.filteredShop || sidebarService.selectedEndPoi">
+      <app-list-view></app-list-view>
     </nav>
   </ng-container>
 </main>

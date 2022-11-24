@@ -87,6 +87,8 @@ export class MapComponent implements OnInit, OnDestroy {
               .flyTo({ center: poi.geometry.coordinates, zoom: 19 });
             this.map.setFloorByLevel(poi.properties.level);
             this.map.setFeaturesHighlight([poi.id], "#9200c7", 46, 0.4);
+            // handle polygon selection, only required when polygons are enabled
+            this.map.handlePolygonSelection(poi);
           } else if (!poi) {
             // otherwise cancel route if it's rendered, remove highlight and return me to default location
             this.map.cancelRoute();
@@ -241,8 +243,6 @@ export class MapComponent implements OnInit, OnDestroy {
       this.map.getPoiClickListener().subscribe((poi) => {
         if (this.map.state.textNavigation) {
           this.map.cancelRoute();
-          // handle polygon selection after previous route cancel, only required when polygons are enabled
-          // this.map.handlePolygonSelection(poi);
         }
         this.sidebarService.onSetEndPoi(poi);
       });

@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { isPointWithinRadius } from "geolib";
 import { StateService } from "../state.service";
+import { AmenityToggleModel } from "../amenity-toggle.model";
 
 @Injectable({ providedIn: "root" })
 export class SidebarService {
@@ -14,6 +15,7 @@ export class SidebarService {
   public accessibleOnlyToggleListener = new Subject<boolean>();
   public amenityToggleListener = new Subject<any>();
   public floorChangeListener = new Subject<string | any>();
+  public activeListItem: AmenityToggleModel;
 
   constructor(private stateService: StateService) {}
 
