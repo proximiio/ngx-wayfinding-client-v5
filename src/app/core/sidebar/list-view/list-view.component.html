@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="content">
+    <h3 class="title">{{ sidebarService.activeListItem?.title | translate }}</h3>
+    <button (click)="onClose()" class="close">
+      <fa-icon [icon]="['fal', 'times']"></fa-icon>
+    </button>
+    <ul class="list">
+      <li *ngFor="let item of data" (click)="onSelect(item)">
+        <span class="title">{{ item.properties.title }}</span>
+        <span class="floor">{{ item.properties.floor_name }}</span>
+      </li>
+    </ul>
+  </div>
+</div>

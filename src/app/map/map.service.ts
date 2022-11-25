@@ -6,6 +6,7 @@ export class MapService {
   public routeFoundListener = new Subject<boolean>();
   public showRouteListener = new Subject();
   public mapReadyListener = new Subject<boolean>();
+  public resetViewListener = new Subject<boolean>();
 
   constructor() {}
   getRouteFoundListener() {
@@ -18,5 +19,9 @@ export class MapService {
 
   getShowRouteListener() {
     return this.showRouteListener.asObservable();
+  }
+
+  getResetViewListener() {
+    return this.resetViewListener.asObservable();
   }
 }

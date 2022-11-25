@@ -1,0 +1,100 @@
+@import "../../../../styles/variables";
+
+.container {
+  background-color: rgba(255 255 255 / 100%);
+  box-shadow: 0 0 15px rgb(0 0 0 / 10%);
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 1rem;
+  position: absolute;
+  left: 0;
+  top: 110px;
+  transition: all 0.25s linear;
+  z-index: 3;
+  max-height: calc(100vh - 110px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 451px;
+
+  .content {
+    padding: 1rem 2rem;
+  }
+
+  h3.title {
+    position: relative;
+    color: $default-color;
+    transition: all 0.25s linear;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    > li {
+      display: flex;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+      padding: 0.8rem 0.2rem;
+      cursor: pointer;
+      align-items: center;
+
+      .title {
+        flex: auto;
+      }
+      .floor {
+        background-color: rgba(0, 0, 0, 0.75);
+        color: white;
+        width: 26px;
+        height: 26px;
+        line-height: 27px;
+        border-radius: 4px;
+        text-align: center;
+      }
+
+      &:hover {
+        color: $default-color;
+        border-color: $default-color;
+        .floor {
+          background-color: $default-color;
+        }
+      }
+
+      &:last-child {
+        border: 0;
+      }
+    }
+  }
+
+  .close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: white;
+    background: $default-color;
+    border: 0;
+    border-radius: 15px;
+    padding: 0.5rem 0.8rem;
+    font-size: 20px;
+    z-index: 4;
+    &:hover {
+      background: darken($default-color, 3%);
+    }
+  }
+}
+
+@media only screen and (max-width: 959.98px) {
+  .container {
+    bottom: 0;
+    top: auto;
+    left: 0;
+    right: 0;
+    position: fixed;
+    width: 100%;
+    margin-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    max-height: 100%;
+  }
+}

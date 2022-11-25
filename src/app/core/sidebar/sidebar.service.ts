@@ -2,18 +2,28 @@ import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { isPointWithinRadius } from "geolib";
 import { StateService } from "../state.service";
+import { AmenityToggleModel } from "../amenity-toggle.model";
+import Feature from "proximiio-js-library/lib/models/feature";
 
 @Injectable({ providedIn: "root" })
 export class SidebarService {
+  public selectedStartPoi;
   public selectedEndPoi;
   public filteredShop = null; // used to store value from shop-picker component via onAmenityToggle method
   public filteredAmenity = null; // used to store value from amenity-picker component via onAmenityToggle method
+  public startPointListener = new Subject<any>();
   public endPointListener = new Subject<any>();
   public accessibleOnlyToggleListener = new Subject<boolean>();
   public amenityToggleListener = new Subject<any>();
   public floorChangeListener = new Subject<string | any>();
+  public centerToFeatureListener = new Subject<Feature>();
+  public activeListItem: AmenityToggleModel;
 
   constructor(private stateService: StateService) {}
+
+  getStartPointListener() {
+    return this.startPointListener.asObservable();
+  }
 
   getEndPointListener() {
     return this.endPointListener.asObservable();
@@ -29,6 +39,18 @@ export class SidebarService {
 
   getFloorChangeListener() {
     return this.floorChangeListener.asObservable();
+  }
+
+  getCenterToFeatureListener() {
+    return this.centerToFeatureListener.asObservable();
+  }
+
+  // pick up the start point and fire up listener to find route
+  onSetStartPoi(poi) {
+    this.selectedStartPoi = this.stateService.state.allFeatures.features.find(
+      (f) => f.id === poi?.id
+    );
+    this.startPointListener.next(this.selectedStartPoi);
   }
 
   // pick up the destination point and fire up listener to find route

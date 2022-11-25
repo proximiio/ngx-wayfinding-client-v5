@@ -58,7 +58,11 @@
       {{ distanceInMinutes }}
     </p>
 
-    <button (click)="onShowRoute()" class="show-route">
+    <button
+      (click)="onShowRoute()"
+      class="show-route"
+      *ngIf="stateService.state.kioskMode"
+    >
       <fa-icon [icon]="['fal', 'walking']"></fa-icon>
       {{ "takeMeThere" | translate }}
     </button>
@@ -109,5 +113,56 @@
         </mat-panel-description>
       </mat-expansion-panel>
     </div>
+  </div>
+  <div class="start-box" *ngIf="!stateService.state.kioskMode">
+    <p
+      class="closest-parking"
+      *ngIf="closestParkingFeature"
+      (click)="onCenterToParking()"
+    >
+      <strong>Closest parking:</strong>
+      {{ closestParkingFeature.properties.title }}
+    </p>
+    <div class="buttons">
+      <button type="button" (click)="onRouteFromParking()">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/people-in-car.png"/>
+        Route from parking
+      </button>
+      <button type="button" (click)="onRouteFromEntrance()">
+        <img src="https://img.icons8.com/ios/50/ffffff/walking--v1.png"/>
+        Route from entrance
+      </button>
+    </div>
+    <!--<form [formGroup]="startPoiForm">
+      <div mat-dialog-content>
+        <mat-form-field appearance="outline">
+          <mat-label>Route from different place</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Start Point"
+            formControlName="startPoi"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            [displayWith]="displayFn"
+            (optionSelected)="onStartPoiSelect($event)"
+          >
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{
+                option.properties.title + " - Floor: " + option.properties.level
+              }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="startPoiForm.get('startPoi').invalid"
+            >Please enter a valid start poi.</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </form>-->
   </div>
 </div>

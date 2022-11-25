@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { AngularMaterialModule } from '../angular-material.module';
 import { FontawesomeModule } from '../fontawesome.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgSelectFormFieldControlDirective } from './ng-select.directive';
 import { TranslateModule } from '@ngx-translate/core';
@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     NgSelectModule,
     RouterModule,
     FontawesomeModule,
@@ -24,7 +25,8 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   exports: [
     NgSelectFormFieldControlDirective,
-    TranslateModule
+    TranslateModule,
+    ReactiveFormsModule
   ]
 })
 export class CoreModule {}

@@ -1,38 +1,72 @@
-import { Component, OnInit } from '@angular/core';
-import { OverlayContainer } from '@angular/cdk/overlay';
-import Fingerprint2 from 'fingerprintjs2';
-import ahoy from 'ahoy.js';
-import { environment } from '../environments/environment';
-import * as Settings from '../../settings';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, OnInit } from "@angular/core";
+import { OverlayContainer } from "@angular/cdk/overlay";
+import Fingerprint2 from "fingerprintjs2";
+import ahoy from "ahoy.js";
+import { environment } from "../environments/environment";
+import * as Settings from "../../settings";
+import { TranslateService } from "@ngx-translate/core";
+import { MapService } from "./map/map.service";
+import { StateService } from "./core/state.service";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit {
   isLoading = false;
-  theme$ = 'custom-theme';
+  theme$ = "custom-theme";
   fingerprint;
   sendAnalytics = true;
 
   constructor(
     overlayContainer: OverlayContainer,
-    translate: TranslateService
+    translate: TranslateService,
+    private mapService: MapService,
+    private stateService: StateService
   ) {
+    const urlParams = new URLSearchParams(window.location.search);
+
     overlayContainer.getContainerElement().classList.add(this.theme$);
-    let langFromUrl = window.document.URL.split('/').pop();
-    if (langFromUrl !== 'en' && langFromUrl !== 'fi' && langFromUrl !== 'sv') {
+
+    this.stateService.state.kioskMode = !!urlParams.get("kiosk");
+
+    let langFromUrl = window.document.URL.split("/").pop();
+    if (langFromUrl !== "en" && langFromUrl !== "fi" && langFromUrl !== "sv") {
       langFromUrl = null;
     }
-    translate.addLangs(['en', 'fi', 'sv']);
-    translate.setDefaultLang(langFromUrl ? langFromUrl : 'en');
-    translate.use(langFromUrl ? langFromUrl : 'en');
+    translate.addLangs(["en", "fi", "sv"]);
+    translate.setDefaultLang(langFromUrl ? langFromUrl : "en");
+    translate.use(langFromUrl ? langFromUrl : "en");
   }
 
   ngOnInit(): void {
     this.startAhoyTracking();
+    if (this.stateService.state.kioskMode) {
+      this.idleTime();
+    }
+  }
+
+  idleTime() {
+    let t;
+
+    const resetView = () => {
+      this.mapService.resetViewListener.next(true);
+    };
+
+    const resetTimer = () => {
+      clearTimeout(t);
+      t = setTimeout(resetView, 1 * 60000); // 1 minute
+    };
+
+    window.onload = resetTimer;
+    window.onmousemove = resetTimer;
+    window.onmousedown = resetTimer; // catches touchscreen presses as well
+    window.ontouchstart = resetTimer; // catches touchscreen swipes as well
+    window.ontouchmove = resetTimer; // required by some devices
+    window.onclick = resetTimer; // catches touchpad clicks as well
+    window.onkeydown = resetTimer;
+    window.addEventListener("scroll", resetTimer, true); // improved; see comments
   }
 
   startAhoyTracking() {
@@ -40,25 +74,25 @@ export class AppComponent implements OnInit {
       const options = {
         excludes: {
           canvas: true,
-          webgl: true
-        }
+          webgl: true,
+        },
       };
       Fingerprint2.get(options, (fingerprint) => {
         this.fingerprint = fingerprint;
         ahoy.configure({
-          urlPrefix: '',
+          urlPrefix: "",
           visitsUrl: `${environment.ahoyUrl}/ahoy/visits`,
           eventsUrl: `${environment.ahoyUrl}/ahoy/events`,
           page: null,
-          platform: 'Web',
+          platform: "Web",
           useBeacon: true,
           startOnReady: true,
           trackVisits: true,
           cookies: true,
           cookieDomain: null,
-          headers: {'Authorization': `Bearer ${Settings.token}`},
-          visitParams: {fingerprint: fingerprint},
-          withCredentials: false
+          headers: { Authorization: `Bearer ${Settings.token}` },
+          visitParams: { fingerprint: fingerprint },
+          withCredentials: false,
         });
         ahoy.trackAll();
       });

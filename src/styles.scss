@@ -1,16 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 // @import "~@ng-select/ng-select/themes/material.theme.css";
 @import "~@ng-select/ng-select/themes/default.theme.css";
-@import '~@angular/material/theming';
-@import 'styles/variables';
+@import "~@angular/material/theming";
+@import "styles/variables";
 
 // always include only once per project
 @include mat-core();
 
 // import our custom theme
-@import 'themes/default-theme.scss';
-@import 'themes/custom-theme.scss';
-@import 'themes/black-theme.scss';
+@import "themes/default-theme.scss";
+@import "themes/custom-theme.scss";
+@import "themes/black-theme.scss";
 
 // import custom componenet themes
 // unofficial naming convention to support nice ordering of files in IDE
@@ -42,10 +42,10 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  -webkit-transform:rotateZ(0);
-  -moz-transform:rotateZ(0);
-  -o-transform:rotateZ(0);
-  transform:rotateZ(0);
+  -webkit-transform: rotateZ(0);
+  -moz-transform: rotateZ(0);
+  -o-transform: rotateZ(0);
+  transform: rotateZ(0);
 }
 
 .theme-wrapper {
@@ -55,7 +55,19 @@
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100vh;
   button {
-    font-family: Roboto, "Helvetica Neue", sans-serif!important;
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
   }
+}
+
+html,
+body {
+  height: 100vh;
+}
+
+.floor-picker-dropdown {
+  background: rgba(255,255,255,.25)!important;
+  padding: 0 .5rem;
+  min-height: 60px!important;
 }

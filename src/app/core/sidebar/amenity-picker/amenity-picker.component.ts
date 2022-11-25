@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from "rxjs";
 import { AmenityToggleModel } from '../../amenity-toggle.model';
 import { SidebarService } from '../sidebar.service';
 
@@ -7,7 +8,7 @@ import { SidebarService } from '../sidebar.service';
   templateUrl: './amenity-picker.component.html',
   styleUrls: ['./amenity-picker.component.scss']
 })
-export class AmenityPickerComponent implements OnInit {
+export class AmenityPickerComponent implements OnInit, OnDestroy {
   sidebarOpened = true;
   data: AmenityToggleModel[] = [{
     title: 'Toilet',
@@ -35,25 +36,36 @@ export class AmenityPickerComponent implements OnInit {
     id: '44010f6f-9963-4433-ad86-40b89b829c41:2cd016a5-8703-417c-af07-d49aef074ad3',
     active: true
   }];
+  private subs: Subscription[] = [];
 
   constructor(
     private sidebarService: SidebarService
-  ) {}
+  ) {
+    this.subs.push(
+      this.sidebarService.getAmenityToggleListener().subscribe((res) => {
+        if (res) {
+          // handle active toggling
+          const item = this.data.find((i) => i.id === res.amenityId);
+          if (item) {
+            this.data = this.data.map(i => {
+              i.active = item.active && !this.sidebarService.filteredAmenity ? true : item.id === i.id;
+              return i;
+            });
+          }
+        }
+      })
+    );
+  }
 
   ngOnInit() {
   }
 
   onFilterClick(item: AmenityToggleModel) {
-    // handle active toggling
-    for (const i of this.data) {
-      if (item.active && this.sidebarService.filteredAmenity === item.id) {
-        i.active = true;
-      } else {
-        i.active = item.id === i.id;
-      }
-    }
     // will do some job at sidebarService, two arguments are expected, category title (same as was defined in setAmenityCategory method) and amenity id
     this.sidebarService.onAmenityToggle('amenities', item.id);
   }
 
+  ngOnDestroy(): void {
+    this.subs.forEach((s) => s.unsubscribe());
+  }
 }
