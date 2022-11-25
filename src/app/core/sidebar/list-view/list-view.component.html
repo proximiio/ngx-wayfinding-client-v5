@@ -1,6 +1,6 @@
 <div class="container">
   <div class="content">
-    <h3 class="title">{{ sidebarService.activeListItem?.title }}</h3>
+    <h3 class="title">{{ sidebarService.activeListItem?.title | translate }}</h3>
     <button (click)="onClose()" class="close">
       <fa-icon [icon]="['fal', 'times']"></fa-icon>
     </button>

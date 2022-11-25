@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
+import { TranslateService } from "@ngx-translate/core";
 import { StateService } from "../../state.service";
 import { SidebarService } from "../sidebar.service";
 
@@ -10,12 +11,15 @@ import { SidebarService } from "../sidebar.service";
 })
 export class ListViewComponent implements OnInit, OnDestroy {
   data;
+  currentLanguage: string;
   private subs: Subscription[] = [];
 
   constructor(
     public sidebarService: SidebarService,
-    private stateService: StateService
+    private stateService: StateService,
+    private translateService: TranslateService
   ) {
+    this.currentLanguage = this.translateService.currentLang;
     this.subs.push(
       this.sidebarService.getAmenityToggleListener().subscribe((res) => {
         if (res && res.category === "shop") {
@@ -28,6 +32,11 @@ export class ListViewComponent implements OnInit, OnDestroy {
             .sort((a, b) => (a.properties.title > b.properties.title ? 1 : -1))
             // .sort((a, b) => (a.properties.level > b.properties.level ? 1 : -1))
             .map((i) => {
+              i.properties.title =
+                i.properties.title_i18n &&
+                i.properties.title_i18n[this.currentLanguage]
+                  ? i.properties.title_i18n[this.currentLanguage]
+                  : i.properties.title;
               i.properties.floor_name = this.stateService.state.floors.find(
                 (floor) => floor.id === i.properties.floor_id
               ).name;
