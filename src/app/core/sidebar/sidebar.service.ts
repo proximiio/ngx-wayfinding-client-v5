@@ -3,6 +3,7 @@ import { Subject } from "rxjs";
 import { isPointWithinRadius } from "geolib";
 import { StateService } from "../state.service";
 import { AmenityToggleModel } from "../amenity-toggle.model";
+import Feature from "proximiio-js-library/lib/models/feature";
 
 @Injectable({ providedIn: "root" })
 export class SidebarService {
@@ -15,6 +16,7 @@ export class SidebarService {
   public accessibleOnlyToggleListener = new Subject<boolean>();
   public amenityToggleListener = new Subject<any>();
   public floorChangeListener = new Subject<string | any>();
+  public centerToFeatureListener = new Subject<Feature>();
   public activeListItem: AmenityToggleModel;
 
   constructor(private stateService: StateService) {}
@@ -37,6 +39,10 @@ export class SidebarService {
 
   getFloorChangeListener() {
     return this.floorChangeListener.asObservable();
+  }
+
+  getCenterToFeatureListener() {
+    return this.centerToFeatureListener.asObservable();
   }
 
   // pick up the start point and fire up listener to find route

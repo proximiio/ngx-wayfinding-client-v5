@@ -15,6 +15,7 @@ import {
 import { PaddingOptions } from "mapbox-gl";
 import { TranslateService } from "@ngx-translate/core";
 import { MapService } from "./map.service";
+import Feature from "proximiio-js-library/lib/models/feature";
 
 @Component({
   selector: "app-map",
@@ -141,6 +142,12 @@ export class MapComponent implements OnInit, OnDestroy {
       // reset view after idle time is reached, this is set in app.component.ts
       this.mapService.getResetViewListener().subscribe(() => {
         this.onResetView();
+      }),
+      // subscribe to feature center listener
+      this.sidebarService.getCenterToFeatureListener().subscribe((feature: Feature) => {
+        if (this.map) {
+          this.map.centerToFeature(feature.id);
+        }
       })
     );
     this.breakpointObserver

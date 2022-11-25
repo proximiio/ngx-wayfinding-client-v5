@@ -9,8 +9,11 @@ import { TranslateService } from "@ngx-translate/core";
 import { MapService } from "src/app/map/map.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { map, startWith, tap } from "rxjs/operators";
+import * as turf from "@turf/turf";
+import { FeatureCollection, Point } from "@turf/turf";
 
-const defaultDetails = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+const defaultDetails =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
 interface StepModel {
   bearingFromLastStep: number;
@@ -49,6 +52,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     startPoi: [this.stateService.state.startPoi, Validators.required],
   });
   startPoiId: string;
+  parkingAmenityId =
+    "44010f6f-9963-4433-ad86-40b89b829c41:adf1071e-81cb-4134-ae55-2e0e0005d2b7";
+  entrancePoiId =
+    "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952";
+  closestParkingFeature: Feature;
   private subs: Subscription[] = [];
 
   constructor(
@@ -77,14 +85,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
               : this.poi.properties.title;
           if (
             this.poi.properties.wayfinding_metadata &&
-            this.poi.properties.wayfinding_metadata['1']
+            this.poi.properties.wayfinding_metadata["1"]
           ) {
-            this.details = this.poi.properties.wayfinding_metadata['1'][
+            this.details = this.poi.properties.wayfinding_metadata["1"][
               this.currentLanguage
             ]
-              ? this.poi.properties.wayfinding_metadata['1'][this.currentLanguage]
-              : this.poi.properties.wayfinding_metadata['1'].en;
+              ? this.poi.properties.wayfinding_metadata["1"][
+                  this.currentLanguage
+                ]
+              : this.poi.properties.wayfinding_metadata["1"].en;
           }
+          this.getClosestParking();
         }
       }),
       this.mapService.getRouteFoundListener().subscribe((found) => {
@@ -101,15 +112,19 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.haveRouteDetails = true;
         }
       }),
-      this.mapService.getMapReadyListener().subscribe(ready => {
+      this.mapService.getMapReadyListener().subscribe((ready) => {
         if (ready) {
-          this.filteredOptions = this.startPoiForm.get("startPoi").valueChanges.pipe(
-            startWith(""),
-            map((value) =>
-              typeof value === "string" ? value : value.properties.title
-            ),
-            map((title) => (title ? this._filter(title) : this.options.slice()))
-          );
+          this.filteredOptions = this.startPoiForm
+            .get("startPoi")
+            .valueChanges.pipe(
+              startWith(""),
+              map((value) =>
+                typeof value === "string" ? value : value.properties.title
+              ),
+              map((title) =>
+                title ? this._filter(title) : this.options.slice()
+              )
+            );
           this.options = this.sidebarService.sortedPOIs;
           this.setStartPoi();
         }
@@ -210,7 +225,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   onStartPoiSelect(e) {
     this.startPoiId = e.option.value.id;
-    this.stateService.state = {...this.stateService.state, startPoiId: this.startPoiId};
+    this.stateService.state = {
+      ...this.stateService.state,
+      startPoiId: this.startPoiId,
+    };
     this.setStartPoi();
   }
 
@@ -219,9 +237,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
       const startPoi = this.sidebarService.sortedPOIs.find(
         (i) => i.id === this.stateService.state.startPoiId
       );
-      this.startPoiForm.get('startPoi').setValue(startPoi);
+      this.startPoiForm.get("startPoi").setValue(startPoi);
       this.stateService.state = { ...this.stateService.state, startPoi };
-      this.stateService.state.defaultLocation.coordinates = startPoi.coordinates;
+      this.stateService.state.defaultLocation.coordinates =
+        startPoi.coordinates;
       this.stateService.state.defaultLocation.level = startPoi.properties.level;
       this.sidebarService.startPointListener.next(startPoi);
     }
@@ -243,6 +262,42 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   onShowRoute() {
     this.mapService.showRouteListener.next();
+  }
+
+  getClosestParking() {
+    const featureCollection = {
+      type: "FeatureCollection",
+      features: this.stateService.state.allFeatures.features.filter(
+        (i) =>
+          i.properties.amenity === this.parkingAmenityId &&
+          i.geometry.type === "Point"
+      ),
+    } as FeatureCollection<Point, { [name: string]: any }>;
+    this.closestParkingFeature = turf.nearestPoint(
+      this.poi,
+      featureCollection
+    ) as Feature;
+    this.closestParkingFeature.properties.title =
+      this.closestParkingFeature.properties.title_i18n &&
+      this.closestParkingFeature.properties.title_i18n[this.currentLanguage]
+        ? this.closestParkingFeature.properties.title_i18n[this.currentLanguage]
+        : this.closestParkingFeature.properties.title;
+  }
+
+  onRouteFromParking() {
+    this.sidebarService.startPointListener.next(this.closestParkingFeature);
+  }
+
+  onRouteFromEntrance() {
+    this.sidebarService.startPointListener.next(
+      this.stateService.state.allFeatures.features.find(
+        (i) => i.id === this.entrancePoiId
+      )
+    );
+  }
+
+  onCenterToParking() {
+    this.sidebarService.centerToFeatureListener.next(this.closestParkingFeature);
   }
 
   ngOnDestroy() {
