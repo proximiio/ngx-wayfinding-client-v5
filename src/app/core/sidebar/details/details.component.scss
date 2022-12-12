@@ -51,6 +51,13 @@
 
     &.header {
       padding-bottom: 0;
+
+      .qr-code {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 5;
+      }
     }
 
     .title {
@@ -280,6 +287,10 @@
         }
       }
       .content {
+        .qr-code {
+          top: .5rem;
+          right: 3rem;
+        }
         .show-route {
           display: none;
         }
@@ -296,6 +307,9 @@
         }
         .content p {
           display: block;
+        }
+        .content .qr-code {
+          right: .5rem;
         }
       }
     }

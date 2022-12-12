@@ -57,6 +57,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   entrancePoiId =
     "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952";
   closestParkingFeature: Feature;
+  qrCodeUrl: string;
+  private destinationFromUrl = false;
   private subs: Subscription[] = [];
 
   constructor(
@@ -66,16 +68,23 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private fb: FormBuilder
   ) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const destinationParam = urlParams.get("destinationFeature");
+
     this.poi = this.sidebarService.selectedEndPoi;
     this.currentLanguage = this.translateService.currentLang;
+
+    if (destinationParam) {
+      this.destinationFromUrl = true;
+    }
   }
 
   ngOnInit() {
     this.subs.push(
       this.sidebarService.getEndPointListener().subscribe((poi) => {
-        this.haveRouteDetails = false;
+        this.haveRouteDetails = this.destinationFromUrl;
         this.details = defaultDetails;
-        this.steps = [];
+        this.steps = this.destinationFromUrl ? this.steps : [];
         if (poi) {
           this.poi = poi;
           this.poi.properties.title =
@@ -97,6 +106,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           }
           this.getClosestParking();
         }
+        this.destinationFromUrl = false;
       }),
       this.mapService.getRouteFoundListener().subscribe((found) => {
         if (found && this.stateService.state.textNavigation) {
@@ -113,6 +123,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             { delimiter: " and ", round: true, language: this.currentLanguage }
           );
           this.haveRouteDetails = true;
+          this.generateQrCode(this.sidebarService.selectedEndPoi, this.sidebarService.selectedStartPoi);
         }
       }),
       this.mapService.getMapReadyListener().subscribe((ready) => {
@@ -245,7 +256,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this.stateService.state.defaultLocation.coordinates =
         startPoi.coordinates;
       this.stateService.state.defaultLocation.level = startPoi.properties.level;
-      this.sidebarService.startPointListener.next(startPoi);
+      this.sidebarService.onSetStartPoi(startPoi);
     }
   }
 
@@ -288,11 +299,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   onRouteFromParking() {
-    this.sidebarService.startPointListener.next(this.closestParkingFeature);
+    this.sidebarService.onSetStartPoi(this.closestParkingFeature);
   }
 
   onRouteFromEntrance() {
-    this.sidebarService.startPointListener.next(
+    this.sidebarService.onSetStartPoi(
       this.stateService.state.allFeatures.features.find(
         (i) => i.id === this.entrancePoiId
       )
@@ -300,7 +311,22 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   onCenterToParking() {
-    this.sidebarService.centerToFeatureListener.next(this.closestParkingFeature);
+    this.sidebarService.centerToFeatureListener.next(
+      this.closestParkingFeature
+    );
+  }
+
+  generateQrCode(destination: Feature, start?: Feature) {
+    const url = new URL(window.location.href);
+    const urlParams = url.searchParams;
+    if (!start && destination) {
+      urlParams.set('destinationFeature', destination.properties.id)
+    }
+    if (destination && start) {
+      urlParams.set('destinationFeature', destination.properties.id)
+      urlParams.set('startFeature', start.properties.id)
+    }
+    this.qrCodeUrl = url.href;
   }
 
   ngOnDestroy() {

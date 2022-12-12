@@ -29,13 +29,22 @@
     <h4 class="level">
       {{ poi.properties.level + 1 | ordinal }} {{ floor | translate }}
     </h4>
+    <div class="qr-code" *ngIf="haveRouteDetails">
+      <qrcode
+        [qrdata]="qrCodeUrl"
+        [width]="100"
+        [errorCorrectionLevel]="'M'"
+        [allowEmptyString]="true"
+      ></qrcode>
+    </div>
   </div>
   <div
     class="content"
     [ngClass]="{ accessibleOnly: stateService.state.accessibleRoute }"
   >
     <p *ngIf="details">
-      {{ details | slice: 0:limit }} {{ details.length > limit ? "..." : "" }}
+      {{ details | slice : 0 : limit }}
+      {{ details.length > limit ? "..." : "" }}
       <a
         *ngIf="details.length > limit"
         href="javascript:;"
@@ -54,7 +63,7 @@
 
     <p *ngIf="haveRouteDetails">
       <strong>{{ "distance" | translate }}</strong
-      >: {{ distanceInMeters | number: "1.0-0" }}m /
+      >: {{ distanceInMeters | number : "1.0-0" }}m /
       {{ distanceInMinutes }}
     </p>
 
@@ -125,11 +134,13 @@
     </p>
     <div class="buttons">
       <button type="button" (click)="onRouteFromParking()">
-        <img src="https://img.icons8.com/ios-filled/50/ffffff/people-in-car.png"/>
+        <img
+          src="https://img.icons8.com/ios-filled/50/ffffff/people-in-car.png"
+        />
         Route from parking
       </button>
       <button type="button" (click)="onRouteFromEntrance()">
-        <img src="https://img.icons8.com/ios/50/ffffff/walking--v1.png"/>
+        <img src="https://img.icons8.com/ios/50/ffffff/walking--v1.png" />
         Route from entrance
       </button>
     </div>
