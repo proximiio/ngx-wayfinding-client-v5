@@ -30,6 +30,7 @@
     "@turf/turf": "^6.3.0",
     "ahoy.js": "^0.3.8",
     "angular-resize-event": "^2.1.0",
+    "angularx-qrcode": "^11.0.0",
     "deep-diff": "^1.0.2",
     "fingerprintjs2": "^2.1.2",
     "geolib": "^3.3.1",
