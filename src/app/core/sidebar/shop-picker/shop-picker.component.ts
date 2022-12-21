@@ -12,10 +12,40 @@ export class ShopPickerComponent implements OnInit, OnDestroy {
   sidebarOpened = true;
   data: AmenityToggleModel[] = [
     {
-      title: "cafes", // category title
-      icon: ["fal", "coffee"], // category fontAwesome icon, please add in fontawesome.module.ts in case it's missing
-      id: "another-amenity-id", // amenity id, must be the same as defined in setAmenityCategory method
-      active: true, // set category as active
+      title: "line-store",
+      iconImage: "assets/images/icons8-shopping-bag.svg",
+      id: "75698d35-0918-4a2b-a8ab-77b93a618e61:ab9f7580-06fa-4f0f-bb63-7e8206238acc",
+      active: true,
+    },
+    {
+      title: "anchor-store",
+      iconImage: "assets/images/icons8-star.svg",
+      id: "75698d35-0918-4a2b-a8ab-77b93a618e61:2d4df5f8-0cc5-442d-a346-411f5ae75bc6",
+      active: true,
+    },
+    {
+      title: "cafe",
+      iconImage: "assets/images/icons8-coffee-beans.svg",
+      id: "75698d35-0918-4a2b-a8ab-77b93a618e61:50f207f0-8346-4125-9470-358023fbe5c5",
+      active: true,
+    },
+    {
+      title: "fast-food",
+      iconImage: "assets/images/icons8-hamburger.svg",
+      id: "75698d35-0918-4a2b-a8ab-77b93a618e61:5c1229eb-4125-4bf5-a005-8c6851d51787",
+      active: true,
+    },
+    {
+      title: "restaurant",
+      iconImage: "assets/images/icons8-tableware.svg",
+      id: "75698d35-0918-4a2b-a8ab-77b93a618e61:53c8a23f-04c7-4ece-8f52-10c30a6f0167",
+      active: true,
+    },
+    {
+      title: "entertainment",
+      iconImage: "assets/images/icons8-smiling.svg",
+      id: "75698d35-0918-4a2b-a8ab-77b93a618e61:1b20689d-8db3-41bf-b42e-6a4c69a06c71",
+      active: true,
     },
   ];
   private subs: Subscription[] = [];

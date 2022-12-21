@@ -28,7 +28,7 @@
   margin-bottom: 1rem;
   position: absolute;
   left: 0;
-  top: 310px;
+  top: 340px;
   transition: all 0.25s linear;
   min-height: 143px;
   z-index: 2;
@@ -51,6 +51,18 @@
     font-size: 16px;
     line-height: 35px;
     color: white;
+  }
+}
+
+.brand {
+  position: fixed;
+  top: 0;
+  right: 40px;
+  width: 320px;
+  z-index: 1;
+
+  img {
+    width: 100%;
   }
 }
 
@@ -98,10 +110,17 @@
     app-floor-picker:not(.open) {
       display: none;
     }
+    .brand {
+      top: 188px;
+      right: calc(50% - 155px);
+    }
     &:not(.open) {
       padding-bottom: 0;
       .menu-dropdown {
         top: 110px;
+      }
+      .brand {
+        top: 94px;
       }
     }
   }
@@ -133,4 +152,5 @@
   .menu-dropdown {
     display: flex;
   }
+
 }

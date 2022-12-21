@@ -144,11 +144,13 @@ export class MapComponent implements OnInit, OnDestroy {
         this.onResetView();
       }),
       // subscribe to feature center listener
-      this.sidebarService.getCenterToFeatureListener().subscribe((feature: Feature) => {
-        if (this.map) {
-          this.map.centerToFeature(feature.id);
-        }
-      })
+      this.sidebarService
+        .getCenterToFeatureListener()
+        .subscribe((feature: Feature) => {
+          if (this.map) {
+            this.map.centerToFeature(feature.id);
+          }
+        })
     );
     this.breakpointObserver
       .observe([Breakpoints.XSmall])
@@ -174,10 +176,13 @@ export class MapComponent implements OnInit, OnDestroy {
           pitch: this.stateService.state.options.pitch,
           bearing: this.stateService.state.options.bearing,
         },
-        defaultPlaceId: "place-id", // if you have more than 1 place in your account, it's a good idea to define defaultPlaceId for the map, otherwise the first one will be picked up
+        defaultPlaceId: "e905bda5-4900-48f5-a6b0-d8e39c05050f", // if you have more than 1 place in your account, it's a good idea to define defaultPlaceId for the map, otherwise the first one will be picked up
         isKiosk: this.stateService.state.kioskMode, // if enabled starting point for routing will be based on values defined in kioskSettings, if disabled findRoute methods will expect start point to be send.
         kioskSettings: {
-          coordinates: this.stateService.state.defaultLocation.coordinates as [number, number],
+          coordinates: this.stateService.state.defaultLocation.coordinates as [
+            number,
+            number
+          ],
           level: this.stateService.state.defaultLocation.level,
         },
         fitBoundsPadding: this.mapPadding, // setting the padding option to use for zooming into the bounds when route is drawn,
@@ -191,6 +196,16 @@ export class MapComponent implements OnInit, OnDestroy {
         // },
         showLevelDirectionIcon: true, // if enabled arrow icon will be shown at the levelchanger indicating direction of level change along the found route
         animatedRoute: true,
+        initPolygons: true,
+        polygonsOptions: {
+          defaultPolygonColor: "#dbd7e8", // optional, default: '#dbd7e8', default color of the polygons
+          hoverPolygonColor: "#202020", // optional, default: '#a58dfa', hover color of the polygons
+          selectedPolygonColor: "#da291c", // optional, default: '#6945ed', selected color of the polygons
+          defaultPolygonHeight: 1.5, // optional, default: 3, default polygon height in meters
+          hoverPolygonHeight: 3, // optional, default: 3, hover polygon height in meters
+          selectedPolygonHeight: 4, // optional, default: 3, selected polygon height in meters
+          removeOriginalPolygonsLayer: true
+        },
       });
 
       // subscribing to map ready listener
@@ -210,17 +225,25 @@ export class MapComponent implements OnInit, OnDestroy {
           this.map.getMapboxInstance().setMaxBounds(this.kiosk.bounds);
         }
 
-        /*
-          // set amenity category group 'shop', those have to be set in shop-picker component afterwards
-          this.map.setAmenitiesCategory('shop', [
-            'amenity-id'
-          ]);
+        // set amenity category group 'shop', those have to be set in shop-picker component afterwards
+        this.map.setAmenitiesCategory("shop", [
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:ab9f7580-06fa-4f0f-bb63-7e8206238acc",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:2d4df5f8-0cc5-442d-a346-411f5ae75bc6",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:50f207f0-8346-4125-9470-358023fbe5c5",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:5c1229eb-4125-4bf5-a005-8c6851d51787",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:53c8a23f-04c7-4ece-8f52-10c30a6f0167",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:1b20689d-8db3-41bf-b42e-6a4c69a06c71",
+        ]);
 
-          // set amenity category group 'amenities', those have to be set in amenity-picker component afterwards
-          this.map.setAmenitiesCategory('amenities', [
-            'another-amenity-id'
-          ]);
-          */
+        // set amenity category group 'amenities', those have to be set in amenity-picker component afterwards
+        this.map.setAmenitiesCategory("amenities", [
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:2a5b339e-30da-4186-9749-06906731b8c9",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:3574e57c-1ecf-47d5-b8f3-b9de1c39cf1b",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:8001844d-c059-4644-9275-6b3e66e8dd3c",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:9c925821-744a-41c4-92cb-0342ab4c2ef9",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:e835e573-36a6-47e2-9687-4ac05c6cd717",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:e284a98b-f0b8-4bdc-9945-04219d3ef857",
+        ]);
       });
 
       // when route will be found, write turn by turn navigation response into state service so it will be accessible from details component
@@ -247,7 +270,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
 
       // set destination point for routing based on click event and cancel previous route if generated
-      this.map.getPoiClickListener().subscribe((poi) => {
+      this.map.getPolygonClickListener().subscribe((poi) => {
         if (this.map.state.textNavigation) {
           this.map.cancelRoute();
         }
@@ -293,7 +316,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
       // centerize map
       this.map.getMapboxInstance().flyTo({
-        center: startPoi.coordinates,
+        center: startPoi.geometry.coordinates,
         bearing: this.stateService.state.options.bearing,
         pitch: this.stateService.state.options.pitch,
         zoom: this.stateService.state.options.zoom,

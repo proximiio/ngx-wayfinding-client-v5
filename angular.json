@@ -26,7 +26,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": false,
-            "baseHref": "/wayfinding/",
+            "baseHref": "/moe/",
             "assets": [
               "src/favicon.ico",
               "src/assets"

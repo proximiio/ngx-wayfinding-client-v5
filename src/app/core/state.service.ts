@@ -33,7 +33,7 @@ export interface State {
   };
   readonly noPlaces: boolean;
   defaultLocation: {
-    coordinates: [number, number] | any[],
+    coordinates: [number, number] | any[];
     level: number;
   };
   readonly textNavigation: any;
@@ -64,7 +64,7 @@ export class StateService {
       bearing: 10,
     },
     defaultLocation: {
-      coordinates: [51.48091652702158, 25.336680584406395], // longitude, latitude
+      coordinates: [55.20090240716519, 25.11959496138134], // longitude, latitude
       level: 0,
     },
     textNavigation: null,
@@ -97,7 +97,7 @@ export class StateService {
       },
     ],
     startPoiId:
-      "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952", // default start point for routes
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:52c53790-2acf-4271-8a32-4b1c99b3227a", // default start point for routes
     startPoi: null,
   };
 }

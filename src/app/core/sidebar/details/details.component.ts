@@ -53,9 +53,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
   });
   startPoiId: string;
   parkingAmenityId =
-    "44010f6f-9963-4433-ad86-40b89b829c41:adf1071e-81cb-4134-ae55-2e0e0005d2b7";
+    "75698d35-0918-4a2b-a8ab-77b93a618e61:21a6d59b-fe0d-46ff-890e-477577d592f7";
   entrancePoiId =
-    "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952";
+    "75698d35-0918-4a2b-a8ab-77b93a618e61:52c53790-2acf-4271-8a32-4b1c99b3227a";
   closestParkingFeature: Feature;
   qrCodeUrl: string;
   private destinationFromUrl = false;

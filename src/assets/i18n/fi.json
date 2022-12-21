@@ -25,5 +25,17 @@
   "toilet": "Toilet",
   "floor": "Floor",
   "shops": "Shops & Restaurants",
-  "cafes": "Cafés"
+  "cafes": "Cafés",
+  "line-store": "Line store",
+  "anchor-store": "Anchor store",
+  "cafe": "Cafe",
+  "fast-food": "Fast food",
+  "restaurant": "Restaurant",
+  "entertainment": "Entertainment",
+  "toilet-men": "Toilet men",
+  "toilet-woman": "Toilet woman",
+  "prayer-room": "Prayer room",
+  "atm": "ATM",
+  "taxi": "Taxi",
+  "metro": "Metro"
 }
