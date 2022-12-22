@@ -22,6 +22,7 @@ export class ListViewComponent implements OnInit, OnDestroy {
     this.currentLanguage = this.translateService.currentLang;
     this.subs.push(
       this.sidebarService.getAmenityToggleListener().subscribe((res) => {
+        console.log(res);
         if (res && res.category === "shop") {
           this.data = this.stateService.state.allFeatures.features
             .filter(
@@ -39,7 +40,7 @@ export class ListViewComponent implements OnInit, OnDestroy {
                   : i.properties.title;
               i.properties.floor_name = this.stateService.state.floors.find(
                 (floor) => floor.id === i.properties.floor_id
-              ).name;
+              )?.name;
               return i;
             });
         }
