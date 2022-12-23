@@ -12,7 +12,7 @@ export interface KioskModel {
   level: number;
   pitch: number;
   bearing: number;
-  bounds: [[number, number], [number, number]];
+  bounds?: [[number, number], [number, number]];
 }
 
 export interface State {
@@ -72,29 +72,13 @@ export class StateService {
     kioskMode: false,
     kiosks: [
       {
-        name: "kiosk1",
-        latitude: 25.33766469,
-        longitude: 51.4814541,
+        name: "kiosk",
+        latitude: 25.11839772802756,
+        longitude: 55.20227480783245,
         level: 0,
-        pitch: 0,
-        bearing: 179.2,
-        bounds: [
-          [51.478472777, 25.336273415],
-          [51.482695283, 25.338782543],
-        ],
-      },
-      {
-        name: "kiosk2",
-        latitude: 25.33687709,
-        longitude: 51.4814541,
-        level: 2,
-        pitch: 0,
-        bearing: -91.2,
-        bounds: [
-          [51.479646637, 25.335341258],
-          [51.482528207, 25.339278794],
-        ],
-      },
+        pitch: 40,
+        bearing: 10
+      }
     ],
     startPoiId:
       "75698d35-0918-4a2b-a8ab-77b93a618e61:52c53790-2acf-4271-8a32-4b1c99b3227a", // default start point for routes
