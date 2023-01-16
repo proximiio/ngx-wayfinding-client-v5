@@ -264,7 +264,6 @@ export class MapComponent implements OnInit, OnDestroy {
                   f.properties.id === this.destinationParam ||
                   f.properties.title === this.destinationParam)
             );
-            console.log(destinationFeature);
           this.sidebarService.onSetEndPoi(destinationFeature);
           this.map.handlePolygonSelection(destinationFeature);
         }

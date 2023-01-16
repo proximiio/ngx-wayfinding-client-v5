@@ -61,8 +61,8 @@
       ></a>
     </p>
 
-    <p *ngIf="poi.properties.metadata?.url">
-      Link: <a [href]="poi.properties.metadata.url" target="_blank" style="display: inline">{{ poi.properties.metadata.url }}</a>
+    <p *ngIf="linkUrl">
+      Link: <a [href]="linkUrl" target="_blank" style="display: inline">{{ poi.properties.metadata.url }}</a>
     </p>
 
     <p *ngIf="haveRouteDetails">

@@ -58,6 +58,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     "75698d35-0918-4a2b-a8ab-77b93a618e61:52c53790-2acf-4271-8a32-4b1c99b3227a";
   closestParkingFeature: Feature;
   qrCodeUrl: string;
+  linkUrl: string;
   private destinationFromUrl = false;
   private subs: Subscription[] = [];
 
@@ -84,6 +85,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this.sidebarService.getEndPointListener().subscribe((poi) => {
         // this.haveRouteDetails = this.destinationFromUrl;
         this.details = defaultDetails;
+        this.linkUrl = null;
         // this.steps = this.destinationFromUrl ? this.steps : [];
         if (poi) {
           this.poi = poi;
@@ -105,6 +107,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               : this.poi.properties.description_i18n.en;
           }
           this.getClosestParking();
+          this.getUrl();
         }
         this.destinationFromUrl = false;
       }),
@@ -330,6 +333,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
       urlParams.set("startFeature", start.properties.id);
     }
     this.qrCodeUrl = url.href;
+  }
+
+  getUrl() {
+    const url = this.poi.properties.metadata.url;
+    if (url) {
+      let protocol = url.startsWith("http://") ? 1 : 0;
+      if (protocol === 0) protocol = url.startsWith("https://") ? 2 : 0;
+      this.linkUrl = protocol === 0 ? `http://${url}` : url;
+    }
   }
 
   ngOnDestroy() {
