@@ -35,6 +35,8 @@ export class MapComponent implements OnInit, OnDestroy {
   private startPoiId: string;
   private endPoi;
   private kiosk: KioskModel;
+  private destinationParam: string;
+  private placeParam: string;
   private subs: Subscription[] = [];
 
   constructor(
@@ -46,10 +48,11 @@ export class MapComponent implements OnInit, OnDestroy {
     private translateService: TranslateService
   ) {
     const urlParams = new URLSearchParams(window.location.search);
-    const destinationParam = urlParams.get("destinationFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
+    this.destinationParam = urlParams.get("destinationFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
+    this.placeParam = urlParams.get("defaultPlace");
 
     // if there is a destination defined in url params, we need to handle poi selection to show details component
-    if (destinationParam) {
+    if (this.destinationParam) {
       this.destinationFromUrl = true;
     }
 
@@ -204,7 +207,7 @@ export class MapComponent implements OnInit, OnDestroy {
           defaultPolygonHeight: 1.5, // optional, default: 3, default polygon height in meters
           hoverPolygonHeight: 3, // optional, default: 3, hover polygon height in meters
           selectedPolygonHeight: 4, // optional, default: 3, selected polygon height in meters
-          removeOriginalPolygonsLayer: true
+          removeOriginalPolygonsLayer: true,
         },
       });
 
@@ -212,6 +215,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.map.getMapReadyListener().subscribe((ready) => {
         this.mapService.mapReadyListener.next(true);
         this.mapLoaded = true;
+        this.mapService.mapReady = true;
         // this.onMyLocation(); // center to default location, if needed comment this out
 
         // setting mapbox navigationControl buttons
@@ -244,6 +248,26 @@ export class MapComponent implements OnInit, OnDestroy {
           "75698d35-0918-4a2b-a8ab-77b93a618e61:e835e573-36a6-47e2-9687-4ac05c6cd717",
           "75698d35-0918-4a2b-a8ab-77b93a618e61:e284a98b-f0b8-4bdc-9945-04219d3ef857",
         ]);
+
+        if (this.destinationFromUrl) {
+          const defaultPlace = this.placeParam
+            ? this.stateService.state.places.find(
+                (p) => p.id === this.placeParam || p.name === this.placeParam
+              )
+            : this.stateService.state.place;
+          const destinationFeature =
+            this.stateService.state.allFeatures.features.find(
+              (f) =>
+                f.properties.title &&
+                f.properties.place_id === defaultPlace.id &&
+                (f.id === this.destinationParam ||
+                  f.properties.id === this.destinationParam ||
+                  f.properties.title === this.destinationParam)
+            );
+            console.log(destinationFeature);
+          this.sidebarService.onSetEndPoi(destinationFeature);
+          this.map.handlePolygonSelection(destinationFeature);
+        }
       });
 
       // when route will be found, write turn by turn navigation response into state service so it will be accessible from details component

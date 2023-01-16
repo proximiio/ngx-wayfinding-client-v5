@@ -1,10 +1,14 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { SidebarService } from '../sidebar.service';
+import { Component, ElementRef, OnInit } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
+import { MapService } from "src/app/map/map.service";
+import { SidebarService } from "../sidebar.service";
+
+let currentLanguage = 'en';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  selector: "app-search",
+  templateUrl: "./search.component.html",
+  styleUrls: ["./search.component.scss"],
 })
 export class SearchComponent implements OnInit {
   selectedPoi;
@@ -12,19 +16,32 @@ export class SearchComponent implements OnInit {
   searchOpen = false;
   optionsOpen = false;
 
-  constructor(public sidebarService: SidebarService, private elRef: ElementRef) {}
+  constructor(
+    public sidebarService: SidebarService,
+    private elRef: ElementRef,
+    public mapService: MapService,
+    private translateService: TranslateService,
+  ) {
+    currentLanguage = this.translateService.currentLang;
+  }
 
   ngOnInit() {
-    const input = this.elRef.nativeElement.children[0].children[2].children[0].children[0].children[1].children[0];
-    const placeholder = this.elRef.nativeElement.children[0].children[2].children[0].children[0].children[0];
-    placeholder.id = 'inputLabel';
-    input.title = 'Search';
-    input.setAttribute('aria-labelledby', 'inputLabel');
+    const input =
+      this.elRef.nativeElement.children[0].children[2].children[0].children[0]
+        .children[1].children[0];
+    const placeholder =
+      this.elRef.nativeElement.children[0].children[2].children[0].children[0]
+        .children[0];
+    placeholder.id = "inputLabel";
+    input.title = "Search";
+    input.setAttribute("aria-labelledby", "inputLabel");
   }
 
   onSearchOpen() {
-    this.pois = this.sidebarService.sortedPOIs;
-    this.searchOpen = true;
+    if (this.mapService.mapReady) {
+      this.pois = this.sidebarService.sortedPOIs;
+      this.searchOpen = true;
+    }
   }
 
   onSearch(result) {
@@ -39,6 +56,21 @@ export class SearchComponent implements OnInit {
       this.optionsOpen = false;
       select.blur();
     });
+  }
+
+  customSearchFn(term: string, item) {
+    const details = item.properties.description_i18n && item.properties.description_i18n[
+      currentLanguage
+    ]
+      ? item.properties.description_i18n[
+          currentLanguage
+        ]
+      : item.properties.description_i18n?.en;
+    term = term.toLowerCase();
+    return (
+      item.properties.title.toLowerCase().indexOf(term) > -1 ||
+      details?.toLowerCase().indexOf(term) > -1
+    );
   }
 
   onClose(select) {

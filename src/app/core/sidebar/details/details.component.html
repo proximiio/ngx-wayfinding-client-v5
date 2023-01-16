@@ -27,7 +27,7 @@
     <h2 class="title">{{ poi.properties.title }}</h2>
     <h4 class="open-hours">{{ getOpenHours() }}</h4>
     <h4 class="level">
-      {{ poi.properties.level + 1 | ordinal }} {{ floor | translate }}
+      {{ poi.properties._dynamic.floor?.name ? poi.properties._dynamic.floor.name : poi.properties.level + 1 | ordinal }}
     </h4>
     <div class="qr-code" *ngIf="haveRouteDetails">
       <qrcode
@@ -59,6 +59,10 @@
         >{{ "showLess" | translate }}
         <fa-icon [icon]="['fal', 'angle-up']"></fa-icon
       ></a>
+    </p>
+
+    <p *ngIf="poi.properties.metadata?.url">
+      Link: <a [href]="poi.properties.metadata.url" target="_blank" style="display: inline">{{ poi.properties.metadata.url }}</a>
     </p>
 
     <p *ngIf="haveRouteDetails">
