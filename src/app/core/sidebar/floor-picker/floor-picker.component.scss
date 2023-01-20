@@ -1,186 +1,48 @@
-@import '../../../../styles/variables';
+@import "../../../../styles/variables";
 
 .container {
-  padding: 1rem 2rem;
-  padding-right: 4rem;
-  background-color: rgba(255 255 255 / 90%);
-  box-shadow: 0 0 15px rgb(0 0 0 / 10%);
-  border-radius: 0 10px 10px 0;
-  margin-bottom: 1rem;
   position: absolute;
-  left: 0;
-  top: 110px;
-  transition: all .25s linear;
-  min-height: 143px;
+  left: calc(50% - 140px);
+  top: 85px;
   z-index: 2;
-  width: 355px;
-
-  .title {
-    position: relative;
-    color: $default-color;
-    transition: all .25s linear;
-  }
-
-  &:not(.open) {
-    left: -400px;
-  }
-
-  .selector,
-  .picker {
-    button {
-      border: 0;
-      color: white;
-      padding: 1rem;
-      cursor: pointer;
-      transition: all .25s linear;
-      margin-right: 10px;
-      >span {
-        vertical-align: super;
-        font-weight: 500;
-      }
-    }
-  }
-
-  .selector {
-    margin-bottom: 15px;
-    button {
-      font-size: 32px;
-      font-weight: bold;
-      background-color: #444;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-      border-radius: 15px;
-      >span {
-        font-size: 20px;
-      }
-
-      &:hover {
-        background-color: darken(#444, 10%);
-      }
-      &.current-floor {
-        background-color: $default-color;
-        fa-icon {
-          margin-left: 20px;
-        }
-        &:hover {
-          background-color: darken($default-color, 3%);
-        }
-      }
-    }
-    .floor-toggle {
-      display: inline-block;
-      float: right;
-    }
-  }
 
   .picker {
+    display: flex;
+    justify-content: center;
+    width: 280px;
     button {
-      padding: .5rem 1rem;
+      padding: 0.5rem 1rem;
       font-size: 22px;
       font-weight: bold;
       background-color: $default-color;
       border-radius: 10px;
+      border: 0;
+      color: white;
+      cursor: pointer;
+      transition: all 0.25s linear;
+      margin-right: 5px;
 
       &.active {
-        background-color: lighten($default-color, 5%);
+        background-color: #000;
       }
-      >span {
-        font-size: 14px;
-      }
-
       &:hover:not(.active) {
-        background-color: darken($default-color, 3%);
+        background-color: darken($default-color, 8%);
       }
-    }
-  }
-
-  .toggle {
-    position: absolute;
-    right: .5rem;
-    top: calc(50% - 20px);
-    font-size: 26px;
-    color: $default-color;
-    padding: .5rem;
-    cursor: pointer;
-
-    &:hover {
-      color: darken($default-color, 3%);
     }
   }
 }
 
 @media only screen and (max-width: 959.98px) {
   .container {
-    position: static;
-    background: none;
-    box-shadow: none;
-    border-radius: 0;
-    min-height: auto;
-    width: auto;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    width: 280px;
-    align-items: flex-end;
-
-    .title {
-      font-size: 14px;
-      margin: 0;
-      line-height: 40px;
-      flex: auto;
-      color: black;
-    }
-
-    .selector,
-    .picker {
-      button {
-        padding: 12px;
-        margin-right: 10px;
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
-
-    .selector {
-      margin-bottom: 0;
-      button {
-        font-size: 16px;
-        font-weight: bold;
-        padding-left: 10px;
-        padding-right: 10px;
-        border-radius: 4px;
-        min-width: 38px;
-        >span {
-          font-size: 10px;
-        }
-        &.current-floor {
-          cursor: auto;
-          &:hover {
-            background-color: $default-color;
-          }
-          fa-icon {
-            display: none;
-          }
-        }
-      }
-    }
+    top: 210px;
 
     .picker {
-      display: none;
       button {
         padding: 8px;
         font-size: 16px;
         font-weight: normal;
         border-radius: 5px;
-        >span {
-          font-size: 12px;
-        }
       }
-    }
-
-    .toggle {
-      display: none;
     }
   }
 }

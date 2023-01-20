@@ -22,7 +22,6 @@ export class ListViewComponent implements OnInit, OnDestroy {
     this.currentLanguage = this.translateService.currentLang;
     this.subs.push(
       this.sidebarService.getAmenityToggleListener().subscribe((res) => {
-        console.log(res);
         if (res && res.category === "shop") {
           this.data = this.stateService.state.allFeatures.features
             .filter(

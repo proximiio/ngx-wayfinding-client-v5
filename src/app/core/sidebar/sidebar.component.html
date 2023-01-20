@@ -1,33 +1,21 @@
 <main class="container" [ngClass]="{ open: filtersOpened }">
   <div class="brand">
-    <img src="assets/images/MOE_logo_triangle.png" alt="Mall of Emirates">
+    <img src="assets/images/MOE_logo_triangle.png" alt="Mall of Emirates" />
   </div>
   <nav>
     <app-search></app-search>
 
-    <div class="menu-section" [hidden]="sidebarService.selectedEndPoi || sidebarService.filteredShop">
-      <app-floor-picker></app-floor-picker>
-    </div>
-    <div class="menu-dropdown">
-      <button mat-icon-button [matMenuTriggerFor]="floorMenu">
-        <span class="fa-layers fa-fw">
-          <fa-icon
-            [icon]="['fal', 'angle-up']"
-            transform="grow-12 up-7"
-          ></fa-icon>
-          <fa-icon
-            [icon]="['fal', 'angle-down']"
-            transform="grow-12 down-7"
-          ></fa-icon>
-        </span>
-      </button>
-      <mat-menu #floorMenu="matMenu" [classList]="'floor-picker-dropdown'">
-        <app-floor-picker></app-floor-picker>
-      </mat-menu>
+    <div class="menu-section">
+      <app-floor-picker [ngClass]="{ open: filtersOpened }"></app-floor-picker>
     </div>
 
     <div
-      [hidden]="sidebarService.selectedEndPoi || sidebarService.filteredShop"
+      [hidden]="
+        sidebarService.selectedEndPoi ||
+        sidebarService.filteredShop ||
+        sidebarService.showRoutePicker ||
+        sidebarService.showClosestAmenityPicker
+      "
       class="filters"
       [ngClass]="{ open: filtersOpened }"
     >
@@ -58,14 +46,28 @@
   </nav>
 
   <ng-container>
-    <nav [hidden]="!sidebarService.selectedEndPoi">
+    <nav [hidden]="!sidebarService.selectedEndPoi || sidebarService.showRoutePicker">
       <app-details></app-details>
     </nav>
   </ng-container>
 
   <ng-container>
-    <nav [hidden]="!sidebarService.filteredShop || sidebarService.selectedEndPoi">
+    <nav
+      [hidden]="!sidebarService.filteredShop || sidebarService.selectedEndPoi"
+    >
       <app-list-view></app-list-view>
+    </nav>
+  </ng-container>
+
+  <ng-container>
+    <nav [hidden]="!sidebarService.showClosestAmenityPicker">
+      <app-closest-amenity></app-closest-amenity>
+    </nav>
+  </ng-container>
+
+  <ng-container>
+    <nav [hidden]="!sidebarService.showRoutePicker">
+      <app-route-picker></app-route-picker>
     </nav>
   </ng-container>
 </main>

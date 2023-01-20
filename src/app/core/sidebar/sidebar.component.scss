@@ -14,7 +14,7 @@
       color: darken($default-color, 3%);
     }
   }
-  > .toggle {
+  nav > .toggle {
     display: none;
   }
 }
@@ -28,7 +28,7 @@
   margin-bottom: 1rem;
   position: absolute;
   left: 0;
-  top: 340px;
+  top: 110px;
   transition: all 0.25s linear;
   min-height: 143px;
   z-index: 2;
@@ -57,7 +57,7 @@
 .brand {
   position: fixed;
   top: 0;
-  right: 40px;
+  right: 80px;
   width: 320px;
   z-index: 1;
 
@@ -81,7 +81,7 @@
     background-color: hsla(0, 0%, 100%, 0.9);
     box-shadow: 0 0 15px rgb(0 0 0 / 10%);
 
-    .toggle {
+    nav > .toggle {
       display: block;
       top: auto;
       bottom: 0rem;
@@ -107,8 +107,10 @@
         background: $accent-color;
       }
     }
-    app-floor-picker:not(.open) {
-      display: none;
+    ::ng-deep app-floor-picker:not(.open) {
+      .container {
+        top: 105px;
+      }
     }
     .brand {
       display: none;
@@ -146,12 +148,4 @@
       display: none;
     }
   }
-
-  .menu-section {
-    display: none;
-  }
-  .menu-dropdown {
-    display: flex;
-  }
-
 }

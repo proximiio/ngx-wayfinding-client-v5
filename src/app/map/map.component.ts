@@ -132,9 +132,16 @@ export class MapComponent implements OnInit, OnDestroy {
           ) {
             // remove amenity filter if there is no value set for defined category
             this.map.removeAmenityFilter(res.amenityId, res.category);
+            if (res.category === "amenities" && this.stateService.state.kioskMode) {
+              this.map.cancelRoute();
+              this.onMyLocation();
+            }
           } else {
             // set amenity filter otherwise
             this.map.setAmenityFilter(res.amenityId, res.category);
+            if (res.category === "amenities" && this.stateService.state.kioskMode) {
+              this.map.findRouteToNearestFeature(res.amenityId);
+            }
           }
         }
       }),
@@ -153,7 +160,12 @@ export class MapComponent implements OnInit, OnDestroy {
           if (this.map) {
             this.map.centerToFeature(feature.id);
           }
-        })
+        }),
+      this.sidebarService.getRouteToClosestAmenityListener().subscribe(() => {
+        if (this.map) {
+          this.map.findRouteToNearestFeature(this.sidebarService.activeListItem.id, this.startPoiId);
+        }
+      })
     );
     this.breakpointObserver
       .observe([Breakpoints.XSmall])
@@ -208,6 +220,7 @@ export class MapComponent implements OnInit, OnDestroy {
           hoverPolygonHeight: 3, // optional, default: 3, hover polygon height in meters
           selectedPolygonHeight: 4, // optional, default: 3, selected polygon height in meters
           removeOriginalPolygonsLayer: true,
+          minZoom: 15
         },
       });
 

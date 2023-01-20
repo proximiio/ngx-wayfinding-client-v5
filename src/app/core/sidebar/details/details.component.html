@@ -27,7 +27,12 @@
     <h2 class="title">{{ poi.properties.title }}</h2>
     <h4 class="open-hours">{{ getOpenHours() }}</h4>
     <h4 class="level">
-      {{ poi.properties._dynamic.floor?.name ? poi.properties._dynamic.floor.name : poi.properties.level + 1 | ordinal }}
+      {{ "level" | translate }}:
+      {{
+        poi.properties._dynamic.floor?.name
+          ? poi.properties._dynamic.floor.name
+          : (poi.properties.level + 1 | ordinal)
+      }}
     </h4>
     <div class="qr-code" *ngIf="haveRouteDetails">
       <qrcode
@@ -62,7 +67,10 @@
     </p>
 
     <p *ngIf="linkUrl">
-      Link: <a [href]="linkUrl" target="_blank" style="display: inline">{{ poi.properties.metadata.url }}</a>
+      Link:
+      <a [href]="linkUrl" target="_blank" style="display: inline">{{
+        poi.properties.metadata.url
+      }}</a>
     </p>
 
     <p *ngIf="haveRouteDetails">
@@ -146,6 +154,10 @@
       <button type="button" (click)="onRouteFromEntrance()">
         <img src="https://img.icons8.com/ios/50/ffffff/walking--v1.png" />
         Route from entrance
+      </button>
+      <button type="button" (click)="onOtherRoute()">
+        <img src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/ffffff/external-route-interface-kiranshastry-lineal-kiranshastry.png"/>
+        Other Route
       </button>
     </div>
     <!--<form [formGroup]="startPoiForm">

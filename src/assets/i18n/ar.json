@@ -11,6 +11,13 @@
   "showAccessibleRoute": "إظهار الطريق الذي يمكن الوصول إليه",
   "noOpenHours": "لا توجد ساعات عمل متاحة",
   "ok": "موافق",
+  "kioskSettings": "Kiosk Settings",
+  "latitude": "Latitude",
+  "longitude": "Longitude",
+  "level": "Level",
+  "zoom": "Zoom",
+  "bearing": "Bearing",
+  "pitch": "Pitch",
   "cancel": "يلغي",
   "submit": "يُقدِّم",
   "enterValid": "الرجاء إدخال",
@@ -30,5 +37,8 @@
   "prayer-room": "Prayer room",
   "atm": "ATM",
   "taxi": "Taxi",
-  "metro": "Metro"
+  "metro": "Metro",
+  "showTheClosest": "Show the closest",
+  "startingPoint": "Starting point",
+  "destination": "Destination"
 }

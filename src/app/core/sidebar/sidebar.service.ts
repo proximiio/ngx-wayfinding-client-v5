@@ -9,6 +9,8 @@ import Feature from "proximiio-js-library/lib/models/feature";
 export class SidebarService {
   public selectedStartPoi;
   public selectedEndPoi;
+  public showRoutePicker = false;
+  public showClosestAmenityPicker = false;
   public filteredShop = null; // used to store value from shop-picker component via onAmenityToggle method
   public filteredAmenity = null; // used to store value from amenity-picker component via onAmenityToggle method
   public startPointListener = new Subject<any>();
@@ -17,6 +19,7 @@ export class SidebarService {
   public amenityToggleListener = new Subject<any>();
   public floorChangeListener = new Subject<string | any>();
   public centerToFeatureListener = new Subject<Feature>();
+  public routeToClosestAmenityListener = new Subject<any>();
   public activeListItem: AmenityToggleModel;
 
   constructor(private stateService: StateService) {}
@@ -43,6 +46,10 @@ export class SidebarService {
 
   getCenterToFeatureListener() {
     return this.centerToFeatureListener.asObservable();
+  }
+
+  getRouteToClosestAmenityListener() {
+    return this.routeToClosestAmenityListener.asObservable();
   }
 
   // pick up the start point and fire up listener to find route
@@ -77,6 +84,10 @@ export class SidebarService {
         this.filteredAmenity === amenityId ? null : amenityId;
     }
     this.amenityToggleListener.next({ category, amenityId });
+  }
+
+  onRouteToClosestAmenity() {
+    this.routeToClosestAmenityListener.next();
   }
 
   // return all pois from map features based on some radius of current place location

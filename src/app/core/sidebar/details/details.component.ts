@@ -316,6 +316,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  onOtherRoute() {
+    this.sidebarService.showRoutePicker = true;
+  }
+
   onCenterToParking() {
     this.sidebarService.centerToFeatureListener.next(
       this.closestParkingFeature
