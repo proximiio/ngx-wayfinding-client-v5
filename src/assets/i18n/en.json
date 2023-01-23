@@ -40,5 +40,6 @@
   "metro": "Metro",
   "showTheClosest": "Show the closest",
   "startingPoint": "Starting point",
-  "destination": "Destination"
+  "destination": "Destination",
+  "instructions": "Instructions"
 }

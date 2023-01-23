@@ -171,7 +171,7 @@ export class MapComponent implements OnInit, OnDestroy {
       .observe([Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
-          this.mapPadding = { top: 50, bottom: 300, left: 50, right: 50 };
+          this.mapPadding = { top: 0, bottom: 100, left: 0, right: 0 };
           if (this.map) this.map.setBoundsPadding(this.mapPadding);
         } else {
           this.mapPadding = { top: 250, bottom: 250, left: 450, right: 250 };

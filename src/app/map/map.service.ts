@@ -3,6 +3,7 @@ import { Subject } from "rxjs";
 
 @Injectable({providedIn: 'root'})
 export class MapService {
+  public showingRoute = false;
   public mapReady = false;
   public routeFoundListener = new Subject<boolean>();
   public showRouteListener = new Subject();

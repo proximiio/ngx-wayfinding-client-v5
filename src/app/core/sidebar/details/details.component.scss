@@ -49,6 +49,10 @@
     top: -20px;
     border-radius: 0 20px 0 0;
 
+    &.small-viewport-only {
+      display: none;
+    }
+
     &.header {
       padding-bottom: 0;
 
@@ -199,6 +203,19 @@
         }
       }
     }
+
+    &.small-viewport-only {
+      .accessible-toggle {
+        border: 2px solid $accent-color;
+        color: $accent-color;
+      }
+      &.accessibleOnly {
+        .accessible-toggle {
+          border: 2px solid $default-color;
+          color: $default-color;
+        }
+      }
+    }
   }
   .toggle {
     position: absolute;
@@ -275,25 +292,59 @@
     border-radius: 10px 10px 0 0;
     max-height: 100%;
 
-    &.haveRoute {
-      max-height: 35%;
-      .toggle {
-        display: block;
-        left: calc(50% - 18px);
+    .toggle {
+      display: block;
+      left: calc(50% - 18px);
+    }
+
+    .img-holder {
+      img {
+        height: 0;
       }
+    }
+
+    .content {
+      &.large-viewport-only {
+        display: none;
+      }
+      &.small-viewport-only {
+        display: block;
+      }
+      >p {
+        display: none;
+      }
+      .open-hours {
+        display: none;
+      }
+    }
+
+    &.open {
+      max-height: 100%;
       .img-holder {
         img {
-          height: 0;
+          height: auto;
         }
       }
       .content {
+        >p {
+          display: block;
+        }
+        .open-hours {
+          display: none;
+        }
+      }
+    }
+
+    &.haveRoute {
+      max-height: 220px;
+      .content {
+        .distance {
+          display: block;
+        }
         .qr-code {
           display: none;
         }
         .show-route {
-          display: none;
-        }
-        >p {
           display: none;
         }
       }
@@ -303,9 +354,6 @@
           img {
             height: auto;
           }
-        }
-        .content p {
-          display: block;
         }
         .content .qr-code {
           right: .5rem;
