@@ -25,6 +25,15 @@
   </div>
   <div class="content header">
     <h2 class="title">{{ poi.properties.title }}</h2>
+    <div class="qr-code" *ngIf="haveRouteDetails">
+      <qrcode
+        [qrdata]="qrCodeUrl"
+        [width]="120"
+        [errorCorrectionLevel]="'M'"
+        [allowEmptyString]="true"
+      ></qrcode>
+      <p>Scan QR code to open on your phone.</p>
+    </div>
     <h4 class="open-hours">{{ getOpenHours() }}</h4>
     <h4 class="level">
       {{ "level" | translate }}:
@@ -34,14 +43,6 @@
           : (poi.properties.level + 1 | ordinal)
       }}
     </h4>
-    <div class="qr-code" *ngIf="haveRouteDetails">
-      <qrcode
-        [qrdata]="qrCodeUrl"
-        [width]="100"
-        [errorCorrectionLevel]="'M'"
-        [allowEmptyString]="true"
-      ></qrcode>
-    </div>
   </div>
   <div
     class="content large-viewport-only"
