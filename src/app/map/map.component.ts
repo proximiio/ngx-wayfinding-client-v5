@@ -97,7 +97,7 @@ export class MapComponent implements OnInit, OnDestroy {
             // otherwise cancel route if it's rendered, remove highlight and return me to default location
             this.map.cancelRoute();
             this.map.setFeaturesHighlight([]);
-            this.onMyLocation();
+            // this.onMyLocation();
           }
         }
       }),
