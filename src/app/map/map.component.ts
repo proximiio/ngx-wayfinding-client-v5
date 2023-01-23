@@ -222,6 +222,7 @@ export class MapComponent implements OnInit, OnDestroy {
           removeOriginalPolygonsLayer: true,
           minZoom: 15
         },
+        blockFeatureClickWhileRouting: true
       });
 
       // subscribing to map ready listener
