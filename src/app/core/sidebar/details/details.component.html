@@ -25,6 +25,15 @@
   </div>
   <div class="content header">
     <h2 class="title">{{ poi.properties.title }}</h2>
+    <div class="qr-code" *ngIf="haveRouteDetails">
+      <qrcode
+        [qrdata]="qrCodeUrl"
+        [width]="120"
+        [errorCorrectionLevel]="'M'"
+        [allowEmptyString]="true"
+      ></qrcode>
+      <p>Scan QR code to open on your phone.</p>
+    </div>
     <h4 class="open-hours">{{ getOpenHours() }}</h4>
     <h4 class="level">
       {{ "level" | translate }}:
@@ -34,17 +43,9 @@
           : (poi.properties.level + 1 | ordinal)
       }}
     </h4>
-    <div class="qr-code" *ngIf="haveRouteDetails">
-      <qrcode
-        [qrdata]="qrCodeUrl"
-        [width]="100"
-        [errorCorrectionLevel]="'M'"
-        [allowEmptyString]="true"
-      ></qrcode>
-    </div>
   </div>
   <div
-    class="content"
+    class="content large-viewport-only"
     [ngClass]="{ accessibleOnly: stateService.state.accessibleRoute }"
   >
     <p *ngIf="details">
@@ -73,7 +74,7 @@
       }}</a>
     </p>
 
-    <p *ngIf="haveRouteDetails">
+    <p class="distance" *ngIf="haveRouteDetails">
       <strong>{{ "distance" | translate }}</strong
       >: {{ distanceInMeters | number : "1.0-0" }}m /
       {{ distanceInMinutes }}
@@ -135,6 +136,92 @@
       </mat-expansion-panel>
     </div>
   </div>
+
+  <div
+    class="content small-viewport-only"
+    [ngClass]="{ accessibleOnly: stateService.state.accessibleRoute }"
+  >
+    <p *ngIf="details">
+      {{ details | slice : 0 : limit }}
+      {{ details.length > limit ? "..." : "" }}
+      <a
+        *ngIf="details.length > limit"
+        href="javascript:;"
+        (click)="limit = details.length; showingMore = true"
+        >{{ "showMore" | translate }}
+        <fa-icon [icon]="['fal', 'angle-down']"></fa-icon
+      ></a>
+      <a
+        *ngIf="showingMore"
+        href="javascript:;"
+        (click)="limit = 200; showingMore = false"
+        >{{ "showLess" | translate }}
+        <fa-icon [icon]="['fal', 'angle-up']"></fa-icon
+      ></a>
+    </p>
+
+    <p *ngIf="linkUrl">
+      Link:
+      <a [href]="linkUrl" target="_blank" style="display: inline">{{
+        poi.properties.metadata.url
+      }}</a>
+    </p>
+
+    <button
+      (click)="onShowRoute()"
+      class="show-route"
+      *ngIf="stateService.state.kioskMode"
+    >
+      <fa-icon [icon]="['fal', 'walking']"></fa-icon>
+      {{ "takeMeThere" | translate }}
+    </button>
+
+    <button
+      (click)="toggleAccessibleRoute()"
+      class="accessible-toggle"
+      *ngIf="haveRouteDetails"
+    >
+      <fa-icon
+        [icon]="
+          stateService.state.accessibleRoute
+            ? ['fal', 'walking']
+            : ['fal', 'wheelchair']
+        "
+      ></fa-icon>
+      {{
+        (stateService.state.accessibleRoute
+          ? "showFastestRoute"
+          : "showAccessibleRoute"
+        ) | translate
+      }}
+    </button>
+
+    <p class="distance" *ngIf="haveRouteDetails">
+      <strong>{{ "distance" | translate }}</strong
+      >: {{ distanceInMeters | number : "1.0-0" }}m /
+      {{ distanceInMinutes }}
+    </p>
+
+    <div *ngIf="haveRouteDetails">
+      <p>
+        <strong>{{ "instructions" | translate }}:</strong>
+      </p>
+      <mat-expansion-panel [disabled]="true" [expanded]="true">
+        <mat-panel-description>
+          <mat-list>
+            <mat-list-item *ngFor="let step of steps">
+              <p matLine>
+                <fa-icon [icon]="step.directionIcon"></fa-icon>
+                <fa-icon [icon]="step.stepIcon"></fa-icon>
+              </p>
+              <p matLine>{{ step.description }}</p>
+            </mat-list-item>
+          </mat-list>
+        </mat-panel-description>
+      </mat-expansion-panel>
+    </div>
+  </div>
+
   <div class="start-box" *ngIf="!stateService.state.kioskMode">
     <p
       class="closest-parking"
@@ -156,7 +243,9 @@
         Route from entrance
       </button>
       <button type="button" (click)="onOtherRoute()">
-        <img src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/ffffff/external-route-interface-kiranshastry-lineal-kiranshastry.png"/>
+        <img
+          src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/ffffff/external-route-interface-kiranshastry-lineal-kiranshastry.png"
+        />
         Other Route
       </button>
     </div>

@@ -83,10 +83,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.push(
       this.sidebarService.getEndPointListener().subscribe((poi) => {
-        // this.haveRouteDetails = this.destinationFromUrl;
+        this.haveRouteDetails = this.stateService.state.kioskMode ? this.destinationFromUrl : false;
+        this.mapService.showingRoute = this.haveRouteDetails;
         this.details = defaultDetails;
         this.linkUrl = null;
-        // this.steps = this.destinationFromUrl ? this.steps : [];
+        this.steps = this.stateService.state.kioskMode && this.destinationFromUrl ? this.steps : [];
         if (poi) {
           this.poi = poi;
           this.poi.properties.title =
@@ -123,6 +124,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             { delimiter: " and ", round: true, language: this.currentLanguage }
           );
           this.haveRouteDetails = true;
+          this.mapService.showingRoute = this.haveRouteDetails;
           this.generateQrCode(
             this.sidebarService.selectedEndPoi,
             this.sidebarService.selectedStartPoi

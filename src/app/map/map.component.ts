@@ -97,7 +97,7 @@ export class MapComponent implements OnInit, OnDestroy {
             // otherwise cancel route if it's rendered, remove highlight and return me to default location
             this.map.cancelRoute();
             this.map.setFeaturesHighlight([]);
-            this.onMyLocation();
+            // this.onMyLocation();
           }
         }
       }),
@@ -171,7 +171,7 @@ export class MapComponent implements OnInit, OnDestroy {
       .observe([Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
-          this.mapPadding = { top: 50, bottom: 300, left: 50, right: 50 };
+          this.mapPadding = { top: 0, bottom: 100, left: 0, right: 0 };
           if (this.map) this.map.setBoundsPadding(this.mapPadding);
         } else {
           this.mapPadding = { top: 250, bottom: 250, left: 450, right: 250 };
@@ -222,6 +222,7 @@ export class MapComponent implements OnInit, OnDestroy {
           removeOriginalPolygonsLayer: true,
           minZoom: 15
         },
+        blockFeatureClickWhileRouting: true
       });
 
       // subscribing to map ready listener
