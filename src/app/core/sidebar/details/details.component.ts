@@ -83,37 +83,26 @@ export class DetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.push(
       this.sidebarService.getEndPointListener().subscribe((poi) => {
-        this.haveRouteDetails = this.stateService.state.kioskMode ? this.destinationFromUrl : false;
+        this.haveRouteDetails = this.stateService.state.kioskMode
+          ? this.destinationFromUrl
+          : false;
         this.mapService.showingRoute = this.haveRouteDetails;
         this.details = defaultDetails;
         this.linkUrl = null;
-        this.steps = this.stateService.state.kioskMode && this.destinationFromUrl ? this.steps : [];
+        this.steps =
+          this.stateService.state.kioskMode && this.destinationFromUrl
+            ? this.steps
+            : [];
         if (poi) {
-          this.poi = poi;
-          this.poi.properties.title =
-            this.poi.properties.title_i18n &&
-            this.poi.properties.title_i18n[this.currentLanguage]
-              ? this.poi.properties.title_i18n[this.currentLanguage]
-              : this.poi.properties.title;
-          this.poi.properties._dynamic.floor = this.poi.properties.floor_id
-            ? this.stateService.state.floors.find(
-                (i) => i.id === this.poi.properties.floor_id
-              )
-            : null;
-          if (this.poi.properties.description_i18n) {
-            this.details = this.poi.properties.description_i18n[
-              this.currentLanguage
-            ]
-              ? this.poi.properties.description_i18n[this.currentLanguage]
-              : this.poi.properties.description_i18n.en;
-          }
-          this.getClosestParking();
-          this.getUrl();
+          this.definePoi(poi);
         }
         this.destinationFromUrl = false;
       }),
       this.mapService.getRouteFoundListener().subscribe((found) => {
         if (found && this.stateService.state.textNavigation) {
+          if (!this.poi) {
+            this.definePoi(this.stateService.state.textNavigation.destination);
+          }
           this.buildNavigationSteps(
             this.stateService.state.textNavigation.steps
           );
@@ -153,7 +142,19 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   onDetailsClose() {
     this.sidebarService.onSetEndPoi(null);
+    this.poi = null;
     this.details = defaultDetails;
+    if (this.sidebarService.filteredAmenity) {
+      this.sidebarService.onAmenityToggle(
+        "amenities",
+        this.sidebarService.filteredAmenity
+      );
+      this.sidebarService.showClosestAmenityPicker = false;
+      this.sidebarService.activeListItem = null;
+      this.startPoiId = null;
+      this.setStartPoi();
+      this.sidebarService.onSetEndPoi(null);
+    }
   }
 
   toggleInstructions() {
@@ -286,6 +287,29 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.mapService.showRouteListener.next();
   }
 
+  definePoi(poi) {
+    this.poi = poi;
+    if (!this.poi.properties._dynamic) this.poi.properties._dynamic = {};
+    if (!this.poi.geometry.type) this.poi.geometry.type = "Point";
+    this.poi.properties.title =
+      this.poi.properties.title_i18n &&
+      this.poi.properties.title_i18n[this.currentLanguage]
+        ? this.poi.properties.title_i18n[this.currentLanguage]
+        : this.poi.properties.title;
+    this.poi.properties._dynamic.floor = this.poi.properties.floor_id
+      ? this.stateService.state.floors.find(
+          (i) => i.id === this.poi.properties.floor_id
+        )
+      : null;
+    if (this.poi.properties.description_i18n) {
+      this.details = this.poi.properties.description_i18n[this.currentLanguage]
+        ? this.poi.properties.description_i18n[this.currentLanguage]
+        : this.poi.properties.description_i18n.en;
+    }
+    this.getClosestParking();
+    this.getUrl();
+  }
+
   getClosestParking() {
     const featureCollection = {
       type: "FeatureCollection",
@@ -295,8 +319,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
           i.geometry.type === "Point"
       ),
     } as FeatureCollection<Point, { [name: string]: any }>;
+    const targetPoint = turf.point(this.poi.geometry.coordinates);
     this.closestParkingFeature = turf.nearestPoint(
-      this.poi,
+      targetPoint,
       featureCollection
     ) as Feature;
     this.closestParkingFeature.properties.title =

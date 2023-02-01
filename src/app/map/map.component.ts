@@ -61,17 +61,6 @@ export class MapComponent implements OnInit, OnDestroy {
       (i) => i.name === urlParams.get("kiosk")
     );
 
-    // if kiosk is found use it's settings to initiate the map
-    if (this.kiosk) {
-      this.stateService.state.options.bearing = this.kiosk.bearing;
-      this.stateService.state.options.pitch = this.kiosk.pitch;
-      this.stateService.state.defaultLocation.coordinates = [
-        this.kiosk.longitude,
-        this.kiosk.latitude,
-      ];
-      this.stateService.state.defaultLocation.level = this.kiosk.level;
-    }
-
     this.subs.push(
       // we subscribe for start point listener events here
       this.sidebarService.getStartPointListener().subscribe((poi) => {
@@ -113,10 +102,13 @@ export class MapComponent implements OnInit, OnDestroy {
       }),
       // we subscribe for accessible route listener events here
       this.sidebarService.getAccessibleOnlyToggleListener().subscribe(() => {
-        if (this.endPoi) {
+        const destination = this.endPoi
+          ? this.endPoi
+          : this.stateService.state.textNavigation.destination;
+        if (destination) {
           // if we have destination point selected, redraw the route based on accessible status
           this.map.findRouteByIds(
-            this.endPoi.id,
+            destination.id,
             this.stateService.state.kioskMode ? null : this.startPoiId,
             this.stateService.state.accessibleRoute
           );
@@ -132,14 +124,20 @@ export class MapComponent implements OnInit, OnDestroy {
           ) {
             // remove amenity filter if there is no value set for defined category
             this.map.removeAmenityFilter(res.amenityId, res.category);
-            if (res.category === "amenities" && this.stateService.state.kioskMode) {
+            if (
+              res.category === "amenities" &&
+              this.stateService.state.kioskMode
+            ) {
               this.map.cancelRoute();
               this.onMyLocation();
             }
           } else {
             // set amenity filter otherwise
             this.map.setAmenityFilter(res.amenityId, res.category);
-            if (res.category === "amenities" && this.stateService.state.kioskMode) {
+            if (
+              res.category === "amenities" &&
+              this.stateService.state.kioskMode
+            ) {
               this.map.findRouteToNearestFeature(res.amenityId);
             }
           }
@@ -163,7 +161,10 @@ export class MapComponent implements OnInit, OnDestroy {
         }),
       this.sidebarService.getRouteToClosestAmenityListener().subscribe(() => {
         if (this.map) {
-          this.map.findRouteToNearestFeature(this.sidebarService.activeListItem.id, this.startPoiId);
+          this.map.findRouteToNearestFeature(
+            this.sidebarService.activeListItem.id,
+            this.startPoiId
+          );
         }
       })
     );
@@ -213,16 +214,17 @@ export class MapComponent implements OnInit, OnDestroy {
         animatedRoute: true,
         initPolygons: true,
         polygonsOptions: {
-          defaultPolygonColor: "#dbd7e8", // optional, default: '#dbd7e8', default color of the polygons
-          hoverPolygonColor: "#202020", // optional, default: '#a58dfa', hover color of the polygons
+          defaultPolygonColor: "#202020", // optional, default: '#dbd7e8', default color of the polygons
+          hoverPolygonColor: "#da291c", // optional, default: '#a58dfa', hover color of the polygons
           selectedPolygonColor: "#da291c", // optional, default: '#6945ed', selected color of the polygons
+          defaultLabelColor: "#fff", // optional, default: '#6945ed', default color of the polygon labels
           defaultPolygonHeight: 1.5, // optional, default: 3, default polygon height in meters
           hoverPolygonHeight: 3, // optional, default: 3, hover polygon height in meters
           selectedPolygonHeight: 4, // optional, default: 3, selected polygon height in meters
           removeOriginalPolygonsLayer: true,
-          minZoom: 15
+          minZoom: 15,
         },
-        blockFeatureClickWhileRouting: true
+        blockFeatureClickWhileRouting: true,
       });
 
       // subscribing to map ready listener
@@ -239,8 +241,25 @@ export class MapComponent implements OnInit, OnDestroy {
           })
         );
 
-        if (this.kiosk?.bounds) {
-          this.map.getMapboxInstance().setMaxBounds(this.kiosk.bounds);
+        // if kiosk is found use it's settings to initiate the map
+        if (this.kiosk) {
+          const kioskPoi = this.kiosk.poiId
+            ? this.stateService.state.allFeatures.features.find(
+                (i) => i.id === this.kiosk.poiId
+              )
+            : null;
+          this.stateService.state.options.bearing = this.kiosk.bearing;
+          this.stateService.state.options.pitch = this.kiosk.pitch;
+          this.stateService.state.defaultLocation.coordinates = kioskPoi
+            ? kioskPoi.geometry.coordinates
+            : [this.kiosk.longitude, this.kiosk.latitude];
+          this.stateService.state.defaultLocation.level = kioskPoi
+            ? kioskPoi.properties.level
+            : this.kiosk.level;
+
+          if (this.kiosk.bounds) {
+            this.map.getMapboxInstance().setMaxBounds(this.kiosk.bounds);
+          }
         }
 
         // set amenity category group 'shop', those have to be set in shop-picker component afterwards
@@ -385,34 +404,6 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  // you can define kiosk settings with this modal dialog, it's not persistent setting
-  onSettings() {
-    const dialogRef = this.dialog.open(SettingsDialogComponent, {
-      width: "420px",
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && this.map) {
-        this.stateService.state.options = {
-          zoom: result.zoom,
-          bearing: result.bearing,
-          pitch: result.pitch,
-        };
-        this.stateService.state.defaultLocation = {
-          coordinates: [result.longitude, result.latitude],
-          level: result.level,
-        };
-        this.map.getMapboxInstance().flyTo({
-          center: [result.longitude, result.latitude],
-          bearing: result.bearing,
-          pitch: result.pitch,
-          zoom: result.zoom,
-        });
-        this.map.setKiosk(result.latitude, result.longitude, result.level);
-      }
-    });
-  }
-
   onShowRoute() {
     if (this.map) {
       this.map.findRouteByIds(
@@ -426,6 +417,14 @@ export class MapComponent implements OnInit, OnDestroy {
   onResetView() {
     if (this.map) {
       this.sidebarService.onSetEndPoi(null);
+      if (this.sidebarService.filteredAmenity) {
+        this.sidebarService.onAmenityToggle(
+          "amenities",
+          this.sidebarService.filteredAmenity
+        );
+        this.sidebarService.showClosestAmenityPicker = false;
+        this.sidebarService.activeListItem = null;
+      }
       this.map.refetch();
     }
   }
