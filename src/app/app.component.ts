@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     overlayContainer: OverlayContainer,
-    translate: TranslateService,
+    public translate: TranslateService,
     private mapService: MapService,
     private stateService: StateService
   ) {

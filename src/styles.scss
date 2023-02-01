@@ -48,8 +48,32 @@
   transform: rotateZ(0);
 }
 
-.theme-wrapper {
-  height: 100%;
+@font-face {
+  font-family: GE SS Two;
+  src: url("assets/fonts/ar/GE-SS-Two-Light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: GE SS Two;
+  font-weight: bold;
+  src: url("assets/fonts/ar/GE-SS-Two-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: FuturaBT;
+  font-weight: 300;
+  src: url("assets/fonts/en/FuturaBT-Light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: FuturaBT;
+  src: url("assets/fonts/en/FuturaBT-Book.otf") format("opentype");
+}
+
+@font-face {
+  font-family: FuturaBT;
+  font-weight: bold;
+  src: url("assets/fonts/en/FuturaBT-Medium.otf") format("opentype");
 }
 
 body {
@@ -70,4 +94,14 @@ body {
   background: rgba(255,255,255,.25)!important;
   padding: 0 .5rem;
   min-height: 60px!important;
+}
+
+.theme-wrapper {
+  height: 100%;
+  &:not(.ar) {
+    font-family: FuturaBT, "Helvetica Neue", sans-serif;
+  }
+  &.ar {
+    font-family: GE SS Two, "Helvetica Neue", sans-serif;
+  }
 }
