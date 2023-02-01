@@ -13,6 +13,7 @@ export interface KioskModel {
   pitch: number;
   bearing: number;
   bounds?: [[number, number], [number, number]];
+  poiId?: string;
 }
 
 export interface State {
@@ -59,7 +60,7 @@ export class StateService {
     loadingRoute: false,
     noPlaces: false,
     options: {
-      zoom: 19,
+      zoom: 18,
       pitch: 40,
       bearing: 10,
     },
@@ -77,8 +78,10 @@ export class StateService {
         longitude: 55.20227480783245,
         level: 0,
         pitch: 40,
-        bearing: 10
-      }
+        bearing: 10,
+        poiId:
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:6a4d5a0d-3d74-4c51-a8d2-bf4292541181",
+      },
     ],
     startPoiId:
       "75698d35-0918-4a2b-a8ab-77b93a618e61:52c53790-2acf-4271-8a32-4b1c99b3227a", // default start point for routes

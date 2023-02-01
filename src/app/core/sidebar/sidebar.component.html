@@ -1,4 +1,7 @@
-<main class="container" [ngClass]="{ open: filtersOpened, haveRoute: mapService.showingRoute}">
+<main
+  class="container"
+  [ngClass]="{ open: filtersOpened, haveRoute: mapService.showingRoute }"
+>
   <div class="brand">
     <img src="assets/images/MOE_logo_triangle.png" alt="Mall of Emirates" />
   </div>
@@ -14,7 +17,8 @@
         sidebarService.selectedEndPoi ||
         sidebarService.filteredShop ||
         sidebarService.showRoutePicker ||
-        sidebarService.showClosestAmenityPicker
+        sidebarService.showClosestAmenityPicker ||
+        mapService.showingRoute
       "
       class="filters"
       [ngClass]="{ open: filtersOpened }"
@@ -46,7 +50,11 @@
   </nav>
 
   <ng-container>
-    <nav [hidden]="!sidebarService.selectedEndPoi || sidebarService.showRoutePicker">
+    <nav
+      [hidden]="
+        (!mapService.showingRoute && !sidebarService.selectedEndPoi) || sidebarService.showRoutePicker
+      "
+    >
       <app-details></app-details>
     </nav>
   </ng-container>

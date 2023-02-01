@@ -7,6 +7,7 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { MapService } from "src/app/map/map.service";
 import { map, startWith } from "rxjs/operators";
 import { Feature } from "@turf/turf";
+import * as removeAccents from "remove-accents";
 
 @Component({
   selector: "app-route-picker",
@@ -123,7 +124,7 @@ export class RoutePickerComponent implements OnInit, OnDestroy {
     const filterValue = title.toLowerCase();
 
     return this.options.filter((option) =>
-      option.properties.title.toLowerCase().includes(filterValue)
+      removeAccents(option.properties.title).toLowerCase().includes(filterValue)
     );
   }
 

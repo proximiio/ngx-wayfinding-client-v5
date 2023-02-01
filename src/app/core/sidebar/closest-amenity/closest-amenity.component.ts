@@ -8,6 +8,7 @@ import { MapService } from "src/app/map/map.service";
 import { map, startWith } from "rxjs/operators";
 import { amenityData } from "../amenity-picker/amenity-picker.component";
 import { AmenityToggleModel } from "../../amenity-toggle.model";
+import * as removeAccents from "remove-accents";
 
 @Component({
   selector: "app-closest-amenity",
@@ -101,7 +102,11 @@ export class ClosestAmenityComponent implements OnInit, OnDestroy {
   setStartPoi() {
     if (!this.stateService.state.kioskMode) {
       const startPoi = this.sidebarService.sortedPOIs.find(
-        (i) => i.id === (this.startPoiId ? this.startPoiId : this.stateService.state.startPoiId)
+        (i) =>
+          i.id ===
+          (this.startPoiId
+            ? this.startPoiId
+            : this.stateService.state.startPoiId)
       );
       if (startPoi) {
         this.routeForm.get("startPoi").setValue(startPoi);
@@ -113,7 +118,10 @@ export class ClosestAmenityComponent implements OnInit, OnDestroy {
   onDestinationSelect(e) {
     this.destinationAmenityId = e.option.value.id;
     if (this.sidebarService.filteredAmenity !== this.destinationAmenityId) {
-      this.sidebarService.onAmenityToggle("amenities", this.destinationAmenityId);
+      this.sidebarService.onAmenityToggle(
+        "amenities",
+        this.destinationAmenityId
+      );
       this.sidebarService.activeListItem = e.option.value;
     }
   }
@@ -139,7 +147,9 @@ export class ClosestAmenityComponent implements OnInit, OnDestroy {
 
     if (type === "pois") {
       return this.options.filter((option) =>
-        option.properties.title.toLowerCase().includes(filterValue)
+        removeAccents(option.properties.title)
+          .toLowerCase()
+          .includes(filterValue)
       );
     }
 

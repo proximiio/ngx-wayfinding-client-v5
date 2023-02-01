@@ -13,7 +13,7 @@
   <button (click)="onDetailsClose()" class="close">
     <fa-icon [icon]="['fal', 'times']"></fa-icon>
   </button>
-  <div class="img-holder">
+  <div class="img-holder" *ngIf="!this.sidebarService.filteredAmenity">
     <img
       [src]="
         poi.properties.images[0]
@@ -34,7 +34,7 @@
       ></qrcode>
       <p>Scan QR code to open on your phone.</p>
     </div>
-    <h4 class="open-hours">{{ getOpenHours() }}</h4>
+    <h4 class="open-hours" *ngIf="!this.sidebarService.filteredAmenity">{{ getOpenHours() }}</h4>
     <h4 class="level">
       {{ "level" | translate }}:
       {{
@@ -48,7 +48,7 @@
     class="content large-viewport-only"
     [ngClass]="{ accessibleOnly: stateService.state.accessibleRoute }"
   >
-    <p *ngIf="details">
+    <p *ngIf="details && !this.sidebarService.filteredAmenity">
       {{ details | slice : 0 : limit }}
       {{ details.length > limit ? "..." : "" }}
       <a
@@ -141,7 +141,7 @@
     class="content small-viewport-only"
     [ngClass]="{ accessibleOnly: stateService.state.accessibleRoute }"
   >
-    <p *ngIf="details">
+    <p *ngIf="details && !this.sidebarService.filteredAmenity">
       {{ details | slice : 0 : limit }}
       {{ details.length > limit ? "..." : "" }}
       <a
@@ -222,7 +222,7 @@
     </div>
   </div>
 
-  <div class="start-box" *ngIf="!stateService.state.kioskMode">
+  <div class="start-box" *ngIf="!stateService.state.kioskMode && !this.sidebarService.filteredAmenity">
     <p
       class="closest-parking"
       *ngIf="closestParkingFeature"

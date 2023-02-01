@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
+import * as removeAccents from "remove-accents";
 import { MapService } from "src/app/map/map.service";
 import { SidebarService } from "../sidebar.service";
 
@@ -68,7 +69,7 @@ export class SearchComponent implements OnInit {
       : item.properties.description_i18n?.en;
     term = term.toLowerCase();
     return (
-      item.properties.title.toLowerCase().indexOf(term) > -1 ||
+      removeAccents(item.properties.title).toLowerCase().indexOf(term) > -1 ||
       details?.toLowerCase().indexOf(term) > -1
     );
   }
