@@ -149,7 +149,7 @@ export class ClosestAmenityComponent implements OnInit, OnDestroy {
       return this.options.filter((option) =>
         removeAccents(option.properties.title)
           .toLowerCase()
-          .includes(filterValue)
+          .includes(removeAccents(filterValue))
       );
     }
 

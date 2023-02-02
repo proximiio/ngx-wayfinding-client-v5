@@ -260,16 +260,36 @@ export class MapComponent implements OnInit, OnDestroy {
           if (this.kiosk.bounds) {
             this.map.getMapboxInstance().setMaxBounds(this.kiosk.bounds);
           }
+
+          this.map.setKiosk(
+            this.stateService.state.defaultLocation.coordinates[1],
+            this.stateService.state.defaultLocation.coordinates[0],
+            this.stateService.state.defaultLocation.level
+          );
         }
+
+        this.hideAmenityFeatures();
 
         // set amenity category group 'shop', those have to be set in shop-picker component afterwards
         this.map.setAmenitiesCategory("shop", [
-          "75698d35-0918-4a2b-a8ab-77b93a618e61:ab9f7580-06fa-4f0f-bb63-7e8206238acc",
-          "75698d35-0918-4a2b-a8ab-77b93a618e61:2d4df5f8-0cc5-442d-a346-411f5ae75bc6",
-          "75698d35-0918-4a2b-a8ab-77b93a618e61:50f207f0-8346-4125-9470-358023fbe5c5",
-          "75698d35-0918-4a2b-a8ab-77b93a618e61:5c1229eb-4125-4bf5-a005-8c6851d51787",
-          "75698d35-0918-4a2b-a8ab-77b93a618e61:53c8a23f-04c7-4ece-8f52-10c30a6f0167",
-          "75698d35-0918-4a2b-a8ab-77b93a618e61:1b20689d-8db3-41bf-b42e-6a4c69a06c71",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:935570c1-cd4e-4c70-8e9d-87e63a0e061b",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:2ee8fe09-6b1f-4ff7-999b-fd6c53802b04",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:04dd218a-adf1-4947-866d-b679badb895a",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:576270da-2592-439f-9082-74f198c8bf6c",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:15120502-00af-47e6-b9ec-53fc35d042c8",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:76f90c15-b759-43b4-aa96-457568adbfd4",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:fe68247a-5c8c-427f-b276-b94b1c39e5da",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:ed0c8e0b-f28b-462b-bd24-3e1f9d1720f1",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:4987b765-0c5e-4bcb-979b-fdbe2adb7979",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:9f3ec695-2fe2-44a6-8390-547d50487f0c",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:105ffbf7-a639-443c-ad48-36239fb822dd",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:79f78a36-2f7b-442c-989a-48a83d76d422",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:e23ab7ec-7a87-4f17-be9a-a5f579d49ee1",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:875d9cfb-8289-4307-9c1c-34b4f52198cb",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:028b17c6-2f82-4ce1-af3d-9fc9ca061972",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:bda780fb-0f4a-4e76-b74c-a11f1975f1b5",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:6e75e80a-583b-4302-b410-f03f2431dc47",
+          "75698d35-0918-4a2b-a8ab-77b93a618e61:cad88ce9-92d8-4137-ae61-82ac1fb5cf22",
         ]);
 
         // set amenity category group 'amenities', those have to be set in amenity-picker component afterwards
@@ -427,6 +447,63 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       this.map.refetch();
     }
+  }
+
+  hideAmenityFeatures() {
+    const amenitiesToHide = [
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:c302b098-4c76-4a70-ae7c-5a0349e86fda",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:632f91c3-ce20-4466-b5f5-96da4e0905bc",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:69d2e19b-fb17-4cd6-966f-1f86f4930122",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:28d180c2-1d18-4b07-bf4d-3646314b7c80",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:ee26e3bc-4911-4843-803b-d109e6f57742",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:109fe182-045f-4db7-bfd8-fd2937a5fc87",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:b87bc5ce-def9-4a62-a78a-a38b7ac787a6",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:53590614-9aa0-4afa-8b8b-cfa3136b316e",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:022da10b-611a-4933-9929-4c4a9e2151f6",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:39a12b78-31a1-4d54-92b9-b117e6d7ab38",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:d812b45f-5257-4a50-ac08-1e2b4d269116",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:7c7a6e4d-9a5c-44d6-b9ac-298d606ce126",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:d460413e-857a-4d91-b5dd-43ca0937228b",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:091f4137-6ca6-436c-ab04-20a5e964568f",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:276391e6-6dfa-413a-8e6a-3276bfa673d0",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:15b182b8-9307-4185-8403-37858c557c63",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:a5286ad2-527f-4bfd-a1c1-3cb13161fe69",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:1b20689d-8db3-41bf-b42e-6a4c69a06c71",
+    ];
+
+    const mainSource = this.map.getMapboxInstance().getSource("main") as any;
+    if (mainSource) {
+      const features = mainSource._data.features.map((feature) => {
+        if (amenitiesToHide.includes(feature.properties.amenity)) {
+          feature.properties.hideIcon = "hide";
+        }
+        return feature;
+      });
+      const data = {
+        type: "FeatureCollection",
+        features,
+      };
+      mainSource.setData(data);
+    }
+
+    const layers = [
+      "proximiio-pois-icons",
+      "pois-icons",
+      "poi-custom-icons",
+      "proximiio-pois-labels",
+      "pois-labels",
+    ];
+    layers.forEach((layer) => {
+      if (this.map.getMapboxInstance().getLayer(layer)) {
+        const l = this.map.getMapboxInstance().getLayer(layer) as any;
+        const filters = [...l.filter];
+
+        filters.push(["!=", ["get", "hideIcon"], "hide"]);
+
+        this.map.state.style.getLayer(layer).filter = filters;
+        this.map.getMapboxInstance().setFilter(layer, filters);
+      }
+    });
   }
 
   ngOnDestroy() {

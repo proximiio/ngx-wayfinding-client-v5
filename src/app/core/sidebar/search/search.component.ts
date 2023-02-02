@@ -67,7 +67,7 @@ export class SearchComponent implements OnInit {
           currentLanguage
         ]
       : item.properties.description_i18n?.en;
-    term = term.toLowerCase();
+    term = removeAccents(term.toLowerCase());
     return (
       removeAccents(item.properties.title).toLowerCase().indexOf(term) > -1 ||
       details?.toLowerCase().indexOf(term) > -1

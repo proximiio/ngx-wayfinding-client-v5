@@ -121,7 +121,7 @@ export class RoutePickerComponent implements OnInit, OnDestroy {
   }
 
   private _filter(title: string): any[] {
-    const filterValue = title.toLowerCase();
+    const filterValue = removeAccents(title.toLowerCase());
 
     return this.options.filter((option) =>
       removeAccents(option.properties.title).toLowerCase().includes(filterValue)
