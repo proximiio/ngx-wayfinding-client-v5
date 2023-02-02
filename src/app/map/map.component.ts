@@ -74,18 +74,16 @@ export class MapComponent implements OnInit, OnDestroy {
         this.endPoi = poi;
         if (this.map) {
           if (poi && !this.destinationFromUrl) {
-            // if map is loaded, the poi is not null in listener event and destination is not set from url, center the map, set the floor level to poi and set the feature highlight
+            // if map is loaded, the poi is not null in listener event and destination is not set from url, center the map, set the floor level to poi
             this.map
               .getMapboxInstance()
               .flyTo({ center: poi.geometry.coordinates, zoom: 19 });
             this.map.setFloorByLevel(poi.properties.level);
-            this.map.setFeaturesHighlight([poi.id], "#9200c7", 46, 0.4);
             // handle polygon selection, only required when polygons are enabled
             this.map.handlePolygonSelection(poi);
           } else if (!poi) {
-            // otherwise cancel route if it's rendered, remove highlight and return me to default location
+            // otherwise cancel route if it's rendered and return me to default location
             this.map.cancelRoute();
-            this.map.setFeaturesHighlight([]);
             // this.onMyLocation();
           }
         }
@@ -340,9 +338,6 @@ export class MapComponent implements OnInit, OnDestroy {
           }, 1000);
           this.destinationFromUrl = false; // must be set to false to enable rerouting by search/click
         }
-
-        // set features highlight
-        this.map.setFeaturesHighlight([res.start.id, res.end.id], "#000", 70);
       });
 
       // set destination point for routing based on click event and cancel previous route if generated
