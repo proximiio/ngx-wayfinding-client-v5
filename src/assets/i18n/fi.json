@@ -41,5 +41,20 @@
   "showTheClosest": "Show the closest",
   "startingPoint": "Starting point",
   "destination": "Destination",
-  "instructions": "Instructions"
+  "instructions": "Instructions",
+  "fashion": "Fashion",
+  "grocery": "Grocery",
+  "health": "Health",
+  "eyewear": "Eyewear",
+  "fitness": "Fitness",
+  "travel": "Travel",
+  "books": "Books",
+  "luxury": "Luxury",
+  "electronics": "Electronics",
+  "home": "Home",
+  "beauty": "Beauty",
+  "jewellery": "Jewellery",
+  "bank": "Bank",
+  "deli": "Deli",
+  "fun": "Fun"
 }
