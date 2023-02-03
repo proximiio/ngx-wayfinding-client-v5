@@ -464,6 +464,7 @@ export class MapComponent implements OnInit, OnDestroy {
       "75698d35-0918-4a2b-a8ab-77b93a618e61:15b182b8-9307-4185-8403-37858c557c63",
       "75698d35-0918-4a2b-a8ab-77b93a618e61:a5286ad2-527f-4bfd-a1c1-3cb13161fe69",
       "75698d35-0918-4a2b-a8ab-77b93a618e61:1b20689d-8db3-41bf-b42e-6a4c69a06c71",
+      "75698d35-0918-4a2b-a8ab-77b93a618e61:cd0d9abe-7461-4018-9615-7b665e46c9eb",
     ];
 
     const mainSource = this.map.getMapboxInstance().getSource("main") as any;
@@ -483,10 +484,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
     const layers = [
       "proximiio-pois-icons",
-      "pois-icons",
-      "poi-custom-icons",
       "proximiio-pois-labels",
+      "pois-icons",
       "pois-labels",
+      "poi-custom-icons",
     ];
     layers.forEach((layer) => {
       if (this.map.getMapboxInstance().getLayer(layer)) {
