@@ -76,7 +76,7 @@ export class SidebarService {
   }
 
   // method responsible for filtering in categories set by setAmenityCategory method
-  onAmenityToggle(category: string, amenityId: string) {
+  onAmenityToggle(category: string, amenityId: string | string[]) {
     if (category === "shop") {
       this.filteredShop = this.filteredShop === amenityId ? null : amenityId;
     } else if (category === "amenities") {

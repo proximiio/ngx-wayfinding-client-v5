@@ -26,7 +26,9 @@ export class ListViewComponent implements OnInit, OnDestroy {
           this.data = this.stateService.state.allFeatures.features
             .filter(
               (i) =>
-                i.properties.amenity === res.amenityId &&
+                (Array.isArray(res.amenityId)
+                  ? res.amenityId.includes(i.properties.amenity)
+                  : i.properties.amenity === res.amenityId) &&
                 i.properties.type === "poi" &&
                 i.properties.place_id === "e905bda5-4900-48f5-a6b0-d8e39c05050f"
             )
