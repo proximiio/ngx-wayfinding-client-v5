@@ -5,7 +5,7 @@ import { Observable, Subscription } from "rxjs";
 import Feature from "proximiio-js-library/lib/models/feature";
 import * as Settings from "../../../../../settings";
 import * as humanizeDuration from "humanize-duration";
-import { TranslateService } from "@ngx-translate/core";
+import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
 import { MapService } from "src/app/map/map.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { map, startWith, tap } from "rxjs/operators";
@@ -59,6 +59,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   closestParkingFeature: Feature;
   qrCodeUrl: string;
   linkUrl: string;
+  routeType: "accessible" | "fastest";
   private destinationFromUrl = false;
   private subs: Subscription[] = [];
 
@@ -73,7 +74,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const destinationParam = urlParams.get("destinationFeature");
 
     this.poi = this.sidebarService.selectedEndPoi;
-    this.currentLanguage = this.translateService.currentLang;
+    this.routeType =
+      this.stateService.state.accessibleRoute === true
+        ? "accessible"
+        : "fastest";
 
     if (destinationParam) {
       this.destinationFromUrl = true;
@@ -83,10 +87,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.push(
       this.sidebarService.getEndPointListener().subscribe((poi) => {
-        this.haveRouteDetails = this.stateService.state.kioskMode
+        /*this.haveRouteDetails = this.stateService.state.kioskMode
           ? this.destinationFromUrl
           : false;
-        this.mapService.showingRoute = this.haveRouteDetails;
+        this.mapService.showingRoute = this.haveRouteDetails;*/
         this.details = defaultDetails;
         this.linkUrl = null;
         this.steps =
@@ -95,8 +99,19 @@ export class DetailsComponent implements OnInit, OnDestroy {
             : [];
         if (poi) {
           this.definePoi(poi);
+        } else {
+          this.haveRouteDetails = false;
+          this.mapService.showingRoute = this.haveRouteDetails;
         }
         this.destinationFromUrl = false;
+      }),
+      this.sidebarService.getAccessibleOnlyToggleListener().subscribe(() => {
+        setTimeout(() => {
+          this.routeType =
+            this.stateService.state.accessibleRoute === true
+              ? "accessible"
+              : "fastest";
+        });
       }),
       this.mapService.getRouteFoundListener().subscribe((found) => {
         if (found && this.stateService.state.textNavigation) {
@@ -135,6 +150,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
             );
           this.options = this.sidebarService.sortedPOIs;
           this.setStartPoi();
+        }
+      }),
+      this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+        this.currentLanguage = event.lang;
+        if (this.poi) {
+          this.definePoi(this.poi);
+          this.distanceInMinutes = humanizeDuration(
+            (this.distanceInMeters / 1000 / this.averageWalkSpeed) * 3600000,
+            { delimiter: " and ", round: true, language: this.currentLanguage }
+          );
         }
       })
     );

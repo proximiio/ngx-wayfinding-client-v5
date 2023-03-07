@@ -164,6 +164,30 @@
       color: white;
     }
 
+    .accessible-toggle-group {
+      display: flex;
+      border: 0;
+      border-radius: 16px;
+      margin-bottom: 0.8rem;
+      .mat-button-toggle {
+        flex: 1 1 1px;
+        color: white;
+        background-color: #b8b0af;
+        padding: 0.8rem;
+
+        &.mat-button-toggle-checked {
+          background-color: $default-color;
+          ::ng-deep .mat-button-toggle-focus-overlay {
+            border: 0;
+          }
+        }
+
+        img {
+          margin-right: 0.8rem;
+        }
+      }
+    }
+
     .mat-expansion-panel ::ng-deep {
       box-shadow: none;
       background: white;
@@ -320,6 +344,20 @@
       }
       .open-hours {
         display: none;
+      }
+      .accessible-toggle-group {
+        border-radius: 8px;
+        margin-bottom: 0.8rem;
+        .mat-button-toggle {
+          padding: 0.4rem;
+          ::ng-deep .mat-button-toggle-label-content {
+            line-height: 32px;
+          }
+          img {
+            width: 26px;
+            margin-right: 0.4rem;
+          }
+        }
       }
     }
 

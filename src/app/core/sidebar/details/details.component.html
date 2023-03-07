@@ -32,9 +32,11 @@
         [errorCorrectionLevel]="'M'"
         [allowEmptyString]="true"
       ></qrcode>
-      <p>Scan QR code to open on your phone.</p>
+      <p>{{ "scan-qr-code" | translate }}</p>
     </div>
-    <h4 class="open-hours" *ngIf="!this.sidebarService.filteredAmenity">{{ getOpenHours() }}</h4>
+    <h4 class="open-hours" *ngIf="!this.sidebarService.filteredAmenity">
+      {{ getOpenHours() }}
+    </h4>
     <h4 class="level">
       {{ "level" | translate }}:
       {{
@@ -68,7 +70,7 @@
     </p>
 
     <p *ngIf="linkUrl">
-      Link:
+      {{ "link" | translate }}:
       <a [href]="linkUrl" target="_blank" style="display: inline">{{
         poi.properties.metadata.url
       }}</a>
@@ -90,6 +92,22 @@
     </button>
 
     <div *ngIf="haveRouteDetails">
+      <mat-button-toggle-group
+        [(ngModel)]="routeType"
+        (change)="toggleAccessibleRoute()"
+        aria-label="Route type"
+        class="accessible-toggle-group"
+      >
+        <mat-button-toggle value="fastest">
+          <img src="https://img.icons8.com/ios/36/ffffff/walking--v1.png" />
+          <span>{{ "fast-route" | translate }}</span>
+        </mat-button-toggle>
+        <mat-button-toggle value="accessible">
+          <img src="https://img.icons8.com/wired/36/ffffff/elevator.png" />
+          <span>{{ "use-elevators" | translate }}</span>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
       <button (click)="toggleInstructions()" class="instructions-toggle">
         <fa-icon
           [icon]="
@@ -103,21 +121,6 @@
         {{
           (showInstructions ? "hideInstructions" : "showInstructions")
             | translate
-        }}
-      </button>
-      <button (click)="toggleAccessibleRoute()" class="accessible-toggle">
-        <fa-icon
-          [icon]="
-            stateService.state.accessibleRoute
-              ? ['fal', 'walking']
-              : ['fal', 'wheelchair']
-          "
-        ></fa-icon>
-        {{
-          (stateService.state.accessibleRoute
-            ? "showFastestRoute"
-            : "showAccessibleRoute"
-          ) | translate
         }}
       </button>
 
@@ -161,7 +164,7 @@
     </p>
 
     <p *ngIf="linkUrl">
-      Link:
+      {{ "link" | translate }}:
       <a [href]="linkUrl" target="_blank" style="display: inline">{{
         poi.properties.metadata.url
       }}</a>
@@ -176,25 +179,22 @@
       {{ "takeMeThere" | translate }}
     </button>
 
-    <button
-      (click)="toggleAccessibleRoute()"
-      class="accessible-toggle"
+    <mat-button-toggle-group
+      [(ngModel)]="routeType"
+      (change)="toggleAccessibleRoute()"
+      aria-label="Route type"
+      class="accessible-toggle-group"
       *ngIf="haveRouteDetails"
     >
-      <fa-icon
-        [icon]="
-          stateService.state.accessibleRoute
-            ? ['fal', 'walking']
-            : ['fal', 'wheelchair']
-        "
-      ></fa-icon>
-      {{
-        (stateService.state.accessibleRoute
-          ? "showFastestRoute"
-          : "showAccessibleRoute"
-        ) | translate
-      }}
-    </button>
+      <mat-button-toggle value="fastest">
+        <img src="https://img.icons8.com/ios/36/ffffff/walking--v1.png" />
+        <span>{{ "fast-route" | translate }}</span>
+      </mat-button-toggle>
+      <mat-button-toggle value="accessible">
+        <img src="https://img.icons8.com/wired/36/ffffff/elevator.png" />
+        <span>{{ "use-elevators" | translate }}</span>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
 
     <p class="distance" *ngIf="haveRouteDetails">
       <strong>{{ "distance" | translate }}</strong
@@ -222,13 +222,18 @@
     </div>
   </div>
 
-  <div class="start-box" *ngIf="!stateService.state.kioskMode && !this.sidebarService.filteredAmenity">
+  <div
+    class="start-box"
+    *ngIf="
+      !stateService.state.kioskMode && !this.sidebarService.filteredAmenity
+    "
+  >
     <p
       class="closest-parking"
       *ngIf="closestParkingFeature"
       (click)="onCenterToParking()"
     >
-      <strong>Closest parking:</strong>
+      <strong>{{ "closest-parking" | translate }}::</strong>
       {{ closestParkingFeature.properties.title }}
     </p>
     <div class="buttons">
@@ -236,17 +241,17 @@
         <img
           src="https://img.icons8.com/ios-filled/50/ffffff/people-in-car.png"
         />
-        Route from parking
+        {{ "route-from-parking" | translate }}
       </button>
       <button type="button" (click)="onRouteFromEntrance()">
         <img src="https://img.icons8.com/ios/50/ffffff/walking--v1.png" />
-        Route from entrance
+        {{ "route-from-entrance" | translate }}
       </button>
       <button type="button" (click)="onOtherRoute()">
         <img
           src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/ffffff/external-route-interface-kiranshastry-lineal-kiranshastry.png"
         />
-        Other Route
+        {{ "other-route" | translate }}
       </button>
     </div>
     <!--<form [formGroup]="startPoiForm">

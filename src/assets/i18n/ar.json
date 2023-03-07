@@ -56,5 +56,14 @@
   "jewellery": "Jewellery",
   "bank": "Bank",
   "deli": "Deli",
-  "fun": "Fun"
+  "fun": "Fun",
+  "use-elevators": "Use elevators",
+  "scan-qr-code": "Scan QR code to open on your phone.",
+  "link": "Link",
+  "closest-parking": "Closest parking",
+  "route-from-parking": "Route from parking",
+  "route-from-entrance": "Route from entrance",
+  "route-from-bike": "Route from bike parking",
+  "other-route": "Other Route",
+  "fast-route": "Fast route"
 }

@@ -56,5 +56,14 @@
   "jewellery": "Jewellery",
   "bank": "Bank",
   "deli": "Deli",
-  "fun": "Fun"
+  "fun": "Fun",
+  "use-elevators": "Käytä hissiä",
+  "scan-qr-code": "Skannaa QR-koodi avataksesi reitti puhelimellasi",
+  "link": "Linkki",
+  "closest-parking": "Lähin parkkipaikka",
+  "route-from-parking": "Reitti parkkipaikalta",
+  "route-from-entrance": "Reitti sisäänkäynniltä",
+  "route-from-bike": "Reitti pyöräparkilta",
+  "other-route": "Muu reitti",
+  "fast-route": "Nopea reitti"
 }
