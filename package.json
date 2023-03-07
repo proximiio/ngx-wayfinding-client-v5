@@ -41,7 +41,7 @@
     "ngforage": "^6.0.0",
     "ngx-mapbox-gl": "^6.0.4",
     "ngx-take-until-destroy": "^5.4.0",
-    "proximiio-js-library": "^1.9.19",
+    "proximiio-js-library": "^1.9.20",
     "remove-accents": "^0.4.4",
     "rxjs": "~6.6.3",
     "tslib": "^2.1.0",
