@@ -1,33 +1,94 @@
-<h1 mat-dialog-title>{{ 'kioskSettings' | translate }}</h1>
+<h1 mat-dialog-title>{{ "kioskSettings" | translate }}</h1>
 <form [formGroup]="settingsForm">
   <div mat-dialog-content>
     <mat-form-field>
-      <input matInput type="number" [placeholder]="'latitude' | translate" formControlName="latitude">
-      <mat-error *ngIf="settingsForm.get('latitude').invalid">{{ 'enterValid' | translate }} {{ 'latitude' | translate }}.</mat-error>
+      <input
+        matInput
+        type="number"
+        [placeholder]="'latitude' | translate"
+        formControlName="latitude"
+        (click)="onFieldSelect('latitude')"
+      />
+      <mat-error *ngIf="settingsForm.get('latitude').invalid"
+        >{{ "enterValid" | translate }} {{ "latitude" | translate }}.</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" [placeholder]="'longitude' | translate" formControlName="longitude">
-      <mat-error *ngIf="settingsForm.get('longitude').invalid">{{ 'enterValid' | translate }} {{ 'longitude' | translate }}.</mat-error>
+      <input
+        matInput
+        type="number"
+        [placeholder]="'longitude' | translate"
+        formControlName="longitude"
+        (click)="onFieldSelect('longitude')"
+      />
+      <mat-error *ngIf="settingsForm.get('longitude').invalid"
+        >{{ "enterValid" | translate }}
+        {{ "longitude" | translate }}.</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" [placeholder]="'level' | translate" formControlName="level">
-      <mat-error *ngIf="settingsForm.get('level').invalid">{{ 'enterValid' | translate }} {{ 'level' | translate }}.</mat-error>
+      <input
+        matInput
+        type="number"
+        [placeholder]="'level' | translate"
+        formControlName="level"
+        (click)="onFieldSelect('level')"
+      />
+      <mat-error *ngIf="settingsForm.get('level').invalid"
+        >{{ "enterValid" | translate }} {{ "level" | translate }}.</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" [placeholder]="'zoom' | translate" formControlName="zoom">
-      <mat-error *ngIf="settingsForm.get('zoom').invalid">{{ 'enterValid' | translate }} {{ 'zoom' | translate }}.</mat-error>
+      <input
+        matInput
+        type="number"
+        [placeholder]="'zoom' | translate"
+        formControlName="zoom"
+        (click)="onFieldSelect('zoom')"
+      />
+      <mat-error *ngIf="settingsForm.get('zoom').invalid"
+        >{{ "enterValid" | translate }} {{ "zoom" | translate }}.</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" [placeholder]="'bearing' | translate" formControlName="bearing">
-      <mat-error *ngIf="settingsForm.get('bearing').invalid">{{ 'enterValid' | translate }} {{ 'bearing' | translate }}.</mat-error>
+      <input
+        matInput
+        type="number"
+        [placeholder]="'bearing' | translate"
+        formControlName="bearing"
+        (click)="onFieldSelect('bearing')"
+      />
+      <mat-error *ngIf="settingsForm.get('bearing').invalid"
+        >{{ "enterValid" | translate }} {{ "bearing" | translate }}.</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" [placeholder]="'pitch' | translate" formControlName="pitch">
-      <mat-error *ngIf="settingsForm.get('pitch').invalid">{{ 'enterValid' | translate }} {{ 'pitch' | translate }}.</mat-error>
+      <input
+        matInput
+        type="number"
+        [placeholder]="'pitch' | translate"
+        formControlName="pitch"
+        (click)="onFieldSelect('pitch')"
+      />
+      <mat-error *ngIf="settingsForm.get('pitch').invalid"
+        >{{ "enterValid" | translate }} {{ "pitch" | translate }}.</mat-error
+      >
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
-    <button mat-button (click)="onCancel()" color="warn" class="cancel">{{ 'cancel' | translate }}</button>
-    <button type="submit" [disabled]="!settingsForm.valid" mat-button [mat-dialog-close]="settingsForm.value" cdkFocusInitial color="primary" class="submit">{{ 'submit' | translate }}</button>
+    <button mat-button (click)="onCancel()" color="warn" class="cancel">
+      {{ "cancel" | translate }}
+    </button>
+    <button
+      type="submit"
+      [disabled]="!settingsForm.valid"
+      mat-button
+      [mat-dialog-close]="settingsForm.value"
+      cdkFocusInitial
+      color="primary"
+      class="submit"
+    >
+      {{ "submit" | translate }}
+    </button>
   </div>
 </form>
