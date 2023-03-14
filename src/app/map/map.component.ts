@@ -215,7 +215,7 @@ export class MapComponent implements OnInit, OnDestroy {
         polygonsOptions: {
           defaultPolygonColor: "#202020", // optional, default: '#dbd7e8', default color of the polygons
           hoverPolygonColor: "#da291c", // optional, default: '#a58dfa', hover color of the polygons
-          selectedPolygonColor: "#da291c", // optional, default: '#6945ed', selected color of the polygons
+          selectedPolygonColor: "#2a2828", // optional, default: '#6945ed', selected color of the polygons
           defaultLabelColor: "#fff", // optional, default: '#6945ed', default color of the polygon labels
           defaultPolygonHeight: 1.5, // optional, default: 3, default polygon height in meters
           hoverPolygonHeight: 3, // optional, default: 3, hover polygon height in meters

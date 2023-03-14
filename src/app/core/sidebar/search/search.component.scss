@@ -1,4 +1,4 @@
-@import '../../../../styles/variables';
+@import "../../../../styles/variables";
 
 .container {
   position: absolute;
@@ -11,7 +11,7 @@
     left: 0;
     right: 0;
     background-color: rgba(255 255 255 / 0%);
-    transition: all .2s linear;
+    transition: all 0.2s linear;
     z-index: 10;
   }
 
@@ -20,7 +20,7 @@
     position: absolute;
     z-index: 13;
     top: 12px;
-    transition: all .3s linear;
+    transition: all 0.3s linear;
     &.search-icon {
       left: 15px;
     }
@@ -38,7 +38,7 @@
 
   .ng-select.custom ::ng-deep {
     min-width: 428px;
-    .ng-select-container  {
+    .ng-select-container {
       cursor: pointer;
       width: 428px;
       min-height: 0px;
@@ -47,7 +47,7 @@
       background-color: rgba(255 255 255 / 90%);
       border: 2px solid rgb(0 0 0 / 15%);
       box-shadow: 0 5px 10px rgb(0 0 0 / 5%);
-      transition: all .3s linear;
+      transition: all 0.3s linear;
 
       &:hover {
         border: 2px solid rgb(0 0 0 / 25%);
@@ -62,7 +62,7 @@
           color: $default-color;
         }
         .ng-input {
-          transition: all .3s linear;
+          transition: all 0.3s linear;
           input {
             padding-left: 65px;
           }
@@ -88,6 +88,16 @@
           font-size: 28px;
           &.ng-option-marked {
             font-weight: bold;
+          }
+        }
+        .ng-optgroup {
+          background-color: rgba(0, 0, 0, 0.4);
+          color: white;
+          font-size: 22px;
+          font-weight: 300;
+          max-width: 420px;
+          &:first-child {
+            display: none;
           }
         }
       }
@@ -117,7 +127,7 @@
       right: 2rem;
       z-index: 12;
 
-      .ng-select-container  {
+      .ng-select-container {
         width: 100%;
         border-radius: 80px;
         height: 80px;
@@ -155,7 +165,7 @@
       }
       &.search-icon {
         left: 38px;
-      };
+      }
     }
 
     .ng-select.custom ::ng-deep {
@@ -182,6 +192,10 @@
             padding-left: 35px;
             font-size: 18px;
           }
+          .ng-optgroup {
+            font-size: 16px;
+            max-width: 100%;
+          }
         }
       }
     }
@@ -200,7 +214,7 @@
         left: 1.5rem;
         right: 1.5rem;
 
-        .ng-select-container  {
+        .ng-select-container {
           height: 46px;
           border-width: 2px;
 
