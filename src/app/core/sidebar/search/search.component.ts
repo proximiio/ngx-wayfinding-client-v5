@@ -4,7 +4,7 @@ import * as removeAccents from "remove-accents";
 import { MapService } from "src/app/map/map.service";
 import { SidebarService } from "../sidebar.service";
 
-let currentLanguage = 'en';
+let currentLanguage = "en";
 
 @Component({
   selector: "app-search",
@@ -21,7 +21,7 @@ export class SearchComponent implements OnInit {
     public sidebarService: SidebarService,
     private elRef: ElementRef,
     public mapService: MapService,
-    private translateService: TranslateService,
+    private translateService: TranslateService
   ) {
     currentLanguage = this.translateService.currentLang;
   }
@@ -40,13 +40,42 @@ export class SearchComponent implements OnInit {
 
   onSearchOpen() {
     if (this.mapService.mapReady) {
-      this.pois = this.sidebarService.sortedPOIs;
       this.searchOpen = true;
     }
   }
 
   onSearch(result) {
     this.optionsOpen = result.term.length > 0;
+    this.pois = this.sidebarService.sortedPOIs
+      .map((item) => {
+        const details =
+          item.properties?.description_i18n &&
+          item.properties?.description_i18n[currentLanguage]
+            ? item.properties.description_i18n[currentLanguage]
+            : item.properties.description_i18n?.en;
+        const title = removeAccents(item.properties?.title);
+        const term = removeAccents(result.term.toLowerCase());
+        if (
+          title.toLowerCase().indexOf(term) > -1 ||
+          details?.toLowerCase().indexOf(term) > -1
+        ) {
+          if (title.toLowerCase().startsWith(term)) {
+            item.score = 9;
+          } else if (title.toLowerCase().indexOf(term) > -1) {
+            item.score = 1;
+          } else if (details?.toLowerCase().indexOf(term) > -1) {
+            item.score = 0;
+            item.foundInDescription = true;
+          }
+          return item;
+        }
+      })
+      .filter((i) => i)
+      .sort(
+        (a, b) =>
+          b.score - a.score ||
+          (a.properties.title > b.properties.title ? 1 : -1)
+      );
   }
 
   onSelect(result, select) {
@@ -57,21 +86,6 @@ export class SearchComponent implements OnInit {
       this.optionsOpen = false;
       select.blur();
     });
-  }
-
-  customSearchFn(term: string, item) {
-    const details = item.properties.description_i18n && item.properties.description_i18n[
-      currentLanguage
-    ]
-      ? item.properties.description_i18n[
-          currentLanguage
-        ]
-      : item.properties.description_i18n?.en;
-    term = removeAccents(term.toLowerCase());
-    return (
-      removeAccents(item.properties.title).toLowerCase().indexOf(term) > -1 ||
-      details?.toLowerCase().indexOf(term) > -1
-    );
   }
 
   onClose(select) {

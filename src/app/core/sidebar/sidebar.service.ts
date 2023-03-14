@@ -131,6 +131,8 @@ export class SidebarService {
           search_query: item.properties.title + " " + item.properties.level,
           coordinates: item.geometry.coordinates,
           isInside,
+          score: 0,
+          foundInDescription: false
         };
       })
       .filter((item) => item.isInside);
