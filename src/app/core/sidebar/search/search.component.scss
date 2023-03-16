@@ -91,13 +91,14 @@
           }
         }
         .ng-optgroup {
-          background-color: rgba(0, 0, 0, 0.4);
-          color: white;
-          font-size: 22px;
-          font-weight: 300;
-          max-width: 420px;
-          &:first-child {
-            display: none;
+          padding: 0;
+          > div {
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            font-size: 22px;
+            font-weight: 300;
+            max-width: 420px;
+            padding: 8px 10px;
           }
         }
       }
@@ -192,7 +193,7 @@
             padding-left: 35px;
             font-size: 18px;
           }
-          .ng-optgroup {
+          .ng-optgroup > div {
             font-size: 16px;
             max-width: 100%;
           }

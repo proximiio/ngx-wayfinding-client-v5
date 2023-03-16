@@ -29,12 +29,10 @@
     [disabled]="!mapService.mapReady"
   >
     <ng-template ng-optgroup-tmp let-item="item">
-      {{ item.foundInDescription ? "Found in description" : "" }}
+      <div [hidden]="!item.foundInDescription">{{ item.foundInDescription ? "Found in description" : "" }}</div>
     </ng-template>
     <ng-container *ngFor="let poi of pois">
-      <ng-option [value]="poi"
-        >{{ poi.properties.title }}</ng-option
-      >
+      <ng-option [value]="poi">{{ poi.properties.title }}</ng-option>
     </ng-container>
   </ng-select>
 </div>
