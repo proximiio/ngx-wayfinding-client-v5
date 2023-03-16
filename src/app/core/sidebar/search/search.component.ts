@@ -76,6 +76,7 @@ export class SearchComponent implements OnInit {
           b.score - a.score ||
           (a.properties.title > b.properties.title ? 1 : -1)
       );
+    console.log(this.pois);
   }
 
   onSelect(result, select) {
