@@ -16,6 +16,17 @@ export interface KioskModel {
   poiId?: string;
 }
 
+export interface RouteDetails {
+  distance: number;
+  duration: {
+    elevator: number;
+    escalator: number;
+    staircase: number;
+    realistic: number;
+    shortest: number;
+  };
+}
+
 export interface State {
   readonly initializing: boolean;
   readonly floor: FloorModel;
@@ -38,11 +49,13 @@ export interface State {
     level: number;
   };
   readonly textNavigation: any;
+  readonly routeDetails?: RouteDetails;
   accessibleRoute: boolean;
   kioskMode: boolean;
   kiosks?: KioskModel[];
   startPoiId: string;
   startPoi: any;
+  defaultPlaceId?: string;
 }
 
 @Injectable({ providedIn: "root" })
@@ -86,5 +99,6 @@ export class StateService {
     startPoiId:
       "75698d35-0918-4a2b-a8ab-77b93a618e61:52c53790-2acf-4271-8a32-4b1c99b3227a", // default start point for routes
     startPoi: null,
+    defaultPlaceId: "e905bda5-4900-48f5-a6b0-d8e39c05050f",
   };
 }

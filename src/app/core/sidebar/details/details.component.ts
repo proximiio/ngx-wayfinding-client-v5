@@ -124,7 +124,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.distanceInMeters =
             this.stateService.state.textNavigation.distanceMeters;
           this.distanceInMinutes = humanizeDuration(
-            (this.distanceInMeters / 1000 / this.averageWalkSpeed) * 3600000,
+            this.stateService.state.routeDetails.duration.realistic * 1000,
             { delimiter: " and ", round: true, language: this.currentLanguage }
           );
           this.haveRouteDetails = true;
@@ -336,7 +336,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   getClosestParking() {
-    const featureCollection = {
+    const sameLevelParking = {
+      type: "FeatureCollection",
+      features: this.stateService.state.allFeatures.features.filter(
+        (i) =>
+          i.properties.amenity === this.parkingAmenityId &&
+          i.geometry.type === "Point" &&
+          i.properties.level === this.poi.properties.level
+      ),
+    } as FeatureCollection<Point, { [name: string]: any }>;
+    const allLevelParking = {
       type: "FeatureCollection",
       features: this.stateService.state.allFeatures.features.filter(
         (i) =>
@@ -347,7 +356,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const targetPoint = turf.point(this.poi.geometry.coordinates);
     this.closestParkingFeature = turf.nearestPoint(
       targetPoint,
-      featureCollection
+      sameLevelParking.features.length > 0 ? sameLevelParking : allLevelParking
     ) as Feature;
     this.closestParkingFeature.properties.title =
       this.closestParkingFeature.properties.title_i18n &&

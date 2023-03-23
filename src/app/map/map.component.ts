@@ -37,6 +37,22 @@ export class MapComponent implements OnInit, OnDestroy {
   private kiosk: KioskModel;
   private destinationParam: string;
   private placeParam: string;
+  private wayfindingConfig = {
+    avoidElevators: true,
+    avoidEscalators: false,
+    avoidStaircases: false,
+    avoidRamps: false,
+    avoidNarrowPaths: false,
+    avoidRevolvingDoors: false,
+    avoidTicketGates: false,
+    avoidBarriers: false,
+    avoidHills: false,
+  };
+  private routeCache: {
+    start: string;
+    destination: string;
+    type: "amenity";
+  };
   private subs: Subscription[] = [];
 
   constructor(
@@ -103,12 +119,11 @@ export class MapComponent implements OnInit, OnDestroy {
         const destination = this.endPoi
           ? this.endPoi
           : this.stateService.state.textNavigation.destination;
-        if (destination) {
+        if (destination && !this.routeCache) {
           // if we have destination point selected, redraw the route based on accessible status
-          this.map.findRouteByIds(
+          this.findRoute(
             destination.id,
-            this.stateService.state.kioskMode ? null : this.startPoiId,
-            this.stateService.state.accessibleRoute
+            this.stateService.state.kioskMode ? null : this.startPoiId
           );
         }
       }),
@@ -136,7 +151,7 @@ export class MapComponent implements OnInit, OnDestroy {
               res.category === "amenities" &&
               this.stateService.state.kioskMode
             ) {
-              this.map.findRouteToNearestFeature(res.amenityId);
+              this.findRoute(res.amenityId, null, "amenity");
             }
           }
         }
@@ -159,9 +174,10 @@ export class MapComponent implements OnInit, OnDestroy {
         }),
       this.sidebarService.getRouteToClosestAmenityListener().subscribe(() => {
         if (this.map) {
-          this.map.findRouteToNearestFeature(
-            this.sidebarService.activeListItem.id,
-            this.startPoiId
+          this.findRoute(
+            this.sidebarService.activeListItem.id as string,
+            this.startPoiId,
+            "amenity"
           );
         }
       })
@@ -190,7 +206,7 @@ export class MapComponent implements OnInit, OnDestroy {
           pitch: this.stateService.state.options.pitch,
           bearing: this.stateService.state.options.bearing,
         },
-        defaultPlaceId: "e905bda5-4900-48f5-a6b0-d8e39c05050f", // if you have more than 1 place in your account, it's a good idea to define defaultPlaceId for the map, otherwise the first one will be picked up
+        defaultPlaceId: this.stateService.state.defaultPlaceId, // if you have more than 1 place in your account, it's a good idea to define defaultPlaceId for the map, otherwise the first one will be picked up
         isKiosk: this.stateService.state.kioskMode, // if enabled starting point for routing will be based on values defined in kioskSettings, if disabled findRoute methods will expect start point to be send.
         kioskSettings: {
           coordinates: this.stateService.state.defaultLocation.coordinates as [
@@ -375,6 +391,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.stateService.state = {
           ...this.stateService.state,
           textNavigation: res.TBTNav,
+          routeDetails: res.details,
         };
 
         // send route found event to map service
@@ -388,6 +405,21 @@ export class MapComponent implements OnInit, OnDestroy {
           }, 1000);
           this.destinationFromUrl = false; // must be set to false to enable rerouting by search/click
         }
+
+        this.routeCache = null;
+      });
+
+      // if route finding failed, try again with accessible route
+      this.map.getRouteFailedListener().subscribe((res) => {
+        if (this.routeCache) {
+          this.sidebarService.onAccessibleRouteToggle();
+          this.findRoute(
+            this.routeCache.destination,
+            this.routeCache.start,
+            this.routeCache.type
+          );
+        }
+        this.routeCache = null;
       });
 
       // set destination point for routing based on click event and cancel previous route if generated
@@ -447,11 +479,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.map.setFloorByLevel(startPoi.properties.level);
       // if we also have an endpoint generate route
       if (this.endPoi) {
-        this.map.findRouteByIds(
-          this.endPoi.id,
-          this.startPoiId,
-          this.stateService.state.accessibleRoute
-        );
+        this.findRoute(this.endPoi.id, this.startPoiId);
       }
     }
   }
@@ -471,12 +499,47 @@ export class MapComponent implements OnInit, OnDestroy {
 
   onShowRoute() {
     if (this.map) {
-      this.map.findRouteByIds(
+      this.findRoute(
         this.endPoi.id,
-        this.stateService.state.kioskMode ? null : this.startPoiId,
-        this.stateService.state.accessibleRoute
+        this.stateService.state.kioskMode ? null : this.startPoiId
       );
     }
+  }
+
+  findRoute(destination: string, start?: string, type?: "amenity") {
+    this.routeCache = {
+      ...this.routeCache,
+      destination,
+      start,
+      type,
+    };
+    const wayfindingConfig = {
+      ...this.wayfindingConfig,
+      avoidElevators: this.stateService.state.accessibleRoute ? false : true,
+      avoidEscalators: this.stateService.state.accessibleRoute ? true : false,
+      avoidStaircases: this.stateService.state.accessibleRoute ? true : false,
+      avoidBarriers: this.stateService.state.accessibleRoute ? true : false,
+      avoidNarrowPaths: this.stateService.state.accessibleRoute ? true : false,
+      avoidRevolvingDoors: this.stateService.state.accessibleRoute
+        ? true
+        : false,
+      avoidTicketGates: this.stateService.state.accessibleRoute ? true : false,
+    };
+    if (type === "amenity") {
+      this.map.findRouteToNearestFeature(
+        destination,
+        start,
+        this.stateService.state.accessibleRoute,
+        wayfindingConfig
+      );
+      return;
+    }
+    this.map.findRouteByIds(
+      destination,
+      start,
+      this.stateService.state.accessibleRoute,
+      wayfindingConfig
+    );
   }
 
   onResetView() {
