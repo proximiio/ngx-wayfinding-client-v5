@@ -30,7 +30,7 @@ export class ListViewComponent implements OnInit, OnDestroy {
                   ? res.amenityId.includes(i.properties.amenity)
                   : i.properties.amenity === res.amenityId) &&
                 i.properties.type === "poi" &&
-                i.properties.place_id === "e905bda5-4900-48f5-a6b0-d8e39c05050f"
+                i.properties.place_id === this.stateService.state.defaultPlaceId
             )
             .sort((a, b) => (a.properties.title > b.properties.title ? 1 : -1))
             // .sort((a, b) => (a.properties.level > b.properties.level ? 1 : -1))

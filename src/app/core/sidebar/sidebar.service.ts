@@ -95,8 +95,12 @@ export class SidebarService {
     return this.stateService.state.allFeatures.features
       .filter(
         (feature) =>
-          feature.properties.usecase === "poi" ||
-          feature.properties.type === "poi"
+          (feature.properties.usecase === "poi" ||
+            feature.properties.type === "poi") &&
+          feature.properties.type !== "escalator" &&
+          feature.properties.type !== "elevator" &&
+          feature.properties.type !== "staircase" &&
+          feature.properties.place_id === this.stateService.state.defaultPlaceId
       )
       .sort((a, b) => (a.properties.title > b.properties.title ? -1 : 1))
       .sort((a, b) => (a.properties.level > b.properties.level ? 1 : -1))
@@ -132,7 +136,7 @@ export class SidebarService {
           coordinates: item.geometry.coordinates,
           isInside,
           score: 0,
-          foundInDescription: false
+          foundInDescription: false,
         };
       })
       .filter((item) => item.isInside);
