@@ -336,7 +336,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   getClosestParking() {
-    const sameLevelParking = {
+    let sameLevelParking = {
       type: "FeatureCollection",
       features: this.stateService.state.allFeatures.features.filter(
         (i) =>
@@ -345,7 +345,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           i.properties.level === this.poi.properties.level
       ),
     } as FeatureCollection<Point, { [name: string]: any }>;
-    const allLevelParking = {
+    let allLevelParking = {
       type: "FeatureCollection",
       features: this.stateService.state.allFeatures.features.filter(
         (i) =>
@@ -353,6 +353,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
           i.geometry.type === "Point"
       ),
     } as FeatureCollection<Point, { [name: string]: any }>;
+    if (this.stateService.state.defaultPlaceId) {
+      sameLevelParking.features = sameLevelParking.features.filter((i) => i.properties.place_id === this.stateService.state.defaultPlaceId);
+      allLevelParking.features = allLevelParking.features.filter((i) => i.properties.place_id === this.stateService.state.defaultPlaceId);
+    }
     const targetPoint = turf.point(this.poi.geometry.coordinates);
     this.closestParkingFeature = turf.nearestPoint(
       targetPoint,
