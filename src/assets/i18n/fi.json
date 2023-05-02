@@ -65,5 +65,18 @@
   "route-from-entrance": "Reitti sisäänkäynniltä",
   "route-from-bike": "Reitti pyöräparkilta",
   "other-route": "Muu reitti",
-  "fast-route": "Nopea reitti"
+  "fast-route": "Nopea reitti",
+  "ELEVATOR": "hissillä",
+  "ESCALATOR": "liukuportaita",
+  "STAIRS": "portaita",
+  "UP": "ylös",
+  "DOWN": "alas",
+  "TO_FLOOR": "kerrokseen",
+  "walk": "Walk",
+  "go": "Kulje",
+  "and-take-the": "ja mene",
+  "in": "päästä",
+  "you-will-arrive": "Saavut perille kohteeseen",
+  "next": "Jatka",
+  "arrived": "Perillä"
 }

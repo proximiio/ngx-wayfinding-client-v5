@@ -55,7 +55,7 @@ export interface State {
   kiosks?: KioskModel[];
   startPoiId: string;
   startPoi: any;
-  defaultPlaceId?: string;
+  defaultPlaceId: string;
 }
 
 @Injectable({ providedIn: "root" })
@@ -113,6 +113,6 @@ export class StateService {
     startPoiId:
       "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952", // default start point for routes
     startPoi: null,
-    defaultPlaceId: "place-id",
+    defaultPlaceId: "da2152c9-48bc-437d-a19d-ceb6a3a0f02a",
   };
 }

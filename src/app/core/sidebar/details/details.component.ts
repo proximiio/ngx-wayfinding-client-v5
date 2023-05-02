@@ -26,6 +26,9 @@ interface StepModel {
   levelChangerId: string;
   lineStringFeatureFromLastStep: Feature;
   waypointId: string;
+  destinationLevel?: number;
+  stepsUntil?: StepModel[];
+  totalDistance?: number;
 }
 
 @Component({
@@ -54,12 +57,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
   startPoiId: string;
   parkingAmenityId =
     "44010f6f-9963-4433-ad86-40b89b829c41:adf1071e-81cb-4134-ae55-2e0e0005d2b7";
-    entrancePoiId =
+  entrancePoiId =
     "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952";
   closestParkingFeature: Feature;
   qrCodeUrl: string;
   linkUrl: string;
   routeType: "accessible" | "fastest";
+  currentStep = 0;
   private destinationFromUrl = false;
   private subs: Subscription[] = [];
 
@@ -102,6 +106,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         } else {
           this.haveRouteDetails = false;
           this.mapService.showingRoute = this.haveRouteDetails;
+          this.currentStep = 0;
         }
         this.destinationFromUrl = false;
       }),
@@ -157,8 +162,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
         if (this.poi) {
           this.definePoi(this.poi);
           this.distanceInMinutes = humanizeDuration(
-            (this.distanceInMeters / 1000 / this.averageWalkSpeed) * 3600000,
+            this.stateService.state.routeDetails.duration.realistic * 1000,
             { delimiter: " and ", round: true, language: this.currentLanguage }
+          );
+          this.buildNavigationSteps(
+            this.stateService.state.textNavigation.steps
           );
         }
       })
@@ -214,58 +222,90 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   buildNavigationSteps(steps: StepModel[]) {
-    steps = steps.filter((i) => i.instruction);
-    this.steps = steps.map((step: StepModel) => {
-      let directionIcon;
-      let stepIcon;
-      switch (step.direction) {
-        case "LEFT": {
-          directionIcon = "arrow-left";
-          stepIcon = "shoe-prints";
-          break;
+    let previousIndex = 0;
+    this.steps = steps
+      .filter((i, index, array) => {
+        // Get the first part of the direction string
+        const direction = i.direction.split("_")[0];
+        // Check if the current step is a level changer and has a valid direction or is finish
+        if (
+          (i.levelChangerId && (direction === "UP" || direction === "DOWN")) ||
+          i.direction === "FINISH"
+        ) {
+          i.stepsUntil = array.slice(previousIndex, index);
+          previousIndex = index + 1;
+          return i;
         }
-        case "SLIGHT_LEFT": {
-          directionIcon = "arrow-left";
-          stepIcon = "shoe-prints";
-          break;
+      })
+      .map((step) => {
+        const direction = step.direction.split("_")[0]
+          ? step.direction.split("_")[0]
+          : step.direction;
+        const levelChangerType = step.direction.split("_")[1];
+        const destinationFloor = this.stateService.state.floors.filter(
+          (f) => f.level === step.destinationLevel
+        )
+          ? this.stateService.state.floors.filter(
+              (f) => f.level === step.destinationLevel
+            )[0]
+          : this.stateService.state.floor;
+
+        const stepsUntilDistance = step.stepsUntil.reduce(
+          (total, item) => total + item.distanceFromLastStep,
+          0
+        );
+        const totalDistance = step.distanceFromLastStep + stepsUntilDistance;
+
+        let description;
+        if (direction === "FINISH") {
+          description =
+            this.currentLanguage === "en"
+              ? `${this.translateService.instant("in")} ${
+                  totalDistance | 0
+                }m ${this.translateService.instant("you-will-arrive")}.`
+              : `${this.translateService.instant("you-will-arrive")} ${
+                  totalDistance | 0
+                }m ${this.translateService.instant("in")}.`;
+        } else {
+          description = `${this.translateService.instant("go")} ${
+            totalDistance | 0
+          }m ${this.translateService.instant(
+            "and-take-the"
+          )} ${this.translateService.instant(
+            levelChangerType
+          )} ${this.translateService.instant(
+            direction
+          )} ${this.translateService.instant("TO_FLOOR")} ${
+            destinationFloor.name
+              ? destinationFloor.name
+              : step.destinationLevel
+          }.`;
         }
-        case "RIGHT": {
-          directionIcon = "arrow-right";
-          stepIcon = "shoe-prints";
-          break;
-        }
-        case "SLIGHT_RIGHT": {
-          directionIcon = "arrow-right";
-          stepIcon = "shoe-prints";
-          break;
-        }
-        case "UP_ESCALATOR": {
-          directionIcon = "arrow-up";
-          stepIcon = "caret-square-up";
-          break;
-        }
-        case "DOWN_ESCALATOR": {
-          directionIcon = "arrow-up";
-          stepIcon = "caret-square-down";
-          break;
-        }
-        case "FINISH": {
-          directionIcon = "arrow-up";
-          stepIcon = "pennant";
-          break;
-        }
-        default: {
-          directionIcon = "compass";
-          stepIcon = "shoe-prints";
-          break;
-        }
-      }
-      return {
-        description: step.instruction.join(""),
-        directionIcon: ["fal", directionIcon],
-        stepIcon: ["fal", stepIcon],
-      };
-    });
+
+        return {
+          totalDistance,
+          description,
+          destinationFloor,
+          ...step,
+        };
+      });
+  }
+
+  onNextStep() {
+    const lastStepIndex = this.steps.length - 1;
+
+    if (this.currentStep !== lastStepIndex) {
+      const step = this.steps[this.currentStep];
+      this.sidebarService.floorChangeListener.next(step.destinationFloor);
+      this.currentStep++;
+    } else {
+      const firstStep = this.stateService.state.textNavigation.steps[0];
+      const startFloor = this.stateService.state.floors.find(
+        (floor) => floor.level === firstStep.level
+      );
+      this.sidebarService.floorChangeListener.next(startFloor);
+      this.currentStep = 0;
+    }
   }
 
   onStartPoiSelect(e) {
@@ -333,6 +373,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }
     this.getClosestParking();
     this.getUrl();
+    if (this.stateService.state.textNavigation?.steps) {
+      this.buildNavigationSteps(this.stateService.state.textNavigation.steps);
+    }
   }
 
   getClosestParking() {
@@ -354,8 +397,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
       ),
     } as FeatureCollection<Point, { [name: string]: any }>;
     if (this.stateService.state.defaultPlaceId) {
-      sameLevelParking.features = sameLevelParking.features.filter((i) => i.properties.place_id === this.stateService.state.defaultPlaceId);
-      allLevelParking.features = allLevelParking.features.filter((i) => i.properties.place_id === this.stateService.state.defaultPlaceId);
+      sameLevelParking.features = sameLevelParking.features.filter(
+        (i) => i.properties.place_id === this.stateService.state.defaultPlaceId
+      );
+      allLevelParking.features = allLevelParking.features.filter(
+        (i) => i.properties.place_id === this.stateService.state.defaultPlaceId
+      );
     }
     const targetPoint = turf.point(this.poi.geometry.coordinates);
     this.closestParkingFeature = turf.nearestPoint(

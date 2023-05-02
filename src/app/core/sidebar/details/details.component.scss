@@ -188,6 +188,45 @@
       }
     }
 
+    .step-nav {
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 0.5rem;
+      border-radius: 5px;
+      overflow: hidden;
+
+      .description {
+        background-color: #b8b0af;
+        color: white;
+        padding: 1rem;
+        flex: 1;
+        display: flex;
+        align-items: center;
+
+        p {
+          margin: 0;
+        }
+      }
+      .next {
+        background-color: #000;
+        color: white;
+        cursor: pointer;
+        padding: 1rem;
+        text-align: center;
+        font-size: 24px;
+        text-transform: uppercase;
+
+        p {
+          margin-bottom: 0;
+          margin-top: 0.25rem;
+        }
+
+        &:hover {
+          background-color: #222;
+        }
+      }
+    }
+
     .mat-expansion-panel ::ng-deep {
       box-shadow: none;
       background: white;
@@ -260,7 +299,7 @@
     }
   }
   .start-box {
-    margin-top: -3rem;
+    margin-top: -2rem;
     padding: 1rem 2rem;
     padding-top: 0;
     position: relative;
@@ -279,7 +318,7 @@
       gap: 10px;
       margin-bottom: 1rem;
       > button {
-        flex: auto;
+        flex: 1 1 0px;
         text-align: center;
         background-color: $default-color;
         color: white;
@@ -338,6 +377,7 @@
       }
       &.small-viewport-only {
         display: block;
+        padding-bottom: 0;
       }
       > p {
         display: none;
@@ -346,6 +386,7 @@
         display: none;
       }
       .accessible-toggle-group {
+        display: none;
         border-radius: 8px;
         margin-bottom: 0.8rem;
         .mat-button-toggle {
@@ -358,6 +399,12 @@
             margin-right: 0.4rem;
           }
         }
+      }
+      .distance {
+        display: none;
+      }
+      .step-nav {
+        padding-bottom: 0;
       }
     }
 
@@ -375,21 +422,24 @@
         .open-hours {
           display: none;
         }
+        .accessible-toggle-group {
+          display: flex;
+        }
       }
     }
 
     &.haveRoute {
       max-height: 245px;
       .content {
-        .distance {
-          display: block;
-        }
         .qr-code {
           display: none;
         }
         .show-route {
           display: none;
         }
+      }
+      .start-box {
+        display: none;
       }
       &.open {
         max-height: 100%;
@@ -398,8 +448,16 @@
             height: auto;
           }
         }
-        .content .qr-code {
-          right: 0.5rem;
+        .content {
+          .distance {
+            display: block;
+          }
+          .qr-code {
+            right: 0.5rem;
+          }
+        }
+        .start-box {
+          display: block;
         }
       }
     }

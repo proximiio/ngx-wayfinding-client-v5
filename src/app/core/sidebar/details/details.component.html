@@ -108,35 +108,27 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
 
-      <button (click)="toggleInstructions()" class="instructions-toggle">
-        <fa-icon
-          [icon]="
-            showInstructions
-              ? ['fal', 'angle-down']
-              : stateService.state.accessibleRoute
-              ? ['fal', 'wheelchair']
-              : ['fal', 'route']
-          "
-        ></fa-icon>
-        {{
-          (showInstructions ? "hideInstructions" : "showInstructions")
-            | translate
-        }}
-      </button>
-
-      <mat-expansion-panel [disabled]="true" [expanded]="showInstructions">
-        <mat-panel-description>
-          <mat-list>
-            <mat-list-item *ngFor="let step of steps">
-              <p matLine>
-                <fa-icon [icon]="step.directionIcon"></fa-icon>
-                <fa-icon [icon]="step.stepIcon"></fa-icon>
-              </p>
-              <p matLine>{{ step.description }}</p>
-            </mat-list-item>
-          </mat-list>
-        </mat-panel-description>
-      </mat-expansion-panel>
+      <div class="step-nav">
+        <div class="description">
+          <p>{{ steps[currentStep].description }}</p>
+        </div>
+        <div class="next" (click)="onNextStep()">
+          <fa-icon
+            [icon]="
+              currentStep !== steps.length - 1
+                ? ['fal', 'chevron-double-right']
+                : ['fal', 'pennant']
+            "
+          ></fa-icon>
+          <p>
+            {{
+              currentStep !== steps.length - 1
+                ? ("next" | translate)
+                : ("arrived" | translate)
+            }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -203,22 +195,27 @@
     </p>
 
     <div *ngIf="haveRouteDetails">
-      <p>
-        <strong>{{ "instructions" | translate }}:</strong>
-      </p>
-      <mat-expansion-panel [disabled]="true" [expanded]="true">
-        <mat-panel-description>
-          <mat-list>
-            <mat-list-item *ngFor="let step of steps">
-              <p matLine>
-                <fa-icon [icon]="step.directionIcon"></fa-icon>
-                <fa-icon [icon]="step.stepIcon"></fa-icon>
-              </p>
-              <p matLine>{{ step.description }}</p>
-            </mat-list-item>
-          </mat-list>
-        </mat-panel-description>
-      </mat-expansion-panel>
+      <div class="step-nav">
+        <div class="description">
+          <p>{{ steps[currentStep].description }}</p>
+        </div>
+        <div class="next" (click)="onNextStep()">
+          <fa-icon
+            [icon]="
+              currentStep !== steps.length - 1
+                ? ['fal', 'chevron-double-right']
+                : ['fal', 'pennant']
+            "
+          ></fa-icon>
+          <p>
+            {{
+              currentStep !== steps.length - 1
+                ? ("next" | translate)
+                : ("arrived" | translate)
+            }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 

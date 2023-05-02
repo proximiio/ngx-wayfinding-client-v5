@@ -57,8 +57,8 @@
 .brand {
   position: fixed;
   top: 0;
-  right: 80px;
-  width: 320px;
+  right: 100px;
+  width: 180px;
   z-index: 1;
 
   img {
@@ -130,12 +130,14 @@
     &.haveRoute {
       padding: 0;
       min-height: 0;
+
       app-search,
       .filters,
       .toggle {
         display: none !important;
       }
       ::ng-deep app-floor-picker {
+        display: none;
         .container {
           top: 20px;
         }

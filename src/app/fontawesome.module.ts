@@ -1,6 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule } from "@angular/core";
 
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from "@fortawesome/angular-fontawesome";
 import {
   faChevronUp,
   faChevronDown,
@@ -46,13 +49,16 @@ import {
   faAngleRight,
   faAngleDoubleLeft,
   faAngleDoubleRight,
-  faArrowCircleDown, faArrowCircleUp, faCaretSquareDown, faCaretSquareUp, faBars
-} from '../vendor/pro-light-svg-icons';
+  faArrowCircleDown,
+  faArrowCircleUp,
+  faCaretSquareDown,
+  faCaretSquareUp,
+  faBars,
+  faRedo,
+} from "../vendor/pro-light-svg-icons";
 
 @NgModule({
-  exports: [
-    FontAwesomeModule
-  ]
+  exports: [FontAwesomeModule],
 })
 export class FontawesomeModule {
   constructor(library: FaIconLibrary) {
@@ -105,7 +111,8 @@ export class FontawesomeModule {
       faCog,
       faCompass,
       faChevronRight,
-      faBars
+      faBars,
+      faRedo
     );
   }
 }
