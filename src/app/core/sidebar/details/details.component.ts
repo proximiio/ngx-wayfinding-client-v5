@@ -5,7 +5,7 @@ import { Observable, Subscription } from "rxjs";
 import Feature from "proximiio-js-library/lib/models/feature";
 import * as Settings from "../../../../../settings";
 import * as humanizeDuration from "humanize-duration";
-import { TranslateService } from "@ngx-translate/core";
+import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
 import { MapService } from "src/app/map/map.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { map, startWith, tap } from "rxjs/operators";
@@ -54,10 +54,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
   startPoiId: string;
   parkingAmenityId =
     "44010f6f-9963-4433-ad86-40b89b829c41:adf1071e-81cb-4134-ae55-2e0e0005d2b7";
-  entrancePoiId =
+    entrancePoiId =
     "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952";
   closestParkingFeature: Feature;
   qrCodeUrl: string;
+  linkUrl: string;
+  routeType: "accessible" | "fastest";
   private destinationFromUrl = false;
   private subs: Subscription[] = [];
 
@@ -72,7 +74,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const destinationParam = urlParams.get("destinationFeature");
 
     this.poi = this.sidebarService.selectedEndPoi;
-    this.currentLanguage = this.translateService.currentLang;
+    this.routeType =
+      this.stateService.state.accessibleRoute === true
+        ? "accessible"
+        : "fastest";
 
     if (destinationParam) {
       this.destinationFromUrl = true;
@@ -82,45 +87,52 @@ export class DetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.push(
       this.sidebarService.getEndPointListener().subscribe((poi) => {
-        this.haveRouteDetails = this.destinationFromUrl;
+        /*this.haveRouteDetails = this.stateService.state.kioskMode
+          ? this.destinationFromUrl
+          : false;
+        this.mapService.showingRoute = this.haveRouteDetails;*/
         this.details = defaultDetails;
-        this.steps = this.destinationFromUrl ? this.steps : [];
+        this.linkUrl = null;
+        this.steps =
+          this.stateService.state.kioskMode && this.destinationFromUrl
+            ? this.steps
+            : [];
         if (poi) {
-          this.poi = poi;
-          this.poi.properties.title =
-            this.poi.properties.title_i18n &&
-            this.poi.properties.title_i18n[this.currentLanguage]
-              ? this.poi.properties.title_i18n[this.currentLanguage]
-              : this.poi.properties.title;
-          if (
-            this.poi.properties.wayfinding_metadata &&
-            this.poi.properties.wayfinding_metadata["1"]
-          ) {
-            this.details = this.poi.properties.wayfinding_metadata["1"][
-              this.currentLanguage
-            ]
-              ? this.poi.properties.wayfinding_metadata["1"][
-                  this.currentLanguage
-                ]
-              : this.poi.properties.wayfinding_metadata["1"].en;
-          }
-          this.getClosestParking();
+          this.definePoi(poi);
+        } else {
+          this.haveRouteDetails = false;
+          this.mapService.showingRoute = this.haveRouteDetails;
         }
         this.destinationFromUrl = false;
       }),
+      this.sidebarService.getAccessibleOnlyToggleListener().subscribe(() => {
+        setTimeout(() => {
+          this.routeType =
+            this.stateService.state.accessibleRoute === true
+              ? "accessible"
+              : "fastest";
+        });
+      }),
       this.mapService.getRouteFoundListener().subscribe((found) => {
         if (found && this.stateService.state.textNavigation) {
+          if (!this.poi) {
+            this.definePoi(this.stateService.state.textNavigation.destination);
+          }
           this.buildNavigationSteps(
             this.stateService.state.textNavigation.steps
           );
           this.distanceInMeters =
             this.stateService.state.textNavigation.distanceMeters;
           this.distanceInMinutes = humanizeDuration(
-            (this.distanceInMeters / 1000 / this.averageWalkSpeed) * 3600000,
+            this.stateService.state.routeDetails.duration.realistic * 1000,
             { delimiter: " and ", round: true, language: this.currentLanguage }
           );
           this.haveRouteDetails = true;
-          this.generateQrCode(this.sidebarService.selectedEndPoi, this.sidebarService.selectedStartPoi);
+          this.mapService.showingRoute = this.haveRouteDetails;
+          this.generateQrCode(
+            this.sidebarService.selectedEndPoi,
+            this.sidebarService.selectedStartPoi
+          );
         }
       }),
       this.mapService.getMapReadyListener().subscribe((ready) => {
@@ -139,13 +151,35 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.options = this.sidebarService.sortedPOIs;
           this.setStartPoi();
         }
+      }),
+      this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+        this.currentLanguage = event.lang;
+        if (this.poi) {
+          this.definePoi(this.poi);
+          this.distanceInMinutes = humanizeDuration(
+            (this.distanceInMeters / 1000 / this.averageWalkSpeed) * 3600000,
+            { delimiter: " and ", round: true, language: this.currentLanguage }
+          );
+        }
       })
     );
   }
 
   onDetailsClose() {
     this.sidebarService.onSetEndPoi(null);
+    this.poi = null;
     this.details = defaultDetails;
+    if (this.sidebarService.filteredAmenity) {
+      this.sidebarService.onAmenityToggle(
+        "amenities",
+        this.sidebarService.filteredAmenity
+      );
+      this.sidebarService.showClosestAmenityPicker = false;
+      this.sidebarService.activeListItem = null;
+      this.startPoiId = null;
+      this.setStartPoi();
+      this.sidebarService.onSetEndPoi(null);
+    }
   }
 
   toggleInstructions() {
@@ -248,12 +282,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
       const startPoi = this.sidebarService.sortedPOIs.find(
         (i) => i.id === this.stateService.state.startPoiId
       );
-      this.startPoiForm.get("startPoi").setValue(startPoi);
-      this.stateService.state = { ...this.stateService.state, startPoi };
-      this.stateService.state.defaultLocation.coordinates =
-        startPoi.coordinates;
-      this.stateService.state.defaultLocation.level = startPoi.properties.level;
-      this.sidebarService.onSetStartPoi(startPoi);
+      if (startPoi) {
+        this.startPoiForm.get("startPoi").setValue(startPoi);
+        this.stateService.state = { ...this.stateService.state, startPoi };
+        this.stateService.state.defaultLocation.coordinates =
+          startPoi.coordinates;
+        this.stateService.state.defaultLocation.level =
+          startPoi.properties.level;
+        this.sidebarService.onSetStartPoi(startPoi);
+      }
     }
   }
 
@@ -275,8 +312,40 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.mapService.showRouteListener.next();
   }
 
+  definePoi(poi) {
+    this.poi = poi;
+    if (!this.poi.properties._dynamic) this.poi.properties._dynamic = {};
+    if (!this.poi.geometry.type) this.poi.geometry.type = "Point";
+    this.poi.properties.title =
+      this.poi.properties.title_i18n &&
+      this.poi.properties.title_i18n[this.currentLanguage]
+        ? this.poi.properties.title_i18n[this.currentLanguage]
+        : this.poi.properties.title;
+    this.poi.properties._dynamic.floor = this.poi.properties.floor_id
+      ? this.stateService.state.floors.find(
+          (i) => i.id === this.poi.properties.floor_id
+        )
+      : null;
+    if (this.poi.properties.description_i18n) {
+      this.details = this.poi.properties.description_i18n[this.currentLanguage]
+        ? this.poi.properties.description_i18n[this.currentLanguage]
+        : this.poi.properties.description_i18n.en;
+    }
+    this.getClosestParking();
+    this.getUrl();
+  }
+
   getClosestParking() {
-    const featureCollection = {
+    let sameLevelParking = {
+      type: "FeatureCollection",
+      features: this.stateService.state.allFeatures.features.filter(
+        (i) =>
+          i.properties.amenity === this.parkingAmenityId &&
+          i.geometry.type === "Point" &&
+          i.properties.level === this.poi.properties.level
+      ),
+    } as FeatureCollection<Point, { [name: string]: any }>;
+    let allLevelParking = {
       type: "FeatureCollection",
       features: this.stateService.state.allFeatures.features.filter(
         (i) =>
@@ -284,9 +353,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
           i.geometry.type === "Point"
       ),
     } as FeatureCollection<Point, { [name: string]: any }>;
+    if (this.stateService.state.defaultPlaceId) {
+      sameLevelParking.features = sameLevelParking.features.filter((i) => i.properties.place_id === this.stateService.state.defaultPlaceId);
+      allLevelParking.features = allLevelParking.features.filter((i) => i.properties.place_id === this.stateService.state.defaultPlaceId);
+    }
+    const targetPoint = turf.point(this.poi.geometry.coordinates);
     this.closestParkingFeature = turf.nearestPoint(
-      this.poi,
-      featureCollection
+      targetPoint,
+      sameLevelParking.features.length > 0 ? sameLevelParking : allLevelParking
     ) as Feature;
     this.closestParkingFeature.properties.title =
       this.closestParkingFeature.properties.title_i18n &&
@@ -307,6 +381,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  onOtherRoute() {
+    this.sidebarService.showRoutePicker = true;
+  }
+
   onCenterToParking() {
     this.sidebarService.centerToFeatureListener.next(
       this.closestParkingFeature
@@ -317,13 +395,22 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const url = new URL(window.location.href);
     const urlParams = url.searchParams;
     if (!start && destination) {
-      urlParams.set('destinationFeature', destination.properties.id)
+      urlParams.set("destinationFeature", destination.properties.id);
     }
     if (destination && start) {
-      urlParams.set('destinationFeature', destination.properties.id)
-      urlParams.set('startFeature', start.properties.id)
+      urlParams.set("destinationFeature", destination.properties.id);
+      urlParams.set("startFeature", start.properties.id);
     }
     this.qrCodeUrl = url.href;
+  }
+
+  getUrl() {
+    const url = this.poi.properties.metadata.url;
+    if (url) {
+      let protocol = url.startsWith("http://") ? 1 : 0;
+      if (protocol === 0) protocol = url.startsWith("https://") ? 2 : 0;
+      this.linkUrl = protocol === 0 ? `http://${url}` : url;
+    }
   }
 
   ngOnDestroy() {

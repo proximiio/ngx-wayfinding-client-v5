@@ -14,7 +14,7 @@
       color: darken($default-color, 3%);
     }
   }
-  > .toggle {
+  nav > .toggle {
     display: none;
   }
 }
@@ -28,7 +28,7 @@
   margin-bottom: 1rem;
   position: absolute;
   left: 0;
-  top: 310px;
+  top: 110px;
   transition: all 0.25s linear;
   min-height: 143px;
   z-index: 2;
@@ -54,6 +54,18 @@
   }
 }
 
+.brand {
+  position: fixed;
+  top: 0;
+  right: 80px;
+  width: 320px;
+  z-index: 1;
+
+  img {
+    width: 100%;
+  }
+}
+
 @media only screen and (max-width: 959.98px) {
   .container {
     position: fixed;
@@ -69,7 +81,7 @@
     background-color: hsla(0, 0%, 100%, 0.9);
     box-shadow: 0 0 15px rgb(0 0 0 / 10%);
 
-    .toggle {
+    nav > .toggle {
       display: block;
       top: auto;
       bottom: 0rem;
@@ -95,13 +107,38 @@
         background: $accent-color;
       }
     }
-    app-floor-picker:not(.open) {
+    ::ng-deep app-floor-picker:not(.open) {
+      .container {
+        top: 105px;
+      }
+    }
+    .brand {
       display: none;
+      top: 188px;
+      right: calc(50% - 155px);
     }
     &:not(.open) {
       padding-bottom: 0;
       .menu-dropdown {
         top: 110px;
+      }
+      .brand {
+        top: 94px;
+      }
+    }
+
+    &.haveRoute {
+      padding: 0;
+      min-height: 0;
+      app-search,
+      .filters,
+      .toggle {
+        display: none !important;
+      }
+      ::ng-deep app-floor-picker {
+        .container {
+          top: 20px;
+        }
       }
     }
   }
@@ -125,12 +162,5 @@
     .toggle {
       display: none;
     }
-  }
-
-  .menu-section {
-    display: none;
-  }
-  .menu-dropdown {
-    display: flex;
   }
 }

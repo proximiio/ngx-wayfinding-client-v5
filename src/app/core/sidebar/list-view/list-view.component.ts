@@ -26,8 +26,11 @@ export class ListViewComponent implements OnInit, OnDestroy {
           this.data = this.stateService.state.allFeatures.features
             .filter(
               (i) =>
-                i.properties.amenity === res.amenityId &&
-                i.properties.type === "poi"
+                (Array.isArray(res.amenityId)
+                  ? res.amenityId.includes(i.properties.amenity)
+                  : i.properties.amenity === res.amenityId) &&
+                i.properties.type === "poi" &&
+                i.properties.place_id === this.stateService.state.defaultPlaceId
             )
             .sort((a, b) => (a.properties.title > b.properties.title ? 1 : -1))
             // .sort((a, b) => (a.properties.level > b.properties.level ? 1 : -1))
@@ -39,7 +42,7 @@ export class ListViewComponent implements OnInit, OnDestroy {
                   : i.properties.title;
               i.properties.floor_name = this.stateService.state.floors.find(
                 (floor) => floor.id === i.properties.floor_id
-              ).name;
+              )?.name;
               return i;
             });
         }

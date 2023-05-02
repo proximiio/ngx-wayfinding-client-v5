@@ -26,6 +26,11 @@
         width: 60px;
         height: 60px;
         line-height: 60px;
+
+        img {
+          margin-top: 10px;
+          width: 40px;
+        }
       }
 
       &:hover .icon {
@@ -66,6 +71,11 @@
           height: 44px;
           line-height: 44px;
           font-size: 16px;
+
+          img {
+            margin-top: 7px;
+            width: 30px;
+          }
         }
         p {
           text-overflow: ellipsis;

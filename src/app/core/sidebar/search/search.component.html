@@ -22,12 +22,17 @@
     [isOpen]="optionsOpen"
     [closeOnSelect]="true"
     [clearSearchOnAdd]="true"
+    groupBy="foundInDescription"
     (click)="onSearchOpen()"
     (search)="onSearch($event)"
     (change)="onSelect($event, select)"
+    [disabled]="!mapService.mapReady"
   >
-    <ng-option *ngFor="let poi of pois" [value]="poi">{{
-      poi.properties.title
-    }}</ng-option>
+    <ng-template ng-optgroup-tmp let-item="item">
+      <div [hidden]="!item.foundInDescription">{{ item.foundInDescription ? "Found in description" : "" }}</div>
+    </ng-template>
+    <ng-container *ngFor="let poi of pois">
+      <ng-option [value]="poi">{{ poi.properties.title }}</ng-option>
+    </ng-container>
   </ng-select>
 </div>

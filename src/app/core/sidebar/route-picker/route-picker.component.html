@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="content">
+    <h3 class="title">
+      {{ sidebarService.selectedEndPoi?.properties.title | translate }}
+    </h3>
+    <button (click)="onClose()" class="close">
+      <fa-icon [icon]="['fal', 'times']"></fa-icon>
+    </button>
+    <form [formGroup]="routeForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "startingPoint" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          [placeholder]="'startingPoint' | translate"
+          formControlName="startPoi"
+          [matAutocomplete]="start"
+        />
+        <mat-autocomplete
+          #start="matAutocomplete"
+          [displayWith]="displayPoi"
+          (optionSelected)="onStartPoiSelect($event)"
+        >
+          <mat-option
+            *ngFor="let option of filteredStartPois | async"
+            [value]="option"
+          >
+            {{
+              option.properties.title + " - Floor: " + option.properties.level
+            }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="routeForm.get('startPoi').invalid"
+          >Please enter a valid start poi.</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "destination" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          [placeholder]="'destination' | translate"
+          formControlName="destinationPoi"
+          [matAutocomplete]="destination"
+        />
+        <mat-autocomplete
+          #destination="matAutocomplete"
+          [displayWith]="displayPoi"
+          (optionSelected)="onDestinationSelect($event)"
+        >
+          <mat-option
+            *ngFor="let option of filteredDestinationPois | async"
+            [value]="option"
+          >
+            {{
+              option.properties.title + " - Floor: " + option.properties.level
+            }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="routeForm.get('destinationPoi').invalid"
+          >Please enter a valid destination poi.</mat-error
+        >
+      </mat-form-field>
+      <button type="submit" [disabled]="routeForm.invalid">
+        <img src="https://img.icons8.com/ios/50/ffffff/walking--v1.png" />
+        {{ "takeMeThere" | translate }}
+      </button>
+    </form>
+  </div>
+</div>

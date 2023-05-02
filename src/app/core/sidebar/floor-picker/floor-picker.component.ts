@@ -9,19 +9,12 @@ import { FloorModel } from 'proximiio-js-library/lib/models/floor';
   styleUrls: ['./floor-picker.component.scss']
 })
 export class FloorPickerComponent implements OnInit {
-  sidebarOpened = true;
-  pickerOpened = false;
-
   constructor(
     private sidebarService: SidebarService,
     public stateService: StateService
   ) {}
 
   ngOnInit() {
-  }
-
-  onFloorChange(way: string) {
-    this.sidebarService.floorChangeListener.next(way);
   }
 
   onFloorPick(floor: FloorModel) {
