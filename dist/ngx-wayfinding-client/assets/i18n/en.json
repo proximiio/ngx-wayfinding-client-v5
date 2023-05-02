@@ -65,5 +65,18 @@
   "route-from-entrance": "Route from entrance",
   "route-from-bike": "Route from bike parking",
   "other-route": "Other Route",
-  "fast-route": "Fast route"
+  "fast-route": "Fast route",
+  "ELEVATOR": "elevator",
+  "ESCALATOR": "escalator",
+  "STAIRS": "stairs",
+  "UP": "up",
+  "DOWN": "down",
+  "TO_FLOOR": "to floor",
+  "walk": "Walk",
+  "go": "Go",
+  "and-take-the": "and take the",
+  "in": "In",
+  "you-will-arrive": "you will arrive at your destination",
+  "next": "Next",
+  "arrived": "Arrived"
 }
