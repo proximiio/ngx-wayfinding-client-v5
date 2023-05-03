@@ -13,7 +13,7 @@
   <button (click)="onDetailsClose()" class="close">
     <fa-icon [icon]="['fal', 'times']"></fa-icon>
   </button>
-  <div class="img-holder">
+  <div class="img-holder" *ngIf="!this.sidebarService.filteredAmenity">
     <img
       [src]="
         poi.properties.images[0]
@@ -25,24 +25,32 @@
   </div>
   <div class="content header">
     <h2 class="title">{{ poi.properties.title }}</h2>
-    <h4 class="open-hours">{{ getOpenHours() }}</h4>
-    <h4 class="level">
-      {{ poi.properties.level + 1 | ordinal }} {{ floor | translate }}
-    </h4>
     <div class="qr-code" *ngIf="haveRouteDetails">
       <qrcode
         [qrdata]="qrCodeUrl"
-        [width]="100"
+        [width]="120"
         [errorCorrectionLevel]="'M'"
         [allowEmptyString]="true"
       ></qrcode>
+      <p>{{ "scan-qr-code" | translate }}</p>
     </div>
+    <h4 class="open-hours" *ngIf="!this.sidebarService.filteredAmenity">
+      {{ getOpenHours() }}
+    </h4>
+    <h4 class="level">
+      {{ "level" | translate }}:
+      {{
+        poi.properties._dynamic.floor?.name
+          ? poi.properties._dynamic.floor.name
+          : (poi.properties.level + 1 | ordinal)
+      }}
+    </h4>
   </div>
   <div
-    class="content"
+    class="content large-viewport-only"
     [ngClass]="{ accessibleOnly: stateService.state.accessibleRoute }"
   >
-    <p *ngIf="details">
+    <p *ngIf="details && !this.sidebarService.filteredAmenity">
       {{ details | slice : 0 : limit }}
       {{ details.length > limit ? "..." : "" }}
       <a
@@ -61,7 +69,14 @@
       ></a>
     </p>
 
-    <p *ngIf="haveRouteDetails">
+    <p *ngIf="linkUrl">
+      {{ "link" | translate }}:
+      <a [href]="linkUrl" target="_blank" style="display: inline">{{
+        poi.properties.metadata.url
+      }}</a>
+    </p>
+
+    <p class="distance" *ngIf="haveRouteDetails">
       <strong>{{ "distance" | translate }}</strong
       >: {{ distanceInMeters | number : "1.0-0" }}m /
       {{ distanceInMinutes }}
@@ -77,59 +92,145 @@
     </button>
 
     <div *ngIf="haveRouteDetails">
-      <button (click)="toggleInstructions()" class="instructions-toggle">
-        <fa-icon
-          [icon]="
-            showInstructions
-              ? ['fal', 'angle-down']
-              : stateService.state.accessibleRoute
-              ? ['fal', 'wheelchair']
-              : ['fal', 'route']
-          "
-        ></fa-icon>
-        {{
-          (showInstructions ? "hideInstructions" : "showInstructions")
-            | translate
-        }}
-      </button>
-      <button (click)="toggleAccessibleRoute()" class="accessible-toggle">
-        <fa-icon
-          [icon]="
-            stateService.state.accessibleRoute
-              ? ['fal', 'walking']
-              : ['fal', 'wheelchair']
-          "
-        ></fa-icon>
-        {{
-          (stateService.state.accessibleRoute
-            ? "showFastestRoute"
-            : "showAccessibleRoute"
-          ) | translate
-        }}
-      </button>
+      <mat-button-toggle-group
+        [(ngModel)]="routeType"
+        (change)="toggleAccessibleRoute()"
+        aria-label="Route type"
+        class="accessible-toggle-group"
+      >
+        <mat-button-toggle value="fastest">
+          <img src="https://img.icons8.com/ios/36/ffffff/walking--v1.png" />
+          <span>{{ "fast-route" | translate }}</span>
+        </mat-button-toggle>
+        <mat-button-toggle value="accessible">
+          <img src="https://img.icons8.com/wired/36/ffffff/elevator.png" />
+          <span>{{ "use-elevators" | translate }}</span>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
 
-      <mat-expansion-panel [disabled]="true" [expanded]="showInstructions">
-        <mat-panel-description>
-          <mat-list>
-            <mat-list-item *ngFor="let step of steps">
-              <p matLine>
-                <fa-icon [icon]="step.directionIcon"></fa-icon>
-                <fa-icon [icon]="step.stepIcon"></fa-icon>
-              </p>
-              <p matLine>{{ step.description }}</p>
-            </mat-list-item>
-          </mat-list>
-        </mat-panel-description>
-      </mat-expansion-panel>
+      <div class="step-nav">
+        <div class="description">
+          <p>{{ steps[currentStep].description }}</p>
+        </div>
+        <div class="next" (click)="onNextStep()">
+          <fa-icon
+            [icon]="
+              currentStep !== steps.length - 1
+                ? ['fal', 'chevron-double-right']
+                : ['fal', 'pennant']
+            "
+          ></fa-icon>
+          <p>
+            {{
+              currentStep !== steps.length - 1
+                ? ("next" | translate)
+                : ("arrived" | translate)
+            }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="start-box" *ngIf="!stateService.state.kioskMode">
+
+  <div
+    class="content small-viewport-only"
+    [ngClass]="{ accessibleOnly: stateService.state.accessibleRoute }"
+  >
+    <p *ngIf="details && !this.sidebarService.filteredAmenity">
+      {{ details | slice : 0 : limit }}
+      {{ details.length > limit ? "..." : "" }}
+      <a
+        *ngIf="details.length > limit"
+        href="javascript:;"
+        (click)="limit = details.length; showingMore = true"
+        >{{ "showMore" | translate }}
+        <fa-icon [icon]="['fal', 'angle-down']"></fa-icon
+      ></a>
+      <a
+        *ngIf="showingMore"
+        href="javascript:;"
+        (click)="limit = 200; showingMore = false"
+        >{{ "showLess" | translate }}
+        <fa-icon [icon]="['fal', 'angle-up']"></fa-icon
+      ></a>
+    </p>
+
+    <p *ngIf="linkUrl">
+      {{ "link" | translate }}:
+      <a [href]="linkUrl" target="_blank" style="display: inline">{{
+        poi.properties.metadata.url
+      }}</a>
+    </p>
+
+    <button
+      (click)="onShowRoute()"
+      class="show-route"
+      *ngIf="stateService.state.kioskMode"
+    >
+      <fa-icon [icon]="['fal', 'walking']"></fa-icon>
+      {{ "takeMeThere" | translate }}
+    </button>
+
+    <mat-button-toggle-group
+      [(ngModel)]="routeType"
+      (change)="toggleAccessibleRoute()"
+      aria-label="Route type"
+      class="accessible-toggle-group"
+      *ngIf="haveRouteDetails"
+    >
+      <mat-button-toggle value="fastest">
+        <img src="https://img.icons8.com/ios/36/ffffff/walking--v1.png" />
+        <span>{{ "fast-route" | translate }}</span>
+      </mat-button-toggle>
+      <mat-button-toggle value="accessible">
+        <img src="https://img.icons8.com/wired/36/ffffff/elevator.png" />
+        <span>{{ "use-elevators" | translate }}</span>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <p class="distance" *ngIf="haveRouteDetails">
+      <strong>{{ "distance" | translate }}</strong
+      >: {{ distanceInMeters | number : "1.0-0" }}m /
+      {{ distanceInMinutes }}
+    </p>
+
+    <div *ngIf="haveRouteDetails">
+      <div class="step-nav">
+        <div class="description">
+          <p>{{ steps[currentStep].description }}</p>
+        </div>
+        <div class="next" (click)="onNextStep()">
+          <fa-icon
+            [icon]="
+              currentStep !== steps.length - 1
+                ? ['fal', 'chevron-double-right']
+                : ['fal', 'pennant']
+            "
+          ></fa-icon>
+          <p>
+            {{
+              currentStep !== steps.length - 1
+                ? ("next" | translate)
+                : ("arrived" | translate)
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="start-box"
+    *ngIf="
+      !stateService.state.kioskMode && !this.sidebarService.filteredAmenity
+    "
+  >
     <p
       class="closest-parking"
       *ngIf="closestParkingFeature"
       (click)="onCenterToParking()"
     >
-      <strong>Closest parking:</strong>
+      <strong>{{ "closest-parking" | translate }}::</strong>
       {{ closestParkingFeature.properties.title }}
     </p>
     <div class="buttons">
@@ -137,11 +238,17 @@
         <img
           src="https://img.icons8.com/ios-filled/50/ffffff/people-in-car.png"
         />
-        Route from parking
+        {{ "route-from-parking" | translate }}
       </button>
       <button type="button" (click)="onRouteFromEntrance()">
         <img src="https://img.icons8.com/ios/50/ffffff/walking--v1.png" />
-        Route from entrance
+        {{ "route-from-entrance" | translate }}
+      </button>
+      <button type="button" (click)="onOtherRoute()">
+        <img
+          src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/ffffff/external-route-interface-kiranshastry-lineal-kiranshastry.png"
+        />
+        {{ "other-route" | translate }}
       </button>
     </div>
     <!--<form [formGroup]="startPoiForm">

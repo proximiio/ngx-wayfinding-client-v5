@@ -1,4 +1,4 @@
-@import '../../../../styles/variables';
+@import "../../../../styles/variables";
 
 .container {
   background-color: rgba(255 255 255 / 100%);
@@ -8,7 +8,7 @@
   position: absolute;
   left: 0;
   top: 110px;
-  transition: all .25s linear;
+  transition: all 0.25s linear;
   min-height: 143px;
   z-index: 4;
   max-height: calc(100vh - 110px);
@@ -28,7 +28,7 @@
     background: $default-color;
     border: 0;
     border-radius: 15px;
-    padding: .5rem .8rem;
+    padding: 0.5rem 0.8rem;
     font-size: 20px;
     z-index: 4;
     &:hover {
@@ -49,14 +49,23 @@
     top: -20px;
     border-radius: 0 20px 0 0;
 
+    &.small-viewport-only {
+      display: none;
+    }
+
     &.header {
       padding-bottom: 0;
 
       .qr-code {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        z-index: 5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        p {
+          color: $default-color;
+          font-weight: 600;
+          font-size: 20px;
+          padding-left: 1.5rem;
+        }
       }
     }
 
@@ -89,7 +98,7 @@
     .open-hours {
       color: $default-color;
       margin-bottom: 0;
-      font-weight: 400
+      font-weight: 400;
     }
 
     h4 {
@@ -101,7 +110,7 @@
     p {
       font-weight: 300;
       font-size: 14px;
-      letter-spacing: .5px;
+      letter-spacing: 0.5px;
 
       a {
         display: block;
@@ -121,22 +130,22 @@
     .show-route {
       display: block;
       width: 100%;
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
       cursor: pointer;
       background: white;
       text-align: center;
       border-radius: 5px;
       font-weight: 500;
-      padding: .5rem;
+      padding: 0.5rem;
       outline: 0;
-      transition: all .25s linear;
+      transition: all 0.25s linear;
 
       fa-icon {
-        margin-right: .5rem;
+        margin-right: 0.5rem;
       }
 
       &:hover {
-        opacity: .7;
+        opacity: 0.7;
         transform: scale(1.05);
       }
     }
@@ -155,6 +164,68 @@
       color: white;
     }
 
+    .accessible-toggle-group {
+      display: flex;
+      border: 0;
+      border-radius: 16px;
+      margin-bottom: 0.8rem;
+      .mat-button-toggle {
+        flex: 1 1 1px;
+        color: white;
+        background-color: #b8b0af;
+        padding: 0.8rem;
+
+        &.mat-button-toggle-checked {
+          background-color: $default-color;
+          ::ng-deep .mat-button-toggle-focus-overlay {
+            border: 0;
+          }
+        }
+
+        img {
+          margin-right: 0.8rem;
+        }
+      }
+    }
+
+    .step-nav {
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 0.5rem;
+      border-radius: 5px;
+      overflow: hidden;
+
+      .description {
+        background-color: #b8b0af;
+        color: white;
+        padding: 1rem;
+        flex: 1;
+        display: flex;
+        align-items: center;
+
+        p {
+          margin: 0;
+        }
+      }
+      .next {
+        background-color: #000;
+        color: white;
+        cursor: pointer;
+        padding: 1rem;
+        text-align: center;
+        font-size: 24px;
+        text-transform: uppercase;
+
+        p {
+          margin-bottom: 0;
+          margin-top: 0.25rem;
+        }
+
+        &:hover {
+          background-color: #222;
+        }
+      }
+    }
 
     .mat-expansion-panel ::ng-deep {
       box-shadow: none;
@@ -199,13 +270,26 @@
         }
       }
     }
+
+    &.small-viewport-only {
+      .accessible-toggle {
+        border: 2px solid $accent-color;
+        color: $accent-color;
+      }
+      &.accessibleOnly {
+        .accessible-toggle {
+          border: 2px solid $default-color;
+          color: $default-color;
+        }
+      }
+    }
   }
   .toggle {
     position: absolute;
     display: none;
     font-size: 30px;
     color: $default-color;
-    padding: .5rem;
+    padding: 0.5rem;
     cursor: pointer;
     transform: rotate(-90deg);
     z-index: 6;
@@ -215,7 +299,7 @@
     }
   }
   .start-box {
-    margin-top: -3rem;
+    margin-top: -2rem;
     padding: 1rem 2rem;
     padding-top: 0;
     position: relative;
@@ -233,15 +317,15 @@
       display: flex;
       gap: 10px;
       margin-bottom: 1rem;
-      >button {
-        flex: auto;
+      > button {
+        flex: 1 1 0px;
         text-align: center;
         background-color: $default-color;
         color: white;
         border-radius: 6px;
         max-width: 120px;
         border: 0;
-        padding: .5rem;
+        padding: 0.5rem;
 
         &:hover {
           background-color: darken($default-color, 15%);
@@ -274,18 +358,78 @@
     margin-bottom: 0;
     border-radius: 10px 10px 0 0;
     max-height: 100%;
+    z-index: 16;
 
-    &.haveRoute {
-      max-height: 35%;
-      .toggle {
-        display: block;
-        left: calc(50% - 18px);
+    .toggle {
+      display: block;
+      left: calc(50% - 18px);
+    }
+
+    .img-holder {
+      img {
+        height: 0;
       }
-      .img-holder {
-        img {
-          height: 0;
+    }
+
+    .content {
+      &.large-viewport-only {
+        display: none;
+      }
+      &.small-viewport-only {
+        display: block;
+        padding-bottom: 0;
+      }
+      > p {
+        display: none;
+      }
+      .open-hours {
+        display: none;
+      }
+      .accessible-toggle-group {
+        display: none;
+        border-radius: 8px;
+        margin-bottom: 0.8rem;
+        .mat-button-toggle {
+          padding: 0.4rem;
+          ::ng-deep .mat-button-toggle-label-content {
+            line-height: 32px;
+          }
+          img {
+            width: 26px;
+            margin-right: 0.4rem;
+          }
         }
       }
+      .distance {
+        display: none;
+      }
+      .step-nav {
+        padding-bottom: 0;
+      }
+    }
+
+    &.open {
+      max-height: 100%;
+      .img-holder {
+        img {
+          height: auto;
+        }
+      }
+      .content {
+        > p {
+          display: block;
+        }
+        .open-hours {
+          display: none;
+        }
+        .accessible-toggle-group {
+          display: flex;
+        }
+      }
+    }
+
+    &.haveRoute {
+      max-height: 245px;
       .content {
         .qr-code {
           display: none;
@@ -293,9 +437,9 @@
         .show-route {
           display: none;
         }
-        >p {
-          display: none;
-        }
+      }
+      .start-box {
+        display: none;
       }
       &.open {
         max-height: 100%;
@@ -304,18 +448,23 @@
             height: auto;
           }
         }
-        .content p {
-          display: block;
+        .content {
+          .distance {
+            display: block;
+          }
+          .qr-code {
+            right: 0.5rem;
+          }
         }
-        .content .qr-code {
-          right: .5rem;
+        .start-box {
+          display: block;
         }
       }
     }
     .start-box {
       font-size: 12px;
       .buttons {
-        >button {
+        > button {
           font-size: 12px;
           max-width: 80px;
           img {

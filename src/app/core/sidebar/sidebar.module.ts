@@ -14,6 +14,8 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { OrdinalPipe } from "../ordinal.pipe";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { ListViewComponent } from "./list-view/list-view.component";
+import { RoutePickerComponent } from "./route-picker/route-picker.component";
+import { ClosestAmenityComponent } from "./closest-amenity/closest-amenity.component";
 
 @NgModule({
   imports: [
@@ -33,6 +35,8 @@ import { ListViewComponent } from "./list-view/list-view.component";
     SearchComponent,
     DetailsComponent,
     ListViewComponent,
+    RoutePickerComponent,
+    ClosestAmenityComponent,
   ],
   declarations: [
     SidebarComponent,
@@ -42,6 +46,8 @@ import { ListViewComponent } from "./list-view/list-view.component";
     SearchComponent,
     DetailsComponent,
     ListViewComponent,
+    RoutePickerComponent,
+    ClosestAmenityComponent,
     OrdinalPipe,
   ],
 })

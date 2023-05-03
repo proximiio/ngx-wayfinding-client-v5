@@ -3,7 +3,8 @@
   <ul class="categories">
     <li *ngFor="let item of data" [class.active]="item.active" (click)="onFilterClick(item)">
       <div class="icon">
-        <fa-icon [icon]="item.icon"></fa-icon>
+        <fa-icon [icon]="item.icon" *ngIf="item.icon"></fa-icon>
+        <img [src]="item.iconImage" [alt]="item.title | translate" *ngIf="item.iconImage">
       </div>
       <p>{{ item.title | translate }}</p>
     </li>

@@ -35,6 +35,24 @@ export class MapComponent implements OnInit, OnDestroy {
   private startPoiId: string;
   private endPoi;
   private kiosk: KioskModel;
+  private destinationParam: string;
+  private placeParam: string;
+  private wayfindingConfig = {
+    avoidElevators: true,
+    avoidEscalators: false,
+    avoidStaircases: false,
+    avoidRamps: false,
+    avoidNarrowPaths: false,
+    avoidRevolvingDoors: false,
+    avoidTicketGates: false,
+    avoidBarriers: false,
+    avoidHills: false,
+  };
+  private routeCache: {
+    start: string;
+    destination: string;
+    type: "amenity";
+  };
   private subs: Subscription[] = [];
 
   constructor(
@@ -46,10 +64,11 @@ export class MapComponent implements OnInit, OnDestroy {
     private translateService: TranslateService
   ) {
     const urlParams = new URLSearchParams(window.location.search);
-    const destinationParam = urlParams.get("destinationFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
+    this.destinationParam = urlParams.get("destinationFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
+    this.placeParam = urlParams.get("defaultPlace");
 
     // if there is a destination defined in url params, we need to handle poi selection to show details component
-    if (destinationParam) {
+    if (this.destinationParam) {
       this.destinationFromUrl = true;
     }
 
@@ -57,17 +76,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.kiosk = this.stateService.state.kiosks.find(
       (i) => i.name === urlParams.get("kiosk")
     );
-
-    // if kiosk is found use it's settings to initiate the map
-    if (this.kiosk) {
-      this.stateService.state.options.bearing = this.kiosk.bearing;
-      this.stateService.state.options.pitch = this.kiosk.pitch;
-      this.stateService.state.defaultLocation.coordinates = [
-        this.kiosk.longitude,
-        this.kiosk.latitude,
-      ];
-      this.stateService.state.defaultLocation.level = this.kiosk.level;
-    }
 
     this.subs.push(
       // we subscribe for start point listener events here
@@ -82,18 +90,17 @@ export class MapComponent implements OnInit, OnDestroy {
         this.endPoi = poi;
         if (this.map) {
           if (poi && !this.destinationFromUrl) {
-            // if map is loaded, the poi is not null in listener event and destination is not set from url, center the map, set the floor level to poi and set the feature highlight
+            // if map is loaded, the poi is not null in listener event and destination is not set from url, center the map, set the floor level to poi
             this.map
               .getMapboxInstance()
               .flyTo({ center: poi.geometry.coordinates, zoom: 19 });
             this.map.setFloorByLevel(poi.properties.level);
-            this.map.setFeaturesHighlight([poi.id], "#9200c7", 46, 0.4);
             // handle polygon selection, only required when polygons are enabled
             this.map.handlePolygonSelection(poi);
           } else if (!poi) {
-            // otherwise cancel route if it's rendered, remove highlight and return me to default location
+            // otherwise cancel route if it's rendered and return me to default location
             this.map.cancelRoute();
-            this.onMyLocation();
+            // this.onMyLocation();
           }
         }
       }),
@@ -109,12 +116,14 @@ export class MapComponent implements OnInit, OnDestroy {
       }),
       // we subscribe for accessible route listener events here
       this.sidebarService.getAccessibleOnlyToggleListener().subscribe(() => {
-        if (this.endPoi) {
+        const destination = this.endPoi
+          ? this.endPoi
+          : this.stateService.state.textNavigation.destination;
+        if (destination && !this.routeCache) {
           // if we have destination point selected, redraw the route based on accessible status
-          this.map.findRouteByIds(
-            this.endPoi.id,
-            this.stateService.state.kioskMode ? null : this.startPoiId,
-            this.stateService.state.accessibleRoute
+          this.findRoute(
+            destination.id,
+            this.stateService.state.kioskMode ? null : this.startPoiId
           );
         }
       }),
@@ -150,9 +159,20 @@ export class MapComponent implements OnInit, OnDestroy {
         this.onResetView();
       }),
       // subscribe to feature center listener
-      this.sidebarService.getCenterToFeatureListener().subscribe((feature: Feature) => {
+      this.sidebarService
+        .getCenterToFeatureListener()
+        .subscribe((feature: Feature) => {
+          if (this.map) {
+            this.map.centerToFeature(feature.id);
+          }
+        }),
+      this.sidebarService.getRouteToClosestAmenityListener().subscribe(() => {
         if (this.map) {
-          this.map.centerToFeature(feature.id);
+          this.findRoute(
+            this.sidebarService.activeListItem.id as string,
+            this.startPoiId,
+            "amenity"
+          );
         }
       })
     );
@@ -160,7 +180,7 @@ export class MapComponent implements OnInit, OnDestroy {
       .observe([Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
-          this.mapPadding = { top: 50, bottom: 300, left: 50, right: 50 };
+          this.mapPadding = { top: 0, bottom: 100, left: 0, right: 0 };
           if (this.map) this.map.setBoundsPadding(this.mapPadding);
         } else {
           this.mapPadding = { top: 250, bottom: 250, left: 450, right: 250 };
@@ -180,10 +200,13 @@ export class MapComponent implements OnInit, OnDestroy {
           pitch: this.stateService.state.options.pitch,
           bearing: this.stateService.state.options.bearing,
         },
-        defaultPlaceId: "place-id", // if you have more than 1 place in your account, it's a good idea to define defaultPlaceId for the map, otherwise the first one will be picked up
+        defaultPlaceId: this.stateService.state.defaultPlaceId, // if you have more than 1 place in your account, it's a good idea to define defaultPlaceId for the map, otherwise the first one will be picked up
         isKiosk: this.stateService.state.kioskMode, // if enabled starting point for routing will be based on values defined in kioskSettings, if disabled findRoute methods will expect start point to be send.
         kioskSettings: {
-          coordinates: this.stateService.state.defaultLocation.coordinates as [number, number],
+          coordinates: this.stateService.state.defaultLocation.coordinates as [
+            number,
+            number
+          ],
           level: this.stateService.state.defaultLocation.level,
         },
         fitBoundsPadding: this.mapPadding, // setting the padding option to use for zooming into the bounds when route is drawn,
@@ -204,6 +227,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.map.getMapReadyListener().subscribe((ready) => {
         this.mapService.mapReadyListener.next(true);
         this.mapLoaded = true;
+        this.mapService.mapReady = true;
         // this.onMyLocation(); // center to default location, if needed comment this out
 
         // setting mapbox navigationControl buttons
@@ -213,8 +237,31 @@ export class MapComponent implements OnInit, OnDestroy {
           })
         );
 
-        if (this.kiosk?.bounds) {
-          this.map.getMapboxInstance().setMaxBounds(this.kiosk.bounds);
+        // if kiosk is found use it's settings to initiate the map
+        if (this.kiosk) {
+          const kioskPoi = this.kiosk.poiId
+            ? this.stateService.state.allFeatures.features.find(
+                (i) => i.id === this.kiosk.poiId
+              )
+            : null;
+          this.stateService.state.options.bearing = this.kiosk.bearing;
+          this.stateService.state.options.pitch = this.kiosk.pitch;
+          this.stateService.state.defaultLocation.coordinates = kioskPoi
+            ? kioskPoi.geometry.coordinates
+            : [this.kiosk.longitude, this.kiosk.latitude];
+          this.stateService.state.defaultLocation.level = kioskPoi
+            ? kioskPoi.properties.level
+            : this.kiosk.level;
+
+          if (this.kiosk.bounds) {
+            this.map.getMapboxInstance().setMaxBounds(this.kiosk.bounds);
+          }
+
+          this.map.setKiosk(
+            this.stateService.state.defaultLocation.coordinates[1],
+            this.stateService.state.defaultLocation.coordinates[0],
+            this.stateService.state.defaultLocation.level
+          );
         }
 
         // set amenity category group 'shop', those have to be set in shop-picker component afterwards
@@ -256,6 +303,21 @@ export class MapComponent implements OnInit, OnDestroy {
           }, 1000);
           this.destinationFromUrl = false; // must be set to false to enable rerouting by search/click
         }
+
+        this.routeCache = null;
+      });
+
+      // if route finding failed, try again with accessible route
+      this.map.getRouteFailedListener().subscribe((res) => {
+        if (this.routeCache) {
+          this.sidebarService.onAccessibleRouteToggle();
+          this.findRoute(
+            this.routeCache.destination,
+            this.routeCache.start,
+            this.routeCache.type
+          );
+        }
+        this.routeCache = null;
       });
 
       // set destination point for routing based on click event and cancel previous route if generated
@@ -305,7 +367,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
       // centerize map
       this.map.getMapboxInstance().flyTo({
-        center: startPoi.coordinates,
+        center: startPoi.geometry.coordinates,
         bearing: this.stateService.state.options.bearing,
         pitch: this.stateService.state.options.pitch,
         zoom: this.stateService.state.options.zoom,
@@ -315,11 +377,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.map.setFloorByLevel(startPoi.properties.level);
       // if we also have an endpoint generate route
       if (this.endPoi) {
-        this.map.findRouteByIds(
-          this.endPoi.id,
-          this.startPoiId,
-          this.stateService.state.accessibleRoute
-        );
+        this.findRoute(this.endPoi.id, this.startPoiId);
       }
     }
   }
@@ -367,19 +425,103 @@ export class MapComponent implements OnInit, OnDestroy {
 
   onShowRoute() {
     if (this.map) {
-      this.map.findRouteByIds(
+      this.findRoute(
         this.endPoi.id,
-        this.stateService.state.kioskMode ? null : this.startPoiId,
-        this.stateService.state.accessibleRoute
+        this.stateService.state.kioskMode ? null : this.startPoiId
       );
     }
+  }
+
+  findRoute(destination: string, start?: string, type?: "amenity") {
+    this.routeCache = {
+      ...this.routeCache,
+      destination,
+      start,
+      type,
+    };
+    const wayfindingConfig = {
+      ...this.wayfindingConfig,
+      avoidElevators: this.stateService.state.accessibleRoute ? false : true,
+      avoidEscalators: this.stateService.state.accessibleRoute ? true : false,
+      avoidStaircases: this.stateService.state.accessibleRoute ? true : false,
+      avoidBarriers: this.stateService.state.accessibleRoute ? true : false,
+      avoidNarrowPaths: this.stateService.state.accessibleRoute ? true : false,
+      avoidRevolvingDoors: this.stateService.state.accessibleRoute
+        ? true
+        : false,
+      avoidTicketGates: this.stateService.state.accessibleRoute ? true : false,
+    };
+    if (type === "amenity") {
+      this.map.findRouteToNearestFeature(
+        destination,
+        start,
+        this.stateService.state.accessibleRoute,
+        wayfindingConfig
+      );
+      return;
+    }
+    this.map.findRouteByIds(
+      destination,
+      start,
+      this.stateService.state.accessibleRoute,
+      wayfindingConfig
+    );
   }
 
   onResetView() {
     if (this.map) {
       this.sidebarService.onSetEndPoi(null);
+      if (this.sidebarService.filteredAmenity) {
+        this.sidebarService.onAmenityToggle(
+          "amenities",
+          this.sidebarService.filteredAmenity
+        );
+        this.sidebarService.showClosestAmenityPicker = false;
+        this.sidebarService.activeListItem = null;
+      }
       this.map.refetch();
     }
+  }
+
+  // it's possible to hide icons & labels per amenity with this function
+  hideAmenityFeatures() {
+    /*const amenitiesToHide = [
+      "amenity-id",
+    ];
+
+    const mainSource = this.map.getMapboxInstance().getSource("main") as any;
+    if (mainSource) {
+      const features = mainSource._data.features.map((feature) => {
+        if (amenitiesToHide.includes(feature.properties.amenity)) {
+          feature.properties.hideIcon = "hide";
+        }
+        return feature;
+      });
+      const data = {
+        type: "FeatureCollection",
+        features,
+      };
+      mainSource.setData(data);
+    }
+
+    const layers = [
+      "proximiio-pois-icons",
+      "proximiio-pois-labels",
+      "pois-icons",
+      "pois-labels",
+      "poi-custom-icons",
+    ];
+    layers.forEach((layer) => {
+      if (this.map.getMapboxInstance().getLayer(layer)) {
+        const l = this.map.getMapboxInstance().getLayer(layer) as any;
+        const filters = [...l.filter];
+
+        filters.push(["!=", ["get", "hideIcon"], "hide"]);
+
+        this.map.state.style.getLayer(layer).filter = filters;
+        this.map.getMapboxInstance().setFilter(layer, filters);
+      }
+    });*/
   }
 
   ngOnDestroy() {

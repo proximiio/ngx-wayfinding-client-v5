@@ -1,0 +1,103 @@
+@import "../../../../styles/variables";
+
+.container {
+  background-color: rgba(255 255 255 / 100%);
+  box-shadow: 0 0 15px rgb(0 0 0 / 10%);
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 1rem;
+  position: absolute;
+  left: 0;
+  top: 110px;
+  transition: all 0.25s linear;
+  z-index: 3;
+  max-height: calc(100vh - 110px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 451px;
+
+  .content {
+    padding: 1rem 2rem;
+  }
+
+  h3.title {
+    position: relative;
+    color: $default-color;
+    transition: all 0.25s linear;
+  }
+
+  form {
+    mat-form-field {
+      width: 100%;
+      display: block;
+    }
+    button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      border: 0;
+      background-color: $default-color;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      font-weight: 500;
+      padding: 0.5rem;
+      outline: 0;
+      transition: all 0.25s linear;
+
+      img {
+        height: 26px;
+        vertical-align: middle;
+      }
+
+      &:hover {
+        opacity: 0.7;
+        transform: scale(1.05);
+      }
+    }
+
+  }
+
+  .close {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: white;
+    background: $default-color;
+    border: 0;
+    border-radius: 15px;
+    padding: 0.5rem 0.8rem;
+    font-size: 20px;
+    z-index: 4;
+    &:hover {
+      background: darken($default-color, 3%);
+    }
+  }
+}
+
+@media only screen and (max-width: 959.98px) {
+  .container {
+    bottom: 0;
+    top: auto;
+    left: 0;
+    right: 0;
+    position: fixed;
+    width: 100%;
+    margin-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    max-height: 100%;
+    z-index: 15;
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      .mat-form-field {
+        width: auto;
+      }
+    }
+  }
+}

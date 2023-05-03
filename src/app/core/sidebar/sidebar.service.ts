@@ -9,6 +9,8 @@ import Feature from "proximiio-js-library/lib/models/feature";
 export class SidebarService {
   public selectedStartPoi;
   public selectedEndPoi;
+  public showRoutePicker = false;
+  public showClosestAmenityPicker = false;
   public filteredShop = null; // used to store value from shop-picker component via onAmenityToggle method
   public filteredAmenity = null; // used to store value from amenity-picker component via onAmenityToggle method
   public startPointListener = new Subject<any>();
@@ -17,6 +19,7 @@ export class SidebarService {
   public amenityToggleListener = new Subject<any>();
   public floorChangeListener = new Subject<string | any>();
   public centerToFeatureListener = new Subject<Feature>();
+  public routeToClosestAmenityListener = new Subject<any>();
   public activeListItem: AmenityToggleModel;
 
   constructor(private stateService: StateService) {}
@@ -45,6 +48,10 @@ export class SidebarService {
     return this.centerToFeatureListener.asObservable();
   }
 
+  getRouteToClosestAmenityListener() {
+    return this.routeToClosestAmenityListener.asObservable();
+  }
+
   // pick up the start point and fire up listener to find route
   onSetStartPoi(poi) {
     this.selectedStartPoi = this.stateService.state.allFeatures.features.find(
@@ -69,7 +76,7 @@ export class SidebarService {
   }
 
   // method responsible for filtering in categories set by setAmenityCategory method
-  onAmenityToggle(category: string, amenityId: string) {
+  onAmenityToggle(category: string, amenityId: string | string[]) {
     if (category === "shop") {
       this.filteredShop = this.filteredShop === amenityId ? null : amenityId;
     } else if (category === "amenities") {
@@ -79,13 +86,21 @@ export class SidebarService {
     this.amenityToggleListener.next({ category, amenityId });
   }
 
+  onRouteToClosestAmenity() {
+    this.routeToClosestAmenityListener.next();
+  }
+
   // return all pois from map features based on some radius of current place location
   get sortedPOIs() {
     return this.stateService.state.allFeatures.features
       .filter(
         (feature) =>
-          feature.properties.usecase === "poi" ||
-          feature.properties.type === "poi"
+          (feature.properties.usecase === "poi" ||
+            feature.properties.type === "poi") &&
+          feature.properties.type !== "escalator" &&
+          feature.properties.type !== "elevator" &&
+          feature.properties.type !== "staircase" &&
+          feature.properties.place_id === this.stateService.state.defaultPlaceId
       )
       .sort((a, b) => (a.properties.title > b.properties.title ? -1 : 1))
       .sort((a, b) => (a.properties.level > b.properties.level ? 1 : -1))
@@ -120,6 +135,8 @@ export class SidebarService {
           search_query: item.properties.title + " " + item.properties.level,
           coordinates: item.geometry.coordinates,
           isInside,
+          score: 0,
+          foundInDescription: false,
         };
       })
       .filter((item) => item.isInside);

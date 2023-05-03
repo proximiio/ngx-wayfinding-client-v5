@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { MapService } from "src/app/map/map.service";
 import { SidebarService } from "./sidebar.service";
 
 @Component({
@@ -9,7 +10,8 @@ import { SidebarService } from "./sidebar.service";
 export class SidebarComponent implements OnInit {
   filtersOpened = true;
   constructor(
-    public sidebarService: SidebarService
+    public sidebarService: SidebarService,
+    public mapService: MapService
   ) {}
 
   ngOnInit() {}

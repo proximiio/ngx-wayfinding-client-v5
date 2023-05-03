@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     overlayContainer: OverlayContainer,
-    translate: TranslateService,
+    public translate: TranslateService,
     private mapService: MapService,
     private stateService: StateService
   ) {
@@ -32,10 +32,10 @@ export class AppComponent implements OnInit {
     this.stateService.state.kioskMode = !!urlParams.get("kiosk");
 
     let langFromUrl = window.document.URL.split("/").pop();
-    if (langFromUrl !== "en" && langFromUrl !== "fi" && langFromUrl !== "sv") {
+    if (langFromUrl !== "en" && langFromUrl !== "fi" && langFromUrl !== "ar") {
       langFromUrl = null;
     }
-    translate.addLangs(["en", "fi", "sv"]);
+    translate.addLangs(["en", "fi", "ar"]);
     translate.setDefaultLang(langFromUrl ? langFromUrl : "en");
     translate.use(langFromUrl ? langFromUrl : "en");
   }
