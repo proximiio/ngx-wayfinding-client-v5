@@ -281,6 +281,25 @@ export class MapComponent implements OnInit, OnDestroy {
           "44010f6f-9963-4433-ad86-40b89b829c41:57ef933b-ff2e-4db1-bc99-d21f2053abb2",
           "44010f6f-9963-4433-ad86-40b89b829c41:2cd016a5-8703-417c-af07-d49aef074ad3",
         ]);
+
+        if (this.destinationFromUrl) {
+          const defaultPlace = this.placeParam
+            ? this.stateService.state.places.find(
+                (p) => p.id === this.placeParam || p.name === this.placeParam
+              )
+            : this.stateService.state.place;
+          const destinationFeature =
+            this.stateService.state.allFeatures.features.find(
+              (f) =>
+                f.properties.title &&
+                f.properties.place_id === defaultPlace.id &&
+                (f.id === this.destinationParam ||
+                  f.properties.id === this.destinationParam ||
+                  f.properties.title === this.destinationParam)
+            );
+          this.sidebarService.onSetEndPoi(destinationFeature);
+          this.map.handlePolygonSelection(destinationFeature);
+        }
       });
 
       // when route will be found, write turn by turn navigation response into state service so it will be accessible from details component
