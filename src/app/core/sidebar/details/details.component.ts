@@ -55,10 +55,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
     startPoi: [this.stateService.state.startPoi, Validators.required],
   });
   startPoiId: string;
-  parkingAmenityId =
-    "44010f6f-9963-4433-ad86-40b89b829c41:adf1071e-81cb-4134-ae55-2e0e0005d2b7";
-  entrancePoiId =
-    "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952";
+  parkingAmenityId = this.stateService.state.parkingAmenityId;
+  entrancePoiId = this.stateService.state.entranceFeatureId;
   closestParkingFeature: Feature;
   qrCodeUrl: string;
   linkUrl: string;
@@ -405,15 +403,21 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
     }
     const targetPoint = turf.point(this.poi.geometry.coordinates);
-    this.closestParkingFeature = turf.nearestPoint(
-      targetPoint,
-      sameLevelParking.features.length > 0 ? sameLevelParking : allLevelParking
-    ) as Feature;
-    this.closestParkingFeature.properties.title =
-      this.closestParkingFeature.properties.title_i18n &&
-      this.closestParkingFeature.properties.title_i18n[this.currentLanguage]
-        ? this.closestParkingFeature.properties.title_i18n[this.currentLanguage]
-        : this.closestParkingFeature.properties.title;
+    if (allLevelParking.features.length > 0) {
+      this.closestParkingFeature = turf.nearestPoint(
+        targetPoint,
+        sameLevelParking.features.length > 0
+          ? sameLevelParking
+          : allLevelParking
+      ) as Feature;
+      this.closestParkingFeature.properties.title =
+        this.closestParkingFeature.properties.title_i18n &&
+        this.closestParkingFeature.properties.title_i18n[this.currentLanguage]
+          ? this.closestParkingFeature.properties.title_i18n[
+              this.currentLanguage
+            ]
+          : this.closestParkingFeature.properties.title;
+    }
   }
 
   onRouteFromParking() {
