@@ -456,7 +456,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   getUrl() {
-    const url = this.poi.properties.metadata.url;
+    const url = typeof this.poi.properties.url === 'undefined' ? (typeof this.poi.properties.metadata !== 'undefined' ? this.poi.properties.metadata.url : 'yolo') : this.poi.properties.url
     if (url) {
       let protocol = url.startsWith("http://") ? 1 : 0;
       if (protocol === 0) protocol = url.startsWith("https://") ? 2 : 0;
