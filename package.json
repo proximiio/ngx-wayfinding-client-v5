@@ -38,7 +38,7 @@
     "humanize-duration": "^3.27.1",
     "mapbox-gl": "^1.13.1",
     "ngx-take-until-destroy": "^5.4.0",
-    "proximiio-js-library": "^1.9.26",
+    "proximiio-js-library": "^1.9.27",
     "remove-accents": "^0.4.4",
     "rxjs": "~6.6.3",
     "simple-keyboard": "^3.4.162",
