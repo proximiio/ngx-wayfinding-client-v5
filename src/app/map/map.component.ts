@@ -72,6 +72,11 @@ export class MapComponent implements OnInit, OnDestroy {
       this.destinationFromUrl = true;
     }
 
+    // if default place is defined in url params, set the same at state service
+    if (this.placeParam) {
+      this.stateService.state.defaultPlaceId = this.placeParam;
+    }
+
     // find kiosk by url param in stateService
     this.kiosk = this.stateService.state.kiosks.find(
       (i) => i.name === urlParams.get("kiosk")
