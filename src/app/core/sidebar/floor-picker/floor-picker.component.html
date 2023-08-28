@@ -5,7 +5,7 @@
       [ngClass]="{ active: floor.level === stateService.state.floor.level }"
       (click)="onFloorPick(floor)"
     >
-      {{ floor.name.length === 1 ? 'L'+floor.name : floor.name }}
+      {{ floor.name.length === 1 ? "L" + floor.name : getFloorName(floor) }}
     </button>
   </div>
 </div>

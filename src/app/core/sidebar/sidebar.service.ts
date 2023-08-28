@@ -4,6 +4,7 @@ import { isPointWithinRadius } from "geolib";
 import { StateService } from "../state.service";
 import { AmenityToggleModel } from "../amenity-toggle.model";
 import Feature from "proximiio-js-library/lib/models/feature";
+import { FloorModel } from "proximiio-js-library/lib/models/floor";
 
 @Injectable({ providedIn: "root" })
 export class SidebarService {
@@ -140,5 +141,13 @@ export class SidebarService {
         };
       })
       .filter((item) => item.isInside);
+  }
+
+  getFloorName(floor: FloorModel, language: string) {
+    if (floor.metadata && floor.metadata["title_" + language]) {
+      return floor.metadata["title_" + language];
+    } else {
+      return floor.name;
+    }
   }
 }

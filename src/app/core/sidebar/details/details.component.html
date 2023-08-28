@@ -41,7 +41,7 @@
       {{ "level" | translate }}:
       {{
         poi.properties._dynamic.floor?.name
-          ? poi.properties._dynamic.floor.name
+          ? getFloorName(poi.properties._dynamic.floor)
           : (poi.properties.level + 1 | ordinal)
       }}
     </h4>

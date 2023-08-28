@@ -11,6 +11,7 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { map, startWith, tap } from "rxjs/operators";
 import * as turf from "@turf/turf";
 import { FeatureCollection, Point } from "@turf/turf";
+import { FloorModel } from "proximiio-js-library/lib/models/floor";
 
 const defaultDetails =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
@@ -66,7 +67,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   private subs: Subscription[] = [];
 
   constructor(
-    public sidebarService: SidebarService,
+    private sidebarService: SidebarService,
     public mapService: MapService,
     public stateService: StateService,
     private translateService: TranslateService,
@@ -275,7 +276,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             direction
           )} ${this.translateService.instant("TO_FLOOR")} ${
             destinationFloor.name
-              ? destinationFloor.name
+              ? this.getFloorName(destinationFloor)
               : step.destinationLevel
           }.`;
         }
@@ -456,12 +457,21 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   getUrl() {
-    const url = typeof this.poi.properties.url === 'undefined' ? (typeof this.poi.properties.metadata !== 'undefined' ? this.poi.properties.metadata.url : 'yolo') : this.poi.properties.url
+    const url =
+      typeof this.poi.properties.url === "undefined"
+        ? typeof this.poi.properties.metadata !== "undefined"
+          ? this.poi.properties.metadata.url
+          : "yolo"
+        : this.poi.properties.url;
     if (url) {
       let protocol = url.startsWith("http://") ? 1 : 0;
       if (protocol === 0) protocol = url.startsWith("https://") ? 2 : 0;
       this.linkUrl = protocol === 0 ? `http://${url}` : url;
     }
+  }
+
+  getFloorName(floor: FloorModel) {
+    return this.sidebarService.getFloorName(floor, this.currentLanguage);
   }
 
   ngOnDestroy() {
