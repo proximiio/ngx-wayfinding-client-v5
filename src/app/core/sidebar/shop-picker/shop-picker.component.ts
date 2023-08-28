@@ -10,6 +10,7 @@ import { SidebarService } from "../sidebar.service";
 })
 export class ShopPickerComponent implements OnInit, OnDestroy {
   sidebarOpened = true;
+<<<<<<< HEAD
   data: AmenityToggleModel[] = [{
     title: 'Cafés',
     icon: ['fal', 'coffee'],
@@ -36,6 +37,16 @@ export class ShopPickerComponent implements OnInit, OnDestroy {
     id: '44010f6f-9963-4433-ad86-40b89b829c41:f62dd757-4057-4015-97a0-c66d8934f7d8',
     active: true
   }];
+=======
+  data: AmenityToggleModel[] = [
+    {
+      title: "toilet", // category title
+      icon: ["fal", "toilet"], // category fontAwesome icon, please add in fontawesome.module.ts in case it's missing
+      id: "amenity-id", // amenity id, must be the same as defined in setAmenityCategory method
+      active: true, // set category as active
+    },
+  ];
+>>>>>>> master
   private subs: Subscription[] = [];
 
   constructor(private sidebarService: SidebarService) {

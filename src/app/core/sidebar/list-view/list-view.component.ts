@@ -35,14 +35,15 @@ export class ListViewComponent implements OnInit, OnDestroy {
             .sort((a, b) => (a.properties.title > b.properties.title ? 1 : -1))
             // .sort((a, b) => (a.properties.level > b.properties.level ? 1 : -1))
             .map((i) => {
+              const floor = this.stateService.state.floors.find(
+                (floor) => floor.id === i.properties.floor_id
+              );
               i.properties.title =
                 i.properties.title_i18n &&
                 i.properties.title_i18n[this.currentLanguage]
                   ? i.properties.title_i18n[this.currentLanguage]
                   : i.properties.title;
-              i.properties.floor_name = this.stateService.state.floors.find(
-                (floor) => floor.id === i.properties.floor_id
-              )?.name;
+              i.properties.floor_name = floor ? this.sidebarService.getFloorName(floor, this.currentLanguage) : '';
               return i;
             });
         }

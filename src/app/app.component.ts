@@ -32,10 +32,15 @@ export class AppComponent implements OnInit {
     this.stateService.state.kioskMode = !!urlParams.get("kiosk");
 
     let langFromUrl = window.document.URL.split("/").pop();
-    if (langFromUrl !== "en" && langFromUrl !== "fi" && langFromUrl !== "ar") {
-      langFromUrl = null;
+    if (
+      langFromUrl !== "en" &&
+      langFromUrl !== "fi" &&
+      langFromUrl !== "ar" &&
+      langFromUrl !== "it"
+    ) {
+      langFromUrl = urlParams.get("lang");
     }
-    translate.addLangs(["en", "fi", "ar"]);
+    translate.addLangs(["en", "fi", "ar", "it"]);
     translate.setDefaultLang(langFromUrl ? langFromUrl : "en");
     translate.use(langFromUrl ? langFromUrl : "en");
   }

@@ -56,6 +56,8 @@ export interface State {
   startPoiId: string;
   startPoi: any;
   defaultPlaceId: string;
+  entranceFeatureId: string;
+  parkingAmenityId: string;
 }
 
 @Injectable({ providedIn: "root" })
@@ -115,5 +117,7 @@ export class StateService {
       "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952", // default start point for routes
     startPoi: null,
     defaultPlaceId: "da2152c9-48bc-437d-a19d-ceb6a3a0f02a",
+    entranceFeatureId: "44010f6f-9963-4433-ad86-40b89b829c41:f6ea1437-e372-4348-9b96-b1304c8a8952",
+    parkingAmenityId: "44010f6f-9963-4433-ad86-40b89b829c41:adf1071e-81cb-4134-ae55-2e0e0005d2b7"
   };
 }
