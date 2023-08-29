@@ -169,11 +169,13 @@
       border: 0;
       border-radius: 16px;
       margin-bottom: 0.8rem;
+
       .mat-button-toggle {
         flex: 1 1 1px;
         color: white;
         background-color: #b8b0af;
         padding: 0.8rem;
+        white-space: normal;
 
         &.mat-button-toggle-checked {
           background-color: $default-color;
@@ -183,7 +185,13 @@
         }
 
         img {
-          margin-right: 0.8rem;
+          display: block;
+          margin: 0 auto;
+        }
+
+        ::ng-deep .mat-button-toggle-label-content {
+          line-height: normal;
+          letter-spacing: -0.25px;
         }
       }
     }
@@ -392,11 +400,11 @@
         .mat-button-toggle {
           padding: 0.4rem;
           ::ng-deep .mat-button-toggle-label-content {
-            line-height: 32px;
+            line-height: normal;
+            font-size: 14px;
           }
           img {
             width: 26px;
-            margin-right: 0.4rem;
           }
         }
       }
