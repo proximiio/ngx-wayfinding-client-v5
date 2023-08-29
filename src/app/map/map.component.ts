@@ -464,6 +464,7 @@ export class MapComponent implements OnInit, OnDestroy {
     const wayfindingConfig = {
       ...this.wayfindingConfig,
       avoidElevators: this.stateService.state.accessibleRoute ? false : true,
+      avoidRamps: this.stateService.state.accessibleRoute ? false : true,
       avoidEscalators: this.stateService.state.accessibleRoute ? true : false,
       avoidStaircases: this.stateService.state.accessibleRoute ? true : false,
       avoidBarriers: this.stateService.state.accessibleRoute ? true : false,
