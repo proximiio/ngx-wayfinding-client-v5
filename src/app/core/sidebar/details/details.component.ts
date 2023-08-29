@@ -129,7 +129,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             this.stateService.state.textNavigation.distanceMeters;
           this.distanceInMinutes = humanizeDuration(
             this.stateService.state.routeDetails.duration.realistic * 1000,
-            { delimiter: " and ", round: true, language: this.currentLanguage }
+            { delimiter: ` ${this.translateService.instant("and")} `, round: true, language: this.currentLanguage }
           );
           this.haveRouteDetails = true;
           this.mapService.showingRoute = this.haveRouteDetails;
