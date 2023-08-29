@@ -261,13 +261,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
         let description;
         if (direction === "FINISH") {
           description =
-            this.currentLanguage === "en"
-              ? `${this.translateService.instant("in")} ${
+            this.currentLanguage === "fi"
+              ? `${this.translateService.instant("you-will-arrive")} ${
                   totalDistance | 0
-                }m ${this.translateService.instant("you-will-arrive")}.`
-              : `${this.translateService.instant("you-will-arrive")} ${
+                }m ${this.translateService.instant("in")}.`
+              : `${this.translateService.instant("in")} ${
                   totalDistance | 0
-                }m ${this.translateService.instant("in")}.`;
+                }m ${this.translateService.instant("you-will-arrive")}.`;
         } else {
           description = `${this.translateService.instant("go")} ${
             totalDistance | 0
