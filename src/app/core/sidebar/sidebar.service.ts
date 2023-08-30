@@ -21,6 +21,7 @@ export class SidebarService {
   public floorChangeListener = new Subject<string | any>();
   public centerToFeatureListener = new Subject<Feature>();
   public routeToClosestAmenityListener = new Subject<any>();
+  public stepChangeListener = new Subject<number>();
   public activeListItem: AmenityToggleModel;
 
   constructor(private stateService: StateService) {}
@@ -51,6 +52,10 @@ export class SidebarService {
 
   getRouteToClosestAmenityListener() {
     return this.routeToClosestAmenityListener.asObservable();
+  }
+
+  getStepChangeListener() {
+    return this.stepChangeListener.asObservable();
   }
 
   // pick up the start point and fire up listener to find route
@@ -89,6 +94,10 @@ export class SidebarService {
 
   onRouteToClosestAmenity() {
     this.routeToClosestAmenityListener.next();
+  }
+
+  onStepChangeListener(step: number) {
+    this.stepChangeListener.next(step);
   }
 
   // return all pois from map features based on some radius of current place location

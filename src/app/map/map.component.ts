@@ -185,6 +185,11 @@ export class MapComponent implements OnInit, OnDestroy {
             "amenity"
           );
         }
+      }),
+      this.sidebarService.getStepChangeListener().subscribe((step) => {
+        if (this.map) {
+          this.map.setNavStep(step);
+        }
       })
     );
     this.breakpointObserver
@@ -349,6 +354,10 @@ export class MapComponent implements OnInit, OnDestroy {
         }
         this.sidebarService.onSetEndPoi(poi);
       });
+
+      this.map.getNavStepSetListener().subscribe((step) => {
+        this.sidebarService.stepChangeListener.next(step);
+      }),
 
       // subscribe to map place selection listener, this always run once at map initiation and upon map.setPlace method call
       this.map.getPlaceSelectListener().subscribe((res) => {
