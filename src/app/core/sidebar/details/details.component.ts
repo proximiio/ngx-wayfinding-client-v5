@@ -299,7 +299,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (this.currentStep !== lastStepIndex) {
       const step = this.steps[this.currentStep];
       this.sidebarService.floorChangeListener.next(step.destinationFloor);
-      //this.currentStep++;
+      this.currentStep++;
       //this.sidebarService.stepChangeListener.next(this.currentStep);
     } else {
       const firstStep = this.stateService.state.textNavigation.steps[0];
