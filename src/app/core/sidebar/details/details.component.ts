@@ -307,7 +307,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         (floor) => floor.level === firstStep.level
       );
       this.sidebarService.floorChangeListener.next(startFloor);
-      //this.currentStep = 0;
+      this.currentStep = 0;
       //this.sidebarService.stepChangeListener.next(this.currentStep);
     }
   }
