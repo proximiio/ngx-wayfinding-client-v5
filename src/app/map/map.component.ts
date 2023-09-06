@@ -4,7 +4,7 @@ import * as Settings from "../../../settings";
 import * as mapboxgl from "mapbox-gl";
 import { KioskModel, StateService } from "../core/state.service";
 import { SettingsDialogComponent } from "../core/settings-dialog/settings-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { SidebarService } from "../core/sidebar/sidebar.service";
 import { Subscription } from "rxjs";
 import {

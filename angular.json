@@ -25,7 +25,8 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "buildOptimizer": true,
+            "aot": true,
             "baseHref": "/wayfinding/",
             "assets": [
               "src/favicon.ico",
