@@ -4,7 +4,7 @@ import * as Settings from "../../../settings";
 import * as mapboxgl from "mapbox-gl";
 import { KioskModel, StateService } from "../core/state.service";
 import { SettingsDialogComponent } from "../core/settings-dialog/settings-dialog.component";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { SidebarService } from "../core/sidebar/sidebar.service";
 import { Subscription } from "rxjs";
 import {
@@ -12,7 +12,6 @@ import {
   Breakpoints,
   BreakpointState,
 } from "@angular/cdk/layout";
-import { PaddingOptions } from "mapbox-gl";
 import { TranslateService } from "@ngx-translate/core";
 import { MapService } from "./map.service";
 import Feature from "proximiio-js-library/lib/models/feature";
@@ -25,7 +24,9 @@ import Feature from "proximiio-js-library/lib/models/feature";
 export class MapComponent implements OnInit, OnDestroy {
   public mapLoaded = false;
   private destinationFromUrl = false;
-  private mapPadding: PaddingOptions = {
+  private mapPadding:
+    | number
+    | { top: number; bottom: number; left: number; right: number } = {
     top: 250,
     bottom: 250,
     left: 500,
@@ -247,6 +248,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
         // setting mapbox navigationControl buttons
         this.map.getMapboxInstance().addControl(
+          // @ts-ignore;
           new mapboxgl.NavigationControl({
             showZoom: false,
           })
@@ -358,20 +360,19 @@ export class MapComponent implements OnInit, OnDestroy {
       this.map.getNavStepSetListener().subscribe((step) => {
         this.sidebarService.stepChangeListener.next(step);
       }),
-
-      // subscribe to map place selection listener, this always run once at map initiation and upon map.setPlace method call
-      this.map.getPlaceSelectListener().subscribe((res) => {
-        // capture the map state (this includes all important data of the map), and store those in application stateService, this one is super important as this will fill our state with initial data to be used elsewhere through the app
-        const mapState = this.map.state;
-        this.stateService.state = {
-          ...this.stateService.state,
-          place: mapState.place,
-          floors: mapState.floors,
-          floor: mapState.floor,
-          allFeatures: mapState.allFeatures,
-          amenities: mapState.amenities,
-        };
-      });
+        // subscribe to map place selection listener, this always run once at map initiation and upon map.setPlace method call
+        this.map.getPlaceSelectListener().subscribe((res) => {
+          // capture the map state (this includes all important data of the map), and store those in application stateService, this one is super important as this will fill our state with initial data to be used elsewhere through the app
+          const mapState = this.map.state;
+          this.stateService.state = {
+            ...this.stateService.state,
+            place: mapState.place,
+            floors: mapState.floors,
+            floor: mapState.floor,
+            allFeatures: mapState.allFeatures,
+            amenities: mapState.amenities,
+          };
+        });
 
       // subscribe to map floor selection listener, this always run once at map initiation and upon map.setFloor method call
       this.map.getFloorSelectListener().subscribe((res) => {

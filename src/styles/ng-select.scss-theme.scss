@@ -78,7 +78,7 @@
     color: mat-color($foreground, text) !important;
 
 
-    .mat-option.ng-option-selected:not(.ng-option-marked):not(:hover) {
+    .mat-mdc-option.ng-option-selected:not(.ng-option-marked):not(:hover) {
       background: mat-color($background, card);
 
       &:not(.ng-option-disabled) {
