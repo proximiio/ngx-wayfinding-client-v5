@@ -7,7 +7,7 @@ import * as Settings from "../../../../../settings";
 import * as humanizeDuration from "humanize-duration";
 import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
 import { MapService } from "src/app/map/map.service";
-import { FormBuilder, Validators } from "@angular/forms";
+import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { map, startWith, tap } from "rxjs/operators";
 import * as turf from "@turf/turf";
 import { FeatureCollection, Point } from "@turf/turf";
@@ -71,7 +71,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     public mapService: MapService,
     public stateService: StateService,
     private translateService: TranslateService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     const urlParams = new URLSearchParams(window.location.search);
     const destinationParam = urlParams.get("destinationFeature");

@@ -11,7 +11,7 @@ import {
 import { Subject } from 'rxjs';
 import {
   NgControl,
-  FormControl,
+  UntypedFormControl,
   FormGroupDirective,
   NgForm
 } from '@angular/forms';
@@ -23,7 +23,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 export class NgSelectErrorStateMatcher {
   constructor(private ngSelect: NgSelectFormFieldControlDirective) {}
   isErrorState(
-    control: FormControl | null,
+    control: UntypedFormControl | null,
     form: FormGroupDirective | NgForm | null
   ): boolean {
     if (!control) {
@@ -179,7 +179,7 @@ export class NgSelectFormFieldControlDirective
     const parent = this._parentFormGroup || this._parentForm;
     const matcher = this.errorStateMatcher || this._defaultErrorStateMatcher;
     const control = this.ngControl
-      ? (this.ngControl.control as FormControl)
+      ? (this.ngControl.control as UntypedFormControl)
       : null;
     const newState = matcher.isErrorState(control, parent);
 

@@ -137,6 +137,6 @@
           "defaultConfiguration": "development"
         }
       }
-    }},
-  "defaultProject": "ngx-wayfinding-client"
+    }
+  }
 }
