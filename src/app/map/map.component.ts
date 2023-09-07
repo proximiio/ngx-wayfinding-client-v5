@@ -362,7 +362,6 @@ export class MapComponent implements OnInit, OnDestroy {
       this.map.getNavStepSetListener().subscribe((step) => {
         this.sidebarService.stepChangeListener.next(step);
       }),
-<<<<<<< HEAD
 
       // subscribe to map place selection listener, this always run once at map initiation and upon map.setPlace method call
       this.map.getPlaceSelectListener().subscribe((res) => {
@@ -377,21 +376,6 @@ export class MapComponent implements OnInit, OnDestroy {
           amenities: mapState.amenities,
         };
       });
-=======
-        // subscribe to map place selection listener, this always run once at map initiation and upon map.setPlace method call
-        this.map.getPlaceSelectListener().subscribe((res) => {
-          // capture the map state (this includes all important data of the map), and store those in application stateService, this one is super important as this will fill our state with initial data to be used elsewhere through the app
-          const mapState = this.map.state;
-          this.stateService.state = {
-            ...this.stateService.state,
-            place: mapState.place,
-            floors: mapState.floors,
-            floor: mapState.floor,
-            allFeatures: mapState.allFeatures,
-            amenities: mapState.amenities,
-          };
-        });
->>>>>>> feature/update-deps
 
       // subscribe to map floor selection listener, this always run once at map initiation and upon map.setFloor method call
       this.map.getFloorSelectListener().subscribe((res) => {
