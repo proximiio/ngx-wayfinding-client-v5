@@ -5,8 +5,8 @@ pre {
   white-space: pre-wrap;
 }
 
-.mat-dialog-title,
-.mat-dialog-content {
+.mat-mdc-dialog-title,
+.mat-mdc-dialog-content {
   text-align: center;
 
   p {
@@ -18,7 +18,7 @@ pre {
   }
 }
 
-button.mat-button {
+button.mat-mdc-button {
   border-radius: 50px;
   padding: .5rem 2rem;
   margin: 0 auto 1rem;
@@ -32,7 +32,7 @@ button.mat-button {
   }
 }
 
-::ng-deep .mat-dialog-container {
+::ng-deep .mat-mdc-dialog-container {
   background-color: white!important;
   color: #444444!important;
 }

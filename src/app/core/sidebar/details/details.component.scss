@@ -169,16 +169,20 @@
       border: 0;
       border-radius: 16px;
       margin-bottom: 0.8rem;
-
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       .mat-button-toggle {
         flex: 1 1 1px;
         color: white;
         background-color: #b8b0af;
         padding: 0.8rem;
         white-space: normal;
-
+        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
         &.mat-button-toggle-checked {
           background-color: $default-color;
+          /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
           ::ng-deep .mat-button-toggle-focus-overlay {
             border: 0;
           }
@@ -188,7 +192,7 @@
           display: block;
           margin: 0 auto;
         }
-
+        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
         ::ng-deep .mat-button-toggle-label-content {
           line-height: normal;
           letter-spacing: -0.25px;
@@ -241,11 +245,14 @@
       .mat-expansion-panel-body {
         padding: 0;
       }
-      .mat-list-item {
+      .mat-mdc-list-item {
         border-top: 1px dashed $default-color;
         color: #222;
+        /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+        /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
         .mat-list-item-content {
           padding: 0;
+          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
           .mat-list-text {
             p:first-child {
               color: $default-color;
@@ -270,8 +277,9 @@
         color: $default-color;
       }
       .mat-expansion-panel ::ng-deep {
-        .mat-list-item {
+        .mat-mdc-list-item {
           border-color: $accent-color;
+          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
           .mat-list-text p:first-child {
             color: $accent-color;
           }
@@ -346,7 +354,7 @@
       }
     }
 
-    .mat-dialog-content {
+    .mat-mdc-dialog-content {
       text-align: center;
     }
     mat-form-field {
@@ -397,8 +405,11 @@
         display: none;
         border-radius: 8px;
         margin-bottom: 0.8rem;
+        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
         .mat-button-toggle {
           padding: 0.4rem;
+          /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
           ::ng-deep .mat-button-toggle-label-content {
             line-height: normal;
             font-size: 14px;

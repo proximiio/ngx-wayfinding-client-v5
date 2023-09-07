@@ -99,7 +99,10 @@ export class AppComponent implements OnInit {
           visitParams: { fingerprint: fingerprint },
           withCredentials: false,
         });
-        ahoy.trackAll();
+        ahoy.trackView();
+        ahoy.trackClicks("a, button, input[type=submit]");
+        ahoy.trackSubmits("form");
+        ahoy.trackChanges("input, textarea, select");
       });
     }
   }

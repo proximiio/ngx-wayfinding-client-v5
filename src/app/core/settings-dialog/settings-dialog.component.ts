@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
-import { FormBuilder, Validators } from "@angular/forms";
+import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { StateService } from "../state.service";
 import Keyboard from "simple-keyboard";
 
@@ -38,7 +38,7 @@ export class SettingsDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<SettingsDialogComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private stateService: StateService
   ) {
     if (this.stateService.state.kioskMode && !this.keyboard?.initialized) {

@@ -21,30 +21,29 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SettingsDialogComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-      }
-    }),
-    FontawesomeModule,
-    AngularMaterialModule,
-    CoreModule,
-    SidebarModule,
-    MapModule,
-    AppRoutingModule,
-    ReactiveFormsModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
-  entryComponents: [SettingsDialogComponent]
+    declarations: [
+        AppComponent,
+        SettingsDialogComponent
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
+        FontawesomeModule,
+        AngularMaterialModule,
+        CoreModule,
+        SidebarModule,
+        MapModule,
+        AppRoutingModule,
+        ReactiveFormsModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
