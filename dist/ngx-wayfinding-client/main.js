@@ -3785,6 +3785,7 @@ class MapComponent {
     this.breakpointObserver = breakpointObserver;
     this.translateService = translateService;
     this.mapLoaded = false;
+    this.startFromUrl = false;
     this.destinationFromUrl = false;
     this.mapPadding = {
       top: 250,
@@ -3805,8 +3806,13 @@ class MapComponent {
     };
     this.subs = [];
     const urlParams = new URLSearchParams(window.location.search);
+    this.startParam = urlParams.get("startFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
     this.destinationParam = urlParams.get("destinationFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
     this.placeParam = urlParams.get("defaultPlace");
+    // if there is a start defined in url params, we need to handle poi selection
+    if (this.startParam) {
+      this.startFromUrl = true;
+    }
     // if there is a destination defined in url params, we need to handle poi selection to show details component
     if (this.destinationParam) {
       this.destinationFromUrl = true;
@@ -3988,6 +3994,10 @@ class MapComponent {
           this.sidebarService.onSetEndPoi(destinationFeature);
           this.map.handlePolygonSelection(destinationFeature);
         }
+        if (this.startFromUrl) {
+          const startFeature = this.stateService.state.allFeatures.features.find(f => f.id === this.startParam || f.properties.id === this.startParam || f.properties.title === this.startParam);
+          this.sidebarService.onSetStartPoi(startFeature);
+        }
       });
       // when route will be found, write turn by turn navigation response into state service so it will be accessible from details component
       this.map.getRouteFoundListener().subscribe(res => {
@@ -3996,7 +4006,6 @@ class MapComponent {
           textNavigation: res.TBTNav,
           routeDetails: res.details
         };
-        console.log(this.stateService.state);
         // send route found event to map service
         this.mapService.routeFoundListener.next(true);
         // if destination is defined in url params and route is found, set destination in the app
