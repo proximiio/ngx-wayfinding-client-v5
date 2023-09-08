@@ -23,6 +23,7 @@ import Feature from "proximiio-js-library/lib/models/feature";
 })
 export class MapComponent implements OnInit, OnDestroy {
   public mapLoaded = false;
+  private startFromUrl = false;
   private destinationFromUrl = false;
   private mapPadding:
     | number
@@ -36,6 +37,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private startPoiId: string;
   private endPoi;
   private kiosk: KioskModel;
+  private startParam: string;
   private destinationParam: string;
   private placeParam: string;
   private wayfindingConfig = {
@@ -65,8 +67,14 @@ export class MapComponent implements OnInit, OnDestroy {
     private translateService: TranslateService
   ) {
     const urlParams = new URLSearchParams(window.location.search);
+    this.startParam = urlParams.get("startFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
     this.destinationParam = urlParams.get("destinationFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
     this.placeParam = urlParams.get("defaultPlace");
+
+    // if there is a start defined in url params, we need to handle poi selection
+    if (this.startParam) {
+      this.startFromUrl = true;
+    }
 
     // if there is a destination defined in url params, we need to handle poi selection to show details component
     if (this.destinationParam) {
@@ -312,6 +320,17 @@ export class MapComponent implements OnInit, OnDestroy {
           this.sidebarService.onSetEndPoi(destinationFeature);
           this.map.handlePolygonSelection(destinationFeature);
         }
+
+        if (this.startFromUrl) {
+          const startFeature =
+            this.stateService.state.allFeatures.features.find(
+              (f) =>
+                f.id === this.startParam ||
+                f.properties.id === this.startParam ||
+                f.properties.title === this.startParam
+            );
+          this.sidebarService.onSetStartPoi(startFeature);
+        }
       });
 
       // when route will be found, write turn by turn navigation response into state service so it will be accessible from details component
@@ -321,7 +340,6 @@ export class MapComponent implements OnInit, OnDestroy {
           textNavigation: res.TBTNav,
           routeDetails: res.details,
         };
-        console.log(this.stateService.state);
 
         // send route found event to map service
         this.mapService.routeFoundListener.next(true);
@@ -362,20 +380,19 @@ export class MapComponent implements OnInit, OnDestroy {
       this.map.getNavStepSetListener().subscribe((step) => {
         this.sidebarService.stepChangeListener.next(step);
       }),
-
-      // subscribe to map place selection listener, this always run once at map initiation and upon map.setPlace method call
-      this.map.getPlaceSelectListener().subscribe((res) => {
-        // capture the map state (this includes all important data of the map), and store those in application stateService, this one is super important as this will fill our state with initial data to be used elsewhere through the app
-        const mapState = this.map.state;
-        this.stateService.state = {
-          ...this.stateService.state,
-          place: mapState.place,
-          floors: mapState.floors,
-          floor: mapState.floor,
-          allFeatures: mapState.allFeatures,
-          amenities: mapState.amenities,
-        };
-      });
+        // subscribe to map place selection listener, this always run once at map initiation and upon map.setPlace method call
+        this.map.getPlaceSelectListener().subscribe((res) => {
+          // capture the map state (this includes all important data of the map), and store those in application stateService, this one is super important as this will fill our state with initial data to be used elsewhere through the app
+          const mapState = this.map.state;
+          this.stateService.state = {
+            ...this.stateService.state,
+            place: mapState.place,
+            floors: mapState.floors,
+            floor: mapState.floor,
+            allFeatures: mapState.allFeatures,
+            amenities: mapState.amenities,
+          };
+        });
 
       // subscribe to map floor selection listener, this always run once at map initiation and upon map.setFloor method call
       this.map.getFloorSelectListener().subscribe((res) => {
