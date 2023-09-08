@@ -1,7 +1,7 @@
 "use strict";
 (self["webpackChunkngx_wayfinding_client"] = self["webpackChunkngx_wayfinding_client"] || []).push([["polyfills"],{
 
-/***/ 19732:
+/***/ 55321:
 /*!**************************!*\
   !*** ./src/polyfills.ts ***!
   \**************************/
@@ -2904,7 +2904,7 @@ var __assign = this && this.__assign || function () {
 },
 /******/ __webpack_require__ => { // webpackRuntimeModules
 /******/ var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-/******/ var __webpack_exports__ = (__webpack_exec__(19732));
+/******/ var __webpack_exports__ = (__webpack_exec__(55321));
 /******/ }
 ]);
 //# sourceMappingURL=polyfills.js.map

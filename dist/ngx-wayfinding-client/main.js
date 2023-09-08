@@ -1,6 +1,6 @@
 (self["webpackChunkngx_wayfinding_client"] = self["webpackChunkngx_wayfinding_client"] || []).push([["main"],{
 
-/***/ 92262:
+/***/ 38527:
 /*!********************************************!*\
   !*** ./src/app/angular-material.module.ts ***!
   \********************************************/
@@ -70,7 +70,7 @@ class AngularMaterialModule {
 
 /***/ }),
 
-/***/ 42899:
+/***/ 23966:
 /*!***************************************!*\
   !*** ./src/app/app-routing.module.ts ***!
   \***************************************/
@@ -113,7 +113,7 @@ class AppRoutingModule {
 
 /***/ }),
 
-/***/ 78641:
+/***/ 66401:
 /*!**********************************!*\
   !*** ./src/app/app.component.ts ***!
   \**********************************/
@@ -127,16 +127,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var fingerprintjs2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fingerprintjs2 */ 7743);
 /* harmony import */ var fingerprintjs2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fingerprintjs2__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var ahoy_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ahoy.js */ 15079);
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../environments/environment */ 70108);
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../environments/environment */ 20553);
 /* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../settings */ 97637);
 /* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_settings__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _map_map_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./map/map.service */ 41655);
-/* harmony import */ var _core_state_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./core/state.service */ 57741);
+/* harmony import */ var _map_map_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./map/map.service */ 22953);
+/* harmony import */ var _core_state_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./core/state.service */ 98845);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/core */ 61699);
 /* harmony import */ var _angular_cdk_overlay__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/cdk/overlay */ 72698);
 /* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ngx-translate/core */ 5939);
-/* harmony import */ var _core_sidebar_sidebar_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./core/sidebar/sidebar.component */ 74682);
-/* harmony import */ var _map_map_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./map/map.component */ 7463);
+/* harmony import */ var _core_sidebar_sidebar_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./core/sidebar/sidebar.component */ 89339);
+/* harmony import */ var _map_map_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./map/map.component */ 83398);
 
 
 
@@ -259,7 +259,7 @@ class AppComponent {
 
 /***/ }),
 
-/***/ 53574:
+/***/ 78629:
 /*!*******************************!*\
   !*** ./src/app/app.module.ts ***!
   \*******************************/
@@ -273,15 +273,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/platform-browser */ 36480);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/common/http */ 54860);
-/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app-routing.module */ 42899);
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.component */ 78641);
-/* harmony import */ var _map_map_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./map/map.module */ 64988);
-/* harmony import */ var _core_core_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./core/core.module */ 99287);
-/* harmony import */ var _angular_material_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./angular-material.module */ 92262);
-/* harmony import */ var _fontawesome_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./fontawesome.module */ 25949);
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../environments/environment */ 70108);
-/* harmony import */ var _core_sidebar_sidebar_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./core/sidebar/sidebar.module */ 12818);
-/* harmony import */ var _core_settings_dialog_settings_dialog_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./core/settings-dialog/settings-dialog.component */ 35223);
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app-routing.module */ 23966);
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.component */ 66401);
+/* harmony import */ var _map_map_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./map/map.module */ 91536);
+/* harmony import */ var _core_core_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./core/core.module */ 48081);
+/* harmony import */ var _angular_material_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./angular-material.module */ 38527);
+/* harmony import */ var _fontawesome_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./fontawesome.module */ 46612);
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../environments/environment */ 20553);
+/* harmony import */ var _core_sidebar_sidebar_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./core/sidebar/sidebar.module */ 5893);
+/* harmony import */ var _core_settings_dialog_settings_dialog_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./core/settings-dialog/settings-dialog.component */ 33646);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/forms */ 28849);
 /* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @ngx-translate/core */ 5939);
 /* harmony import */ var _ngx_translate_http_loader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ngx-translate/http-loader */ 70614);
@@ -333,7 +333,7 @@ class AppModule {
 
 /***/ }),
 
-/***/ 99287:
+/***/ 48081:
 /*!*************************************!*\
   !*** ./src/app/core/core.module.ts ***!
   \*************************************/
@@ -347,11 +347,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ 26575);
 /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser/animations */ 24987);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/router */ 27947);
-/* harmony import */ var _angular_material_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../angular-material.module */ 92262);
-/* harmony import */ var _fontawesome_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../fontawesome.module */ 25949);
+/* harmony import */ var _angular_material_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../angular-material.module */ 38527);
+/* harmony import */ var _fontawesome_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../fontawesome.module */ 46612);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/forms */ 28849);
 /* harmony import */ var _ng_select_ng_select__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ng-select/ng-select */ 21788);
-/* harmony import */ var _ng_select_directive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ng-select.directive */ 20893);
+/* harmony import */ var _ng_select_directive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ng-select.directive */ 93359);
 /* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ngx-translate/core */ 5939);
 /* harmony import */ var angularx_qrcode__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! angularx-qrcode */ 73725);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 61699);
@@ -387,7 +387,7 @@ class CoreModule {
 
 /***/ }),
 
-/***/ 20893:
+/***/ 93359:
 /*!*********************************************!*\
   !*** ./src/app/core/ng-select.directive.ts ***!
   \*********************************************/
@@ -569,7 +569,7 @@ class NgSelectFormFieldControlDirective {
 
 /***/ }),
 
-/***/ 44099:
+/***/ 19782:
 /*!**************************************!*\
   !*** ./src/app/core/ordinal.pipe.ts ***!
   \**************************************/
@@ -611,7 +611,7 @@ class OrdinalPipe {
 
 /***/ }),
 
-/***/ 35223:
+/***/ 33646:
 /*!*******************************************************************!*\
   !*** ./src/app/core/settings-dialog/settings-dialog.component.ts ***!
   \*******************************************************************/
@@ -623,7 +623,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   SettingsDialogComponent: () => (/* binding */ SettingsDialogComponent)
 /* harmony export */ });
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ 28849);
-/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../state.service */ 57741);
+/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../state.service */ 98845);
 /* harmony import */ var simple_keyboard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! simple-keyboard */ 62009);
 /* harmony import */ var simple_keyboard__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(simple_keyboard__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 61699);
@@ -920,7 +920,7 @@ class SettingsDialogComponent {
 
 /***/ }),
 
-/***/ 17068:
+/***/ 86826:
 /*!*************************************************************************!*\
   !*** ./src/app/core/sidebar/amenity-picker/amenity-picker.component.ts ***!
   \*************************************************************************/
@@ -932,7 +932,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   AmenityPickerComponent: () => (/* binding */ AmenityPickerComponent),
 /* harmony export */   amenityData: () => (/* binding */ amenityData)
 /* harmony export */ });
-/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sidebar.service */ 52342);
+/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sidebar.service */ 11132);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 61699);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ 26575);
 /* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ 60683);
@@ -1079,7 +1079,7 @@ class AmenityPickerComponent {
 
 /***/ }),
 
-/***/ 62564:
+/***/ 84246:
 /*!***************************************************************************!*\
   !*** ./src/app/core/sidebar/closest-amenity/closest-amenity.component.ts ***!
   \***************************************************************************/
@@ -1090,13 +1090,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ClosestAmenityComponent: () => (/* binding */ ClosestAmenityComponent)
 /* harmony export */ });
-/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../state.service */ 57741);
-/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sidebar.service */ 52342);
+/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../state.service */ 98845);
+/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sidebar.service */ 11132);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/forms */ 28849);
-/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/map/map.service */ 41655);
+/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/map/map.service */ 22953);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ 1062);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs/operators */ 47422);
-/* harmony import */ var _amenity_picker_amenity_picker_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../amenity-picker/amenity-picker.component */ 17068);
+/* harmony import */ var _amenity_picker_amenity_picker_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../amenity-picker/amenity-picker.component */ 86826);
 /* harmony import */ var remove_accents__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! remove-accents */ 20299);
 /* harmony import */ var remove_accents__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(remove_accents__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 61699);
@@ -1358,7 +1358,7 @@ class ClosestAmenityComponent {
 
 /***/ }),
 
-/***/ 92433:
+/***/ 34638:
 /*!***********************************************************!*\
   !*** ./src/app/core/sidebar/details/details.component.ts ***!
   \***********************************************************/
@@ -1369,13 +1369,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   DetailsComponent: () => (/* binding */ DetailsComponent)
 /* harmony export */ });
-/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sidebar.service */ 52342);
-/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../state.service */ 57741);
+/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sidebar.service */ 11132);
+/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../state.service */ 98845);
 /* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../settings */ 97637);
 /* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_settings__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var humanize_duration__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! humanize-duration */ 20833);
 /* harmony import */ var humanize_duration__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(humanize_duration__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/map/map.service */ 41655);
+/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/map/map.service */ 22953);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/forms */ 28849);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ 1062);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! rxjs/operators */ 47422);
@@ -1386,7 +1386,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material_button_toggle__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/button-toggle */ 10727);
 /* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ 60683);
 /* harmony import */ var angularx_qrcode__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! angularx-qrcode */ 73725);
-/* harmony import */ var _ordinal_pipe__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../ordinal.pipe */ 44099);
+/* harmony import */ var _ordinal_pipe__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../ordinal.pipe */ 19782);
 
 
 
@@ -2312,7 +2312,7 @@ class DetailsComponent {
 
 /***/ }),
 
-/***/ 76874:
+/***/ 34824:
 /*!*********************************************************************!*\
   !*** ./src/app/core/sidebar/floor-picker/floor-picker.component.ts ***!
   \*********************************************************************/
@@ -2323,8 +2323,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   FloorPickerComponent: () => (/* binding */ FloorPickerComponent)
 /* harmony export */ });
-/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../state.service */ 57741);
-/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sidebar.service */ 52342);
+/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../state.service */ 98845);
+/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sidebar.service */ 11132);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 61699);
 /* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngx-translate/core */ 5939);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ 26575);
@@ -2402,7 +2402,7 @@ class FloorPickerComponent {
 
 /***/ }),
 
-/***/ 24689:
+/***/ 32316:
 /*!***************************************************************!*\
   !*** ./src/app/core/sidebar/list-view/list-view.component.ts ***!
   \***************************************************************/
@@ -2413,8 +2413,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ListViewComponent: () => (/* binding */ ListViewComponent)
 /* harmony export */ });
-/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../state.service */ 57741);
-/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sidebar.service */ 52342);
+/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../state.service */ 98845);
+/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sidebar.service */ 11132);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 61699);
 /* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngx-translate/core */ 5939);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ 26575);
@@ -2528,7 +2528,7 @@ class ListViewComponent {
 
 /***/ }),
 
-/***/ 60595:
+/***/ 7551:
 /*!*********************************************************************!*\
   !*** ./src/app/core/sidebar/route-picker/route-picker.component.ts ***!
   \*********************************************************************/
@@ -2539,10 +2539,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   RoutePickerComponent: () => (/* binding */ RoutePickerComponent)
 /* harmony export */ });
-/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../state.service */ 57741);
-/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sidebar.service */ 52342);
+/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../state.service */ 98845);
+/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sidebar.service */ 11132);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/forms */ 28849);
-/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/map/map.service */ 41655);
+/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/map/map.service */ 22953);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ 1062);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ 47422);
 /* harmony import */ var remove_accents__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! remove-accents */ 20299);
@@ -2788,7 +2788,7 @@ class RoutePickerComponent {
 
 /***/ }),
 
-/***/ 66959:
+/***/ 83629:
 /*!*********************************************************!*\
   !*** ./src/app/core/sidebar/search/search.component.ts ***!
   \*********************************************************/
@@ -2801,18 +2801,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var remove_accents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! remove-accents */ 20299);
 /* harmony import */ var remove_accents__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(remove_accents__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/app/map/map.service */ 41655);
-/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sidebar.service */ 52342);
+/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/app/map/map.service */ 22953);
+/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sidebar.service */ 11132);
 /* harmony import */ var simple_keyboard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! simple-keyboard */ 62009);
 /* harmony import */ var simple_keyboard__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(simple_keyboard__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../state.service */ 57741);
+/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../state.service */ 98845);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 61699);
 /* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ngx-translate/core */ 5939);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/common */ 26575);
 /* harmony import */ var _ng_select_ng_select__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ng-select/ng-select */ 21788);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/forms */ 28849);
 /* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ 60683);
-/* harmony import */ var _ng_select_directive__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../ng-select.directive */ 20893);
+/* harmony import */ var _ng_select_directive__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../ng-select.directive */ 93359);
 
 
 
@@ -3036,7 +3036,7 @@ class SearchComponent {
 
 /***/ }),
 
-/***/ 50177:
+/***/ 51410:
 /*!*******************************************************************!*\
   !*** ./src/app/core/sidebar/shop-picker/shop-picker.component.ts ***!
   \*******************************************************************/
@@ -3047,7 +3047,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ShopPickerComponent: () => (/* binding */ ShopPickerComponent)
 /* harmony export */ });
-/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sidebar.service */ 52342);
+/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sidebar.service */ 11132);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 61699);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ 26575);
 /* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ 60683);
@@ -3193,7 +3193,7 @@ class ShopPickerComponent {
 
 /***/ }),
 
-/***/ 74682:
+/***/ 89339:
 /*!***************************************************!*\
   !*** ./src/app/core/sidebar/sidebar.component.ts ***!
   \***************************************************/
@@ -3204,19 +3204,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   SidebarComponent: () => (/* binding */ SidebarComponent)
 /* harmony export */ });
-/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/app/map/map.service */ 41655);
-/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sidebar.service */ 52342);
+/* harmony import */ var src_app_map_map_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/app/map/map.service */ 22953);
+/* harmony import */ var _sidebar_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sidebar.service */ 11132);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/core */ 61699);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/common */ 26575);
 /* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ 60683);
-/* harmony import */ var _floor_picker_floor_picker_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./floor-picker/floor-picker.component */ 76874);
-/* harmony import */ var _shop_picker_shop_picker_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./shop-picker/shop-picker.component */ 50177);
-/* harmony import */ var _amenity_picker_amenity_picker_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./amenity-picker/amenity-picker.component */ 17068);
-/* harmony import */ var _search_search_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./search/search.component */ 66959);
-/* harmony import */ var _details_details_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./details/details.component */ 92433);
-/* harmony import */ var _list_view_list_view_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./list-view/list-view.component */ 24689);
-/* harmony import */ var _route_picker_route_picker_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./route-picker/route-picker.component */ 60595);
-/* harmony import */ var _closest_amenity_closest_amenity_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./closest-amenity/closest-amenity.component */ 62564);
+/* harmony import */ var _floor_picker_floor_picker_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./floor-picker/floor-picker.component */ 34824);
+/* harmony import */ var _shop_picker_shop_picker_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./shop-picker/shop-picker.component */ 51410);
+/* harmony import */ var _amenity_picker_amenity_picker_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./amenity-picker/amenity-picker.component */ 86826);
+/* harmony import */ var _search_search_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./search/search.component */ 83629);
+/* harmony import */ var _details_details_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./details/details.component */ 34638);
+/* harmony import */ var _list_view_list_view_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./list-view/list-view.component */ 32316);
+/* harmony import */ var _route_picker_route_picker_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./route-picker/route-picker.component */ 7551);
+/* harmony import */ var _closest_amenity_closest_amenity_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./closest-amenity/closest-amenity.component */ 84246);
 
 
 
@@ -3335,7 +3335,7 @@ class SidebarComponent {
 
 /***/ }),
 
-/***/ 12818:
+/***/ 5893:
 /*!************************************************!*\
   !*** ./src/app/core/sidebar/sidebar.module.ts ***!
   \************************************************/
@@ -3347,22 +3347,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   SidebarModule: () => (/* binding */ SidebarModule)
 /* harmony export */ });
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/common */ 26575);
-/* harmony import */ var _floor_picker_floor_picker_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./floor-picker/floor-picker.component */ 76874);
-/* harmony import */ var _shop_picker_shop_picker_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shop-picker/shop-picker.component */ 50177);
-/* harmony import */ var _amenity_picker_amenity_picker_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./amenity-picker/amenity-picker.component */ 17068);
-/* harmony import */ var _search_search_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./search/search.component */ 66959);
-/* harmony import */ var _details_details_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./details/details.component */ 92433);
+/* harmony import */ var _floor_picker_floor_picker_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./floor-picker/floor-picker.component */ 34824);
+/* harmony import */ var _shop_picker_shop_picker_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shop-picker/shop-picker.component */ 51410);
+/* harmony import */ var _amenity_picker_amenity_picker_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./amenity-picker/amenity-picker.component */ 86826);
+/* harmony import */ var _search_search_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./search/search.component */ 83629);
+/* harmony import */ var _details_details_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./details/details.component */ 34638);
 /* harmony import */ var _ng_select_ng_select__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @ng-select/ng-select */ 21788);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/forms */ 28849);
-/* harmony import */ var _angular_material_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../angular-material.module */ 92262);
-/* harmony import */ var _sidebar_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./sidebar.component */ 74682);
-/* harmony import */ var _core_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../core.module */ 99287);
+/* harmony import */ var _angular_material_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../angular-material.module */ 38527);
+/* harmony import */ var _sidebar_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./sidebar.component */ 89339);
+/* harmony import */ var _core_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../core.module */ 48081);
 /* harmony import */ var _fortawesome_angular_fontawesome__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @fortawesome/angular-fontawesome */ 60683);
-/* harmony import */ var _ordinal_pipe__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ordinal.pipe */ 44099);
+/* harmony import */ var _ordinal_pipe__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ordinal.pipe */ 19782);
 /* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/expansion */ 88060);
-/* harmony import */ var _list_view_list_view_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./list-view/list-view.component */ 24689);
-/* harmony import */ var _route_picker_route_picker_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./route-picker/route-picker.component */ 60595);
-/* harmony import */ var _closest_amenity_closest_amenity_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./closest-amenity/closest-amenity.component */ 62564);
+/* harmony import */ var _list_view_list_view_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./list-view/list-view.component */ 32316);
+/* harmony import */ var _route_picker_route_picker_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./route-picker/route-picker.component */ 7551);
+/* harmony import */ var _closest_amenity_closest_amenity_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./closest-amenity/closest-amenity.component */ 84246);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 61699);
 
 
@@ -3403,7 +3403,7 @@ class SidebarModule {
 
 /***/ }),
 
-/***/ 52342:
+/***/ 11132:
 /*!*************************************************!*\
   !*** ./src/app/core/sidebar/sidebar.service.ts ***!
   \*************************************************/
@@ -3417,7 +3417,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ 32484);
 /* harmony import */ var geolib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! geolib */ 9281);
 /* harmony import */ var geolib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(geolib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../state.service */ 57741);
+/* harmony import */ var _state_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../state.service */ 98845);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 61699);
 
 
@@ -3538,7 +3538,7 @@ class SidebarService {
 
 /***/ }),
 
-/***/ 57741:
+/***/ 98845:
 /*!***************************************!*\
   !*** ./src/app/core/state.service.ts ***!
   \***************************************/
@@ -3626,7 +3626,7 @@ class StateService {
 
 /***/ }),
 
-/***/ 25949:
+/***/ 46612:
 /*!***************************************!*\
   !*** ./src/app/fontawesome.module.ts ***!
   \***************************************/
@@ -3667,7 +3667,7 @@ class FontawesomeModule {
 
 /***/ }),
 
-/***/ 5440:
+/***/ 69215:
 /*!*******************************************!*\
   !*** ./src/app/map/map-routing.module.ts ***!
   \*******************************************/
@@ -3679,7 +3679,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   MapRoutingModule: () => (/* binding */ MapRoutingModule)
 /* harmony export */ });
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ 27947);
-/* harmony import */ var _map_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./map.component */ 7463);
+/* harmony import */ var _map_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./map.component */ 83398);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 61699);
 
 
@@ -3717,7 +3717,7 @@ class MapRoutingModule {
 
 /***/ }),
 
-/***/ 7463:
+/***/ 83398:
 /*!**************************************!*\
   !*** ./src/app/map/map.component.ts ***!
   \**************************************/
@@ -3733,11 +3733,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_settings__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var mapbox_gl__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! mapbox-gl */ 89788);
 /* harmony import */ var mapbox_gl__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(mapbox_gl__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _core_state_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../core/state.service */ 57741);
-/* harmony import */ var _core_settings_dialog_settings_dialog_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../core/settings-dialog/settings-dialog.component */ 35223);
-/* harmony import */ var _core_sidebar_sidebar_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../core/sidebar/sidebar.service */ 52342);
+/* harmony import */ var _core_state_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../core/state.service */ 98845);
+/* harmony import */ var _core_settings_dialog_settings_dialog_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../core/settings-dialog/settings-dialog.component */ 33646);
+/* harmony import */ var _core_sidebar_sidebar_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../core/sidebar/sidebar.service */ 11132);
 /* harmony import */ var _angular_cdk_layout__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/cdk/layout */ 39743);
-/* harmony import */ var _map_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./map.service */ 41655);
+/* harmony import */ var _map_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./map.service */ 22953);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/core */ 61699);
 /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/dialog */ 17401);
 /* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ngx-translate/core */ 5939);
@@ -4227,7 +4227,7 @@ class MapComponent {
 
 /***/ }),
 
-/***/ 64988:
+/***/ 91536:
 /*!***********************************!*\
   !*** ./src/app/map/map.module.ts ***!
   \***********************************/
@@ -4239,11 +4239,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   MapModule: () => (/* binding */ MapModule)
 /* harmony export */ });
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ 26575);
-/* harmony import */ var _map_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./map.component */ 7463);
-/* harmony import */ var _map_routing_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map-routing.module */ 5440);
-/* harmony import */ var _core_core_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../core/core.module */ 99287);
-/* harmony import */ var _fontawesome_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../fontawesome.module */ 25949);
-/* harmony import */ var _angular_material_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../angular-material.module */ 92262);
+/* harmony import */ var _map_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./map.component */ 83398);
+/* harmony import */ var _map_routing_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map-routing.module */ 69215);
+/* harmony import */ var _core_core_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../core/core.module */ 48081);
+/* harmony import */ var _fontawesome_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../fontawesome.module */ 46612);
+/* harmony import */ var _angular_material_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../angular-material.module */ 38527);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 61699);
 
 
@@ -4273,7 +4273,7 @@ class MapModule {
 
 /***/ }),
 
-/***/ 41655:
+/***/ 22953:
 /*!************************************!*\
   !*** ./src/app/map/map.service.ts ***!
   \************************************/
@@ -4321,7 +4321,7 @@ class MapService {
 
 /***/ }),
 
-/***/ 70108:
+/***/ 20553:
 /*!*****************************************!*\
   !*** ./src/environments/environment.ts ***!
   \*****************************************/
@@ -4352,7 +4352,7 @@ const environment = {
 
 /***/ }),
 
-/***/ 96792:
+/***/ 14913:
 /*!*********************!*\
   !*** ./src/main.ts ***!
   \*********************/
@@ -4364,8 +4364,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 61699);
 /* harmony import */ var hammerjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! hammerjs */ 4700);
 /* harmony import */ var hammerjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(hammerjs__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _app_app_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app/app.module */ 53574);
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./environments/environment */ 70108);
+/* harmony import */ var _app_app_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app/app.module */ 78629);
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./environments/environment */ 20553);
 
 
 
@@ -15948,7 +15948,7 @@ var _iconsCache = {
 },
 /******/ __webpack_require__ => { // webpackRuntimeModules
 /******/ var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-/******/ __webpack_require__.O(0, ["vendor"], () => (__webpack_exec__(96792)));
+/******/ __webpack_require__.O(0, ["vendor"], () => (__webpack_exec__(14913)));
 /******/ var __webpack_exports__ = __webpack_require__.O();
 /******/ }
 ]);
