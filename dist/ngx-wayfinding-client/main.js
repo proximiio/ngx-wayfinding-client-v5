@@ -2106,6 +2106,8 @@ class DetailsComponent {
     }));
   }
   onDetailsClose() {
+    this.startPoiId = null;
+    this.setStartPoi();
     this.sidebarService.onSetEndPoi(null);
     this.poi = null;
     this.details = defaultDetails;
@@ -2113,9 +2115,6 @@ class DetailsComponent {
       this.sidebarService.onAmenityToggle("amenities", this.sidebarService.filteredAmenity);
       this.sidebarService.showClosestAmenityPicker = false;
       this.sidebarService.activeListItem = null;
-      this.startPoiId = null;
-      this.setStartPoi();
-      this.sidebarService.onSetEndPoi(null);
     }
   }
   toggleInstructions() {
@@ -3883,7 +3882,7 @@ class MapComponent {
         } else {
           // set amenity filter otherwise
           this.map.setAmenityFilter(res.amenityId, res.category);
-          if (res.category === "amenities") {
+          if (res.category === "amenities" && this.stateService.state.kioskMode) {
             this.map.findRouteToNearestFeature(res.amenityId);
           }
         }
