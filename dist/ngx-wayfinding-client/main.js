@@ -2065,6 +2065,7 @@ class DetailsComponent {
       this.destinationFromUrl = false;
     }), this.sidebarService.getAccessibleOnlyToggleListener().subscribe(() => {
       setTimeout(() => {
+        this.currentStep = 0;
         this.routeType = this.stateService.state.accessibleRoute === true ? "accessible" : "fastest";
       });
     }), this.sidebarService.getStepChangeListener().subscribe(step => {
@@ -3958,7 +3959,8 @@ class MapComponent {
         // },
         showLevelDirectionIcon: true,
         initPolygons: true,
-        animatedRoute: true
+        animatedRoute: true,
+        blockFeatureClickWhileRouting: true
       });
       // subscribing to map ready listener
       this.map.getMapReadyListener().subscribe(ready => {
