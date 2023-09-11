@@ -158,7 +158,7 @@ export class MapComponent implements OnInit, OnDestroy {
           } else {
             // set amenity filter otherwise
             this.map.setAmenityFilter(res.amenityId, res.category);
-            if (res.category === "amenities") {
+            if (res.category === "amenities" && this.stateService.state.kioskMode) {
               this.map.findRouteToNearestFeature(res.amenityId);
             }
           }

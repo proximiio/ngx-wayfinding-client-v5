@@ -118,7 +118,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               : "fastest";
         });
       }),
-      this.sidebarService.getStepChangeListener().subscribe(step => {
+      this.sidebarService.getStepChangeListener().subscribe((step) => {
         this.currentStep = step;
       }),
       this.mapService.getRouteFoundListener().subscribe((found) => {
@@ -134,7 +134,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
             : this.stateService.state.textNavigation.distanceMeters;
           this.distanceInMinutes = humanizeDuration(
             this.stateService.state.routeDetails.duration.realistic * 1000,
-            { delimiter: ` ${this.translateService.instant("and")} `, round: true, language: this.currentLanguage }
+            {
+              delimiter: ` ${this.translateService.instant("and")} `,
+              round: true,
+              language: this.currentLanguage,
+            }
           );
           this.haveRouteDetails = true;
           this.mapService.showingRoute = this.haveRouteDetails;
@@ -178,6 +182,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   onDetailsClose() {
+    this.startPoiId = null;
+    this.setStartPoi();
     this.sidebarService.onSetEndPoi(null);
     this.poi = null;
     this.details = defaultDetails;
@@ -188,9 +194,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
       this.sidebarService.showClosestAmenityPicker = false;
       this.sidebarService.activeListItem = null;
-      this.startPoiId = null;
-      this.setStartPoi();
-      this.sidebarService.onSetEndPoi(null);
     }
   }
 
