@@ -111,6 +111,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       }),
       this.sidebarService.getAccessibleOnlyToggleListener().subscribe(() => {
         setTimeout(() => {
+          this.currentStep = 0;
           this.routeType =
             this.stateService.state.accessibleRoute === true
               ? "accessible"

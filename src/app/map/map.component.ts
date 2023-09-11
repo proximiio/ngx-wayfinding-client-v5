@@ -240,6 +240,7 @@ export class MapComponent implements OnInit, OnDestroy {
         showLevelDirectionIcon: true, // if enabled arrow icon will be shown at the levelchanger indicating direction of level change along the found route
         initPolygons: true,
         animatedRoute: true,
+        blockFeatureClickWhileRouting: true,
       });
 
       // subscribing to map ready listener
