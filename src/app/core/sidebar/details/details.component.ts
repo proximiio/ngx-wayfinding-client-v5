@@ -87,6 +87,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           ? this.destinationFromUrl
           : false;
         this.mapService.showingRoute = this.haveRouteDetails;*/
+        console.log(poi);
         this.details = defaultDetails;
         this.linkUrl = null;
         this.steps =
@@ -196,6 +197,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const weekDay = d.getDay();
 
     if (
+      this.poi.properties.workingHours &&
+      this.poi.properties.workingHours[weekDay]
+    ) {
+      return `${this.poi.properties.workingHours[weekDay][0]} - ${this.poi.properties.workingHours[weekDay][1]}`;
+    } else if (
       this.poi.properties.metadata &&
       this.poi.properties.metadata.openHours &&
       this.poi.properties.metadata.openHours[weekDay].en
