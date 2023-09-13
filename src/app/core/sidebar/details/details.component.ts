@@ -7,7 +7,6 @@ import * as Settings from "../../../../../settings";
 import * as humanizeDuration from "humanize-duration";
 import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
 import { MapService } from "src/app/map/map.service";
-import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { map, startWith, tap } from "rxjs/operators";
 import * as turf from "@turf/turf";
 import { FeatureCollection, Point } from "@turf/turf";
@@ -50,11 +49,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
   averageWalkSpeed = 4.5; // km/h
   haveRouteDetails = false;
   currentLanguage: string;
-  options: any[] = [];
-  filteredOptions: Observable<any[]>;
-  startPoiForm = this.fb.group({
-    startPoi: [this.stateService.state.startPoi, Validators.required],
-  });
   startPoiId: string;
   parkingAmenityId = this.stateService.state.parkingAmenityId;
   entrancePoiId = this.stateService.state.entranceFeatureId;
@@ -70,8 +64,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private sidebarService: SidebarService,
     public mapService: MapService,
     public stateService: StateService,
-    private translateService: TranslateService,
-    private fb: UntypedFormBuilder
+    private translateService: TranslateService
   ) {
     const urlParams = new URLSearchParams(window.location.search);
     const destinationParam = urlParams.get("destinationFeature");
@@ -150,18 +143,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
       }),
       this.mapService.getMapReadyListener().subscribe((ready) => {
         if (ready) {
-          this.filteredOptions = this.startPoiForm
-            .get("startPoi")
-            .valueChanges.pipe(
-              startWith(""),
-              map((value) =>
-                typeof value === "string" ? value : value.properties.title
-              ),
-              map((title) =>
-                title ? this._filter(title) : this.options.slice()
-              )
-            );
-          this.options = this.sidebarService.sortedPOIs;
           this.setStartPoi();
         }
       }),
@@ -182,8 +163,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   onDetailsClose() {
-    this.startPoiId = null;
-    this.setStartPoi();
+    //this.startPoiId = null;
+    //this.setStartPoi();
+    this.sidebarService.onSetStartPoi(null);
     this.sidebarService.onSetEndPoi(null);
     this.poi = null;
     this.details = defaultDetails;
@@ -317,22 +299,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onStartPoiSelect(e) {
-    this.startPoiId = e.option.value.id;
-    this.stateService.state = {
-      ...this.stateService.state,
-      startPoiId: this.startPoiId,
-    };
-    this.setStartPoi();
-  }
-
   setStartPoi() {
     if (!this.stateService.state.kioskMode) {
       const startPoi = this.sidebarService.sortedPOIs.find(
         (i) => i.id === this.stateService.state.startPoiId
       );
       if (startPoi) {
-        this.startPoiForm.get("startPoi").setValue(startPoi);
         this.stateService.state = { ...this.stateService.state, startPoi };
         this.stateService.state.defaultLocation.coordinates =
           startPoi.coordinates;
@@ -341,20 +313,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.sidebarService.onSetStartPoi(startPoi);
       }
     }
-  }
-
-  displayFn(poi: any): string {
-    return poi && poi.properties && poi.properties.title
-      ? `${poi.properties.title} - Floor: ${poi.properties.level}`
-      : "";
-  }
-
-  private _filter(title: string): any[] {
-    const filterValue = title.toLowerCase();
-
-    return this.options.filter((option) =>
-      option.properties.title.toLowerCase().includes(filterValue)
-    );
   }
 
   onShowRoute() {

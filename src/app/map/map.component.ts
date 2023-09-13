@@ -97,7 +97,11 @@ export class MapComponent implements OnInit, OnDestroy {
         if (this.mapLoaded) {
           this.map.getMapboxInstance().resize();
         }
-        this.setStartPoi(poi);
+        if (poi) {
+          this.setStartPoi(poi);
+        } else {
+          this.startPoiId = this.stateService.state.startPoiId;
+        }
       }),
       // we subscribe for end point listener events here
       this.sidebarService.getEndPointListener().subscribe((poi) => {
