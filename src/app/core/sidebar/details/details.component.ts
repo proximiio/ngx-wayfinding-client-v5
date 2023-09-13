@@ -87,7 +87,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
           ? this.destinationFromUrl
           : false;
         this.mapService.showingRoute = this.haveRouteDetails;*/
-        console.log(poi);
         this.details = defaultDetails;
         this.linkUrl = null;
         this.steps =
