@@ -290,22 +290,14 @@ export class MapComponent implements OnInit, OnDestroy {
         }
 
         // set amenity category group 'shop', those have to be set in shop-picker component afterwards
-        this.map.setAmenitiesCategory("shop", [
-          "44010f6f-9963-4433-ad86-40b89b829c41:c693d414-4613-4c6c-95da-771e52759873",
-          "44010f6f-9963-4433-ad86-40b89b829c41:d111c5e4-1a63-48b3-94de-5fa7b309daaf",
-          "44010f6f-9963-4433-ad86-40b89b829c41:da5435e2-9179-4ca6-86e4-652b7e8d109b",
-          "44010f6f-9963-4433-ad86-40b89b829c41:c96e80d7-6683-4ca0-bc64-b6ed3fc824e2",
-          "44010f6f-9963-4433-ad86-40b89b829c41:f62dd757-4057-4015-97a0-c66d8934f7d8",
-        ]);
+        /*this.map.setAmenitiesCategory("shop", [
+          "amenity-id",
+        ]);*/
 
         // set amenity category group 'amenities', those have to be set in amenity-picker component afterwards
-        this.map.setAmenitiesCategory("amenities", [
-          "44010f6f-9963-4433-ad86-40b89b829c41:e762ea14-70e2-49b7-9938-f6870f9ab18f",
-          "44010f6f-9963-4433-ad86-40b89b829c41:61042c8a-87a3-40e4-afa8-3a2c3c09fbf8",
-          "44010f6f-9963-4433-ad86-40b89b829c41:62c605cc-75c0-449a-987c-3bdfef2c1642",
-          "44010f6f-9963-4433-ad86-40b89b829c41:57ef933b-ff2e-4db1-bc99-d21f2053abb2",
-          "44010f6f-9963-4433-ad86-40b89b829c41:2cd016a5-8703-417c-af07-d49aef074ad3",
-        ]);
+        /*this.map.setAmenitiesCategory("amenities", [
+          "another-amenity-id",
+        ]);*/
 
         if (this.destinationFromUrl) {
           const defaultPlace = this.placeParam
