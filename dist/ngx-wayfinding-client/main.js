@@ -993,31 +993,12 @@ function AmenityPickerComponent_li_5_Template(rf, ctx) {
   }
 }
 const amenityData = [{
-  title: "Toilet",
-  icon: ["fal", "toilet"],
-  id: "44010f6f-9963-4433-ad86-40b89b829c41:e762ea14-70e2-49b7-9938-f6870f9ab18f",
-  active: true
-}, {
-  title: "Accessible toilet",
-  icon: ["fal", "wheelchair"],
-  id: "44010f6f-9963-4433-ad86-40b89b829c41:61042c8a-87a3-40e4-afa8-3a2c3c09fbf8",
-  active: true
-}, {
-  title: "Baby changing",
-  icon: ["fal", "baby"],
-  id: "44010f6f-9963-4433-ad86-40b89b829c41:62c605cc-75c0-449a-987c-3bdfef2c1642",
-  active: true
-}, {
-  title: "Emergency care",
-  icon: ["fal", "stethoscope"],
-  id: "44010f6f-9963-4433-ad86-40b89b829c41:57ef933b-ff2e-4db1-bc99-d21f2053abb2",
-  active: true
-}, {
-  title: "ATM",
-  icon: ["fal", "money-bill"],
-  id: "44010f6f-9963-4433-ad86-40b89b829c41:2cd016a5-8703-417c-af07-d49aef074ad3",
-  active: true
+  title: "cafes",
+  icon: ["fal", "coffee"],
+  id: "another-amenity-id",
+  active: true // set category as active
 }];
+
 class AmenityPickerComponent {
   constructor(sidebarService) {
     this.sidebarService = sidebarService;
@@ -3089,31 +3070,12 @@ class ShopPickerComponent {
     this.sidebarService = sidebarService;
     this.sidebarOpened = true;
     this.data = [{
-      title: 'Cafés',
-      icon: ['fal', 'coffee'],
-      id: '44010f6f-9963-4433-ad86-40b89b829c41:c693d414-4613-4c6c-95da-771e52759873',
-      active: true
-    }, {
-      title: 'Clothing',
-      icon: ['fal', 'tshirt'],
-      id: '44010f6f-9963-4433-ad86-40b89b829c41:d111c5e4-1a63-48b3-94de-5fa7b309daaf',
-      active: true
-    }, {
-      title: 'Groceries',
-      icon: ['fal', 'shopping-cart'],
-      id: '44010f6f-9963-4433-ad86-40b89b829c41:da5435e2-9179-4ca6-86e4-652b7e8d109b',
-      active: true
-    }, {
-      title: 'Restaurants',
-      icon: ['fal', 'utensils'],
-      id: '44010f6f-9963-4433-ad86-40b89b829c41:c96e80d7-6683-4ca0-bc64-b6ed3fc824e2',
-      active: true
-    }, {
-      title: 'Shoes',
-      icon: ['fal', 'boot'],
-      id: '44010f6f-9963-4433-ad86-40b89b829c41:f62dd757-4057-4015-97a0-c66d8934f7d8',
-      active: true
+      title: "toilet",
+      icon: ["fal", "toilet"],
+      id: "amenity-id",
+      active: true // set category as active
     }];
+
     this.subs = [];
     this.subs.push(this.sidebarService.getAmenityToggleListener().subscribe(res => {
       if (res) {
@@ -3967,9 +3929,13 @@ class MapComponent {
           this.map.setKiosk(this.stateService.state.defaultLocation.coordinates[1], this.stateService.state.defaultLocation.coordinates[0], this.stateService.state.defaultLocation.level);
         }
         // set amenity category group 'shop', those have to be set in shop-picker component afterwards
-        this.map.setAmenitiesCategory("shop", ["44010f6f-9963-4433-ad86-40b89b829c41:c693d414-4613-4c6c-95da-771e52759873", "44010f6f-9963-4433-ad86-40b89b829c41:d111c5e4-1a63-48b3-94de-5fa7b309daaf", "44010f6f-9963-4433-ad86-40b89b829c41:da5435e2-9179-4ca6-86e4-652b7e8d109b", "44010f6f-9963-4433-ad86-40b89b829c41:c96e80d7-6683-4ca0-bc64-b6ed3fc824e2", "44010f6f-9963-4433-ad86-40b89b829c41:f62dd757-4057-4015-97a0-c66d8934f7d8"]);
+        /*this.map.setAmenitiesCategory("shop", [
+          "amenity-id",
+        ]);*/
         // set amenity category group 'amenities', those have to be set in amenity-picker component afterwards
-        this.map.setAmenitiesCategory("amenities", ["44010f6f-9963-4433-ad86-40b89b829c41:e762ea14-70e2-49b7-9938-f6870f9ab18f", "44010f6f-9963-4433-ad86-40b89b829c41:61042c8a-87a3-40e4-afa8-3a2c3c09fbf8", "44010f6f-9963-4433-ad86-40b89b829c41:62c605cc-75c0-449a-987c-3bdfef2c1642", "44010f6f-9963-4433-ad86-40b89b829c41:57ef933b-ff2e-4db1-bc99-d21f2053abb2", "44010f6f-9963-4433-ad86-40b89b829c41:2cd016a5-8703-417c-af07-d49aef074ad3"]);
+        /*this.map.setAmenitiesCategory("amenities", [
+          "another-amenity-id",
+        ]);*/
         if (this.destinationFromUrl) {
           const defaultPlace = this.placeParam ? this.stateService.state.places.find(p => p.id === this.placeParam || p.name === this.placeParam) : this.stateService.state.place;
           const destinationFeature = this.stateService.state.allFeatures.features.find(f => f.properties.title && f.properties.place_id === defaultPlace.id && (f.id === this.destinationParam || f.properties.id === this.destinationParam || f.properties.title === this.destinationParam));
@@ -4328,8 +4294,8 @@ __webpack_require__.r(__webpack_exports__);
 // The list of file replacements can be found in `angular.json`.
 const environment = {
   production: false,
-  authUrl: 'http://localhost:6006/wayfinding-demo',
-  ahoyUrl: 'http://localhost:6006/wayfinding-demo/analytics',
+  authUrl: 'http://localhost:6001/wayfinding',
+  ahoyUrl: 'http://localhost:6001/wayfinding/analytics',
   appPrefix: 'ngx-wayfinding-'
 };
 /*
@@ -4376,10 +4342,10 @@ _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__.platformBrowser().bootstr
 /***/ ((module) => {
 
 var Settings = {
-  token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImlzcyI6IjQ0MDEwZjZmLTk5NjMtNDQzMy1hZDg2LTQwYjg5YjgyOWM0MSIsInR5cGUiOiJ1c2VyIiwidXNlciI6IkRlbW8gV2F5ZmluZGluZyIsInVzZXJfaWQiOiI1ZTBkNDVlMy0wMjVmLTRiMzItYmUwNy0wYzk0MjUxYmQ1NzMiLCJ0ZW5hbnRfaWQiOiI0NDAxMGY2Zi05OTYzLTQ0MzMtYWQ4Ni00MGI4OWI4MjljNDEifQ.reaAdK4uUqvGcDghQTmXtbsHR4mX9Hcinwwg4_uqwfQ",
-  basepath: "/wayfinding-demo",
+  token: "PLACE YOUR TOKEN HERE",
+  basepath: "/wayfinding",
   // in case of change it's required to change that also at ./src/environments and ./angular.json files
-  port: "6006",
+  port: "6001",
   // in case of change it's required to change that also at ./src/environments
   proximi_api: 'https://api.proximi.fi',
   geo_version: 'v5'
