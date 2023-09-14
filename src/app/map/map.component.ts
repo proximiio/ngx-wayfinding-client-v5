@@ -12,7 +12,6 @@ import {
   Breakpoints,
   BreakpointState,
 } from "@angular/cdk/layout";
-import { PaddingOptions } from "mapbox-gl";
 import { TranslateService } from "@ngx-translate/core";
 import { MapService } from "./map.service";
 import Feature from "proximiio-js-library/lib/models/feature";
@@ -24,8 +23,11 @@ import Feature from "proximiio-js-library/lib/models/feature";
 })
 export class MapComponent implements OnInit, OnDestroy {
   public mapLoaded = false;
+  private startFromUrl = false;
   private destinationFromUrl = false;
-  private mapPadding: PaddingOptions = {
+  private mapPadding:
+    | number
+    | { top: number; bottom: number; left: number; right: number } = {
     top: 250,
     bottom: 250,
     left: 500,
@@ -35,6 +37,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private startPoiId: string;
   private endPoi;
   private kiosk: KioskModel;
+  private startParam: string;
   private destinationParam: string;
   private placeParam: string;
   private wayfindingConfig = {
@@ -64,8 +67,14 @@ export class MapComponent implements OnInit, OnDestroy {
     private translateService: TranslateService
   ) {
     const urlParams = new URLSearchParams(window.location.search);
+    this.startParam = urlParams.get("startFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
     this.destinationParam = urlParams.get("destinationFeature"); // in case you change url param name in urlParams option of map constuctor, change that too
     this.placeParam = urlParams.get("defaultPlace");
+
+    // if there is a start defined in url params, we need to handle poi selection
+    if (this.startParam) {
+      this.startFromUrl = true;
+    }
 
     // if there is a destination defined in url params, we need to handle poi selection to show details component
     if (this.destinationParam) {
@@ -88,7 +97,11 @@ export class MapComponent implements OnInit, OnDestroy {
         if (this.mapLoaded) {
           this.map.getMapboxInstance().resize();
         }
-        this.setStartPoi(poi);
+        if (poi) {
+          this.setStartPoi(poi);
+        } else {
+          this.startPoiId = this.stateService.state.startPoiId;
+        }
       }),
       // we subscribe for end point listener events here
       this.sidebarService.getEndPointListener().subscribe((poi) => {
@@ -142,21 +155,15 @@ export class MapComponent implements OnInit, OnDestroy {
           ) {
             // remove amenity filter if there is no value set for defined category
             this.map.removeAmenityFilter(res.amenityId, res.category);
-            if (
-              res.category === "amenities" &&
-              this.stateService.state.kioskMode
-            ) {
+            if (res.category === "amenities") {
               this.map.cancelRoute();
               this.onMyLocation();
             }
           } else {
             // set amenity filter otherwise
             this.map.setAmenityFilter(res.amenityId, res.category);
-            if (
-              res.category === "amenities" &&
-              this.stateService.state.kioskMode
-            ) {
-              this.findRoute(res.amenityId, null, "amenity");
+            if (res.category === "amenities" && this.stateService.state.kioskMode) {
+              this.map.findRouteToNearestFeature(res.amenityId);
             }
           }
         }
@@ -235,7 +242,9 @@ export class MapComponent implements OnInit, OnDestroy {
         //   position: 'bottom-right', //  position on the map to which the control will be added.
         // },
         showLevelDirectionIcon: true, // if enabled arrow icon will be shown at the levelchanger indicating direction of level change along the found route
+        initPolygons: true,
         animatedRoute: true,
+        blockFeatureClickWhileRouting: true,
       });
 
       // subscribing to map ready listener
@@ -247,6 +256,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
         // setting mapbox navigationControl buttons
         this.map.getMapboxInstance().addControl(
+          // @ts-ignore;
           new mapboxgl.NavigationControl({
             showZoom: false,
           })
@@ -279,17 +289,23 @@ export class MapComponent implements OnInit, OnDestroy {
           );
         }
 
-        this.hideAmenityFeatures();
-
         // set amenity category group 'shop', those have to be set in shop-picker component afterwards
-        /*this.map.setAmenitiesCategory("shop", [
-          "amenity-id",
-        ]);*/
+        this.map.setAmenitiesCategory("shop", [
+          "44010f6f-9963-4433-ad86-40b89b829c41:c693d414-4613-4c6c-95da-771e52759873",
+          "44010f6f-9963-4433-ad86-40b89b829c41:d111c5e4-1a63-48b3-94de-5fa7b309daaf",
+          "44010f6f-9963-4433-ad86-40b89b829c41:da5435e2-9179-4ca6-86e4-652b7e8d109b",
+          "44010f6f-9963-4433-ad86-40b89b829c41:c96e80d7-6683-4ca0-bc64-b6ed3fc824e2",
+          "44010f6f-9963-4433-ad86-40b89b829c41:f62dd757-4057-4015-97a0-c66d8934f7d8",
+        ]);
 
         // set amenity category group 'amenities', those have to be set in amenity-picker component afterwards
-        /*this.map.setAmenitiesCategory("amenities", [
-          "another-amenity-id",
-        ]);*/
+        this.map.setAmenitiesCategory("amenities", [
+          "44010f6f-9963-4433-ad86-40b89b829c41:e762ea14-70e2-49b7-9938-f6870f9ab18f",
+          "44010f6f-9963-4433-ad86-40b89b829c41:61042c8a-87a3-40e4-afa8-3a2c3c09fbf8",
+          "44010f6f-9963-4433-ad86-40b89b829c41:62c605cc-75c0-449a-987c-3bdfef2c1642",
+          "44010f6f-9963-4433-ad86-40b89b829c41:57ef933b-ff2e-4db1-bc99-d21f2053abb2",
+          "44010f6f-9963-4433-ad86-40b89b829c41:2cd016a5-8703-417c-af07-d49aef074ad3",
+        ]);
 
         if (this.destinationFromUrl) {
           const defaultPlace = this.placeParam
@@ -308,6 +324,17 @@ export class MapComponent implements OnInit, OnDestroy {
             );
           this.sidebarService.onSetEndPoi(destinationFeature);
           this.map.handlePolygonSelection(destinationFeature);
+        }
+
+        if (this.startFromUrl) {
+          const startFeature =
+            this.stateService.state.allFeatures.features.find(
+              (f) =>
+                f.id === this.startParam ||
+                f.properties.id === this.startParam ||
+                f.properties.title === this.startParam
+            );
+          this.sidebarService.onSetStartPoi(startFeature);
         }
       });
 
@@ -348,7 +375,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
 
       // set destination point for routing based on click event and cancel previous route if generated
-      this.map.getPoiClickListener().subscribe((poi) => {
+      this.map.getPolygonClickListener().subscribe((poi) => {
         if (this.map.state.textNavigation) {
           this.map.cancelRoute();
         }
@@ -358,20 +385,19 @@ export class MapComponent implements OnInit, OnDestroy {
       this.map.getNavStepSetListener().subscribe((step) => {
         this.sidebarService.stepChangeListener.next(step);
       }),
-
-      // subscribe to map place selection listener, this always run once at map initiation and upon map.setPlace method call
-      this.map.getPlaceSelectListener().subscribe((res) => {
-        // capture the map state (this includes all important data of the map), and store those in application stateService, this one is super important as this will fill our state with initial data to be used elsewhere through the app
-        const mapState = this.map.state;
-        this.stateService.state = {
-          ...this.stateService.state,
-          place: mapState.place,
-          floors: mapState.floors,
-          floor: mapState.floor,
-          allFeatures: mapState.allFeatures,
-          amenities: mapState.amenities,
-        };
-      });
+        // subscribe to map place selection listener, this always run once at map initiation and upon map.setPlace method call
+        this.map.getPlaceSelectListener().subscribe((res) => {
+          // capture the map state (this includes all important data of the map), and store those in application stateService, this one is super important as this will fill our state with initial data to be used elsewhere through the app
+          const mapState = this.map.state;
+          this.stateService.state = {
+            ...this.stateService.state,
+            place: mapState.place,
+            floors: mapState.floors,
+            floor: mapState.floor,
+            allFeatures: mapState.allFeatures,
+            amenities: mapState.amenities,
+          };
+        });
 
       // subscribe to map floor selection listener, this always run once at map initiation and upon map.setFloor method call
       this.map.getFloorSelectListener().subscribe((res) => {

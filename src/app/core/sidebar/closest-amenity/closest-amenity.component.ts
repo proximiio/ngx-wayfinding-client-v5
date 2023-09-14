@@ -3,7 +3,7 @@ import { Observable, Subscription } from "rxjs";
 import { TranslateService } from "@ngx-translate/core";
 import { StateService } from "../../state.service";
 import { SidebarService } from "../sidebar.service";
-import { FormBuilder, Validators } from "@angular/forms";
+import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { MapService } from "src/app/map/map.service";
 import { map, startWith } from "rxjs/operators";
 import { amenityData } from "../amenity-picker/amenity-picker.component";
@@ -35,7 +35,7 @@ export class ClosestAmenityComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private translateService: TranslateService,
     public mapService: MapService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     this.currentLanguage = this.translateService.currentLang;
     this.subs.push(

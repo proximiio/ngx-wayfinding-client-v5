@@ -2,9 +2,9 @@
   <button class="my-location" (click)="onMyLocation()" aria-label="My Location" title="My Location">
     <span aria-hidden="true" class="icon"></span>
   </button>
-  <button class="settings" (click)="onSettings()" aria-label="Settings" title="Settings">
+  <!--<button class="settings" (click)="onSettings()" aria-label="Settings" title="Settings">
     <fa-icon aria-hidden="true" [icon]="['fal', 'cog']" size="lg"></fa-icon>
-  </button>
+  </button>-->
   <div id="proximiioMap"></div>
 </main>
 <main *ngIf="!mapLoaded" class="loading">
