@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import Proximiio from "proximiio-js-library";
 import * as Settings from "../../../settings";
-import * as mapboxgl from "mapbox-gl";
+import * as maplibregl from "maplibregl-gl";
 import { KioskModel, StateService } from "../core/state.service";
 import { SettingsDialogComponent } from "../core/settings-dialog/settings-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -162,7 +162,10 @@ export class MapComponent implements OnInit, OnDestroy {
           } else {
             // set amenity filter otherwise
             this.map.setAmenityFilter(res.amenityId, res.category);
-            if (res.category === "amenities" && this.stateService.state.kioskMode) {
+            if (
+              res.category === "amenities" &&
+              this.stateService.state.kioskMode
+            ) {
               this.map.findRouteToNearestFeature(res.amenityId);
             }
           }
@@ -257,7 +260,7 @@ export class MapComponent implements OnInit, OnDestroy {
         // setting mapbox navigationControl buttons
         this.map.getMapboxInstance().addControl(
           // @ts-ignore;
-          new mapboxgl.NavigationControl({
+          new maplibregl.NavigationControl({
             showZoom: false,
           })
         );

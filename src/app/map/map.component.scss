@@ -18,11 +18,11 @@
   min-height: 320px;
 
   ::ng-deep {
-    .mapboxgl-ctrl-top-right {
+    .maplibregl-ctrl-top-right {
       top: 100px;
       right: 20px;
     }
-    .mapboxgl-ctrl-group {
+    .maplibregl-ctrl-group {
       background-color: $default-color;
       color: white;
       box-shadow: none;
@@ -32,12 +32,12 @@
         height: 48px !important;
         padding: .8rem;
         border-radius: 48px!important;
-        &.mapboxgl-ctrl-compass,
-        &.mapboxgl-ctrl-geolocate {
+        &.maplibregl-ctrl-compass,
+        &.maplibregl-ctrl-geolocate {
           margin: 0.1em 2px !important;
         }
-        &.mapboxgl-ctrl-compass {
-          .mapboxgl-ctrl-icon {
+        &.maplibregl-ctrl-compass {
+          .maplibregl-ctrl-icon {
             background-image: url('../../assets/compass-regular.svg');
           }
         }
@@ -194,7 +194,7 @@
 @media only screen and (max-width: 959.98px) {
   #proximiioMap {
     ::ng-deep {
-      .mapboxgl-ctrl-top-right {
+      .maplibregl-ctrl-top-right {
         display: none;
       }
     }
