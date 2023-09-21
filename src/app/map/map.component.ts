@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import Proximiio from "proximiio-js-library";
 import * as Settings from "../../../settings";
-import * as maplibregl from "maplibregl-gl";
+import * as maplibregl from "maplibre-gl";
 import { KioskModel, StateService } from "../core/state.service";
 import { SettingsDialogComponent } from "../core/settings-dialog/settings-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
