@@ -386,6 +386,7 @@ export class MapComponent implements OnInit, OnDestroy {
           const mapState = this.map.state;
           this.stateService.state = {
             ...this.stateService.state,
+            places: mapState.places,
             place: mapState.place,
             floors: mapState.floors,
             floor: mapState.floor,
@@ -400,6 +401,7 @@ export class MapComponent implements OnInit, OnDestroy {
         const mapState = this.map.state;
         this.stateService.state = {
           ...this.stateService.state,
+          places: mapState.places,
           place: mapState.place,
           floors: mapState.floors,
           floor: mapState.floor,
