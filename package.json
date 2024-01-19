@@ -37,7 +37,7 @@
     "humanize-duration": "^3.29.0",
     "maplibre-gl": "^3.3.1",
     "ngx-take-until-destroy": "^5.4.0",
-    "proximiio-js-library": "^1.11.9",
+    "proximiio-js-library": "^1.11.10",
     "remove-accents": "^0.5.0",
     "rxjs": "~6.6.3",
     "simple-keyboard": "^3.7.8",
