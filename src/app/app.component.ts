@@ -36,11 +36,12 @@ export class AppComponent implements OnInit {
       langFromUrl !== "en" &&
       langFromUrl !== "fi" &&
       langFromUrl !== "ar" &&
+      langFromUrl !== "id" &&
       langFromUrl !== "it"
     ) {
       langFromUrl = urlParams.get("lang");
     }
-    translate.addLangs(["en", "fi", "ar", "it"]);
+    translate.addLangs(["en", "fi", "ar", "it", "id"]);
     translate.setDefaultLang(langFromUrl ? langFromUrl : "en");
     translate.use(langFromUrl ? langFromUrl : "en");
   }
